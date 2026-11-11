@@ -91,6 +91,7 @@ namespace Hanafuda
             };
 
             Log(Engine.Dry ? "Modo simulación: nada se cambia en el sistema." : "Listo. Cada ajuste guarda el valor anterior para poder deshacerlo.");
+            if (Engine.Limited) Log("Abierto sin permisos de administrador: puedes ver todo. Para cambiar algo, pulsa «Abrir como administrador».");
             Log("Equipo detectado: " + (Engine.IsLaptop ? "laptop" : "escritorio") + " · " + Engine.CpuName);
             timer.Tick += (s, e) => UpdateHud();
             timer.Start();
@@ -113,9 +114,10 @@ namespace Hanafuda
                 var g = e.Graphics;
                 Theme.Card(g, new Rectangle(14, 10, 14, 20));
                 Theme.Draw(g, "HANAFUDA OPTI", Theme.F(9f, FontStyle.Bold), Theme.Text, new Rectangle(36, 0, 200, TopH), TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-                var mode = Engine.Dry ? "MODO SIMULACIÓN" : "ADMINISTRADOR";
+                var mode = Engine.Dry ? "MODO SIMULACIÓN" : Engine.Limited ? "SOLO LECTURA" : "ADMINISTRADOR";
+                if (Engine.Limited) mode = "SOLO LECTURA";
                 if (Engine.RebootPending) mode = "REINICIO PENDIENTE  ·  " + mode;
-                Theme.Draw(g, mode, Theme.F(7.5f, FontStyle.Bold), Engine.RebootPending ? Theme.Text : Theme.Dim, new Rectangle(0, 0, ClientSize.Width - 110, TopH), TextFormatFlags.Right | TextFormatFlags.VerticalCenter);
+                Theme.Draw(g, mode, Theme.F(7.5f, FontStyle.Bold), Engine.RebootPending || Engine.Limited ? Theme.Text : Theme.Dim, new Rectangle(0, 0, ClientSize.Width - (Engine.Limited ? 330 : 110), TopH), TextFormatFlags.Right | TextFormatFlags.VerticalCenter);
                 using (var pen = new Pen(Theme.Line)) g.DrawLine(pen, 0, TopH - 1, ClientSize.Width, TopH - 1);
             };
             var min = new WindowButton("min") { Location = new Point(ClientSize.Width - 92, 0) };
@@ -124,6 +126,12 @@ namespace Hanafuda
             close.Click += delegate { Close(); };
             topBar.Controls.Add(min);
             topBar.Controls.Add(close);
+            if (Engine.Limited)
+            {
+                var elevate = new FlatButton("Abrir como administrador", 200) { Primary = true, Height = 26, Location = new Point(ClientSize.Width - 314, 7) };
+                elevate.Click += delegate { Reopen(); };
+                topBar.Controls.Add(elevate);
+            }
             Controls.Add(topBar);
         }
 
@@ -327,11 +335,11 @@ namespace Hanafuda
             }
             var gpus = Metrics.Gpu();
             var main = gpus.Split(new[] { " + " }, StringSplitOptions.None).OrderBy(n => n.IndexOf("Intel", StringComparison.OrdinalIgnoreCase) >= 0 ? 1 : 0).First();
-            gpu.Value = System.Text.RegularExpressions.Regex.Replace(main, @"NVIDIA |GeForce |AMD |Radeon\(TM\) |Intel\(R\) |\(R\)|\(TM\)", "").Trim();
+            gpu.Value = System.Text.RegularExpressions.Regex.Replace(main, @"NVIDIA |GeForce |AMD |Radeon\(TM\) |Intel\(R\) |\(R\)|\(TM\)| GPU$", "").Trim();
             gpu.Sub = gpus;
-            cpu.Value = "…";
             sys.Sub = Metrics.WindowsName();
             Metrics.Cpu();
+            UpdateHud(true);
 
             int y = 270;
             var actions = new[]
@@ -367,11 +375,14 @@ namespace Hanafuda
             page.Controls.Add(info);
         }
 
-        void UpdateHud()
+        void UpdateHud() { UpdateHud(false); }
+
+        void UpdateHud(bool first)
         {
             if (cpu == null || current != "inicio") return;
-            var c = Metrics.Cpu();
-            cpu.Value = c.ToString("0") + " %"; cpu.Sub = Engine.CpuName; cpu.Push((float)c);
+            cpu.Sub = Engine.CpuName;
+            if (first) { cpu.Value = "…"; cpu.Invalidate(); }
+            else { var c = Metrics.Cpu(); cpu.Value = c.ToString("0") + " %"; cpu.Push((float)c); }
             double used, total, pct;
             Metrics.Ram(out used, out total, out pct);
             ram.Value = pct.ToString("0") + " %"; ram.Sub = used.ToString("0.0") + " de " + total.ToString("0") + " GB en uso"; ram.Push((float)pct);
@@ -496,8 +507,23 @@ namespace Hanafuda
 
         bool TryBusy()
         {
+            if (!CanChange()) return false;
             if (Interlocked.CompareExchange(ref busy, 1, 0) != 0) { Log("Espera a que termine la tarea actual."); return false; }
             return true;
+        }
+
+        // Sin permisos de administrador se puede mirar todo, pero no cambiar nada.
+        bool CanChange()
+        {
+            if (!Engine.Limited) return true;
+            if (ConfirmDialog.Ask(this, "Se necesitan permisos", "Para cambiar ajustes, Hanafuda tiene que abrirse como administrador. Pulsa Reabrir y luego Sí en el aviso de Windows.", "Reabrir")) Reopen();
+            return false;
+        }
+
+        void Reopen()
+        {
+            if (Program.Elevate()) { Close(); return; }
+            Log("Windows no dio permisos de administrador. Sigues en modo solo lectura.");
         }
 
         void Done(string msg, Action ui)
@@ -763,6 +789,7 @@ namespace Hanafuda
                 var it = item;
                 tg.Click += delegate
                 {
+                    if (!CanChange()) return;
                     try
                     {
                         Startup.Set(it, !it.Enabled);

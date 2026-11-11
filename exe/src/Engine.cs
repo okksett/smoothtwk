@@ -156,6 +156,7 @@ namespace Hanafuda
     public static class Engine
     {
         public static bool Dry;
+        public static bool Limited;
         public static Action<string> Log = delegate { };
         public static bool RebootPending;
         public const string HighPerf = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c";

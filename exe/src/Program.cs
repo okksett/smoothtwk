@@ -39,11 +39,12 @@ namespace Hanafuda
             try { Catalog.Load(); }
             catch (Exception ex) { MessageBox.Show("No se pudo cargar el catálogo: " + ex.Message, "Hanafuda Opti"); return 2; }
             if (shot != null) Engine.Dry = true;
-            if (!Engine.Dry && !IsAdmin())
+            Engine.Limited = args.Contains("--limited");
+            if (!Engine.Dry && !Engine.Limited && !IsAdmin())
             {
-                try { Process.Start(new ProcessStartInfo(Application.ExecutablePath, string.Join(" ", argv.Select(a => "\"" + a + "\""))) { Verb = "runas", UseShellExecute = true }); }
-                catch (Win32Exception) { MessageBox.Show("Hanafuda Opti necesita permisos de administrador para cambiar ajustes del sistema.", "Hanafuda Opti"); }
-                return 0;
+                // Si el aviso de administrador se cancela, abre igual en modo solo lectura.
+                if (Elevate()) return 0;
+                Engine.Limited = true;
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -51,6 +52,16 @@ namespace Hanafuda
             if (shot != null) return form.Shoot(shot);
             Application.Run(form);
             return 0;
+        }
+
+        public static bool Elevate()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(Application.ExecutablePath) { Verb = "runas", UseShellExecute = true });
+                return true;
+            }
+            catch (Win32Exception) { return false; }
         }
     }
 
