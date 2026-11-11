@@ -91,7 +91,11 @@ namespace Hanafuda
             };
 
             Log(Engine.Dry ? "Modo simulación: nada se cambia en el sistema." : "Listo. Cada ajuste guarda el valor anterior para poder deshacerlo.");
-            if (Engine.Limited) Log("Abierto sin permisos de administrador: puedes ver todo. Para cambiar algo, pulsa «Abrir como administrador».");
+            if (Engine.Limited)
+            {
+                if (Program.LastElevationError.Length > 0) Log(Program.LastElevationError);
+                Log("Abierto sin permisos de administrador: puedes ver todo. Para cambiar algo, pulsa «Abrir como administrador» y luego Sí.");
+            }
             Log("Equipo detectado: " + (Engine.IsLaptop ? "laptop" : "escritorio") + " · " + Engine.CpuName);
             timer.Tick += (s, e) => UpdateHud();
             timer.Start();
@@ -523,7 +527,7 @@ namespace Hanafuda
         void Reopen()
         {
             if (Program.Elevate()) { Close(); return; }
-            Log("Windows no dio permisos de administrador. Sigues en modo solo lectura.");
+            Log(Program.LastElevationError + " Sigues en modo solo lectura.");
         }
 
         void Done(string msg, Action ui)

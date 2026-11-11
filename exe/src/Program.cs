@@ -54,6 +54,8 @@ namespace Hanafuda
             return 0;
         }
 
+        public static string LastElevationError = "";
+
         public static bool Elevate()
         {
             try
@@ -61,7 +63,13 @@ namespace Hanafuda
                 Process.Start(new ProcessStartInfo(Application.ExecutablePath) { Verb = "runas", UseShellExecute = true });
                 return true;
             }
-            catch (Win32Exception) { return false; }
+            catch (Win32Exception ex)
+            {
+                LastElevationError = ex.NativeErrorCode == 1223
+                    ? "Windows canceló el permiso (código 1223): se pulsó No o el aviso se cerró sin respuesta."
+                    : "Windows no pudo elevar (código " + ex.NativeErrorCode + "): " + ex.Message;
+                return false;
+            }
         }
     }
 
