@@ -24,10 +24,10 @@ exit /b
 :runconsole
 color 0F
 chcp 65001 >nul
-powershell -NoProfile -ExecutionPolicy Bypass -File "%HF_DIR%hanafuda.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%HF_DIR%hanafuda-consola.ps1"
 exit /b %errorlevel%
 
 :run
 chcp 65001 >nul
-powershell -NoProfile -ExecutionPolicy Bypass -File "%HF_DIR%hanafuda.ps1" %*
+powershell -NoProfile -ExecutionPolicy Bypass -File "%HF_DIR%hanafuda-consola.ps1" %*
 exit /b %errorlevel%

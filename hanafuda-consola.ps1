@@ -1144,8 +1144,11 @@ function Set-UserPathRaw([string]$Value) {
 function Install-Hanafuda {
     $dest = Join-Path $env:LOCALAPPDATA 'HanafudaOpti'
     if (-not (Test-Path -LiteralPath $dest)) { [void](New-Item -ItemType Directory -Path $dest) }
+    # El script de consola no puede llamarse hanafuda.ps1: PowerShell lo preferiria sobre hanafuda.cmd.
+    $legacy = Join-Path $dest 'hanafuda.ps1'
+    if (Test-Path -LiteralPath $legacy) { Remove-Item -LiteralPath $legacy -Force }
     if ($PSScriptRoot.TrimEnd('\') -ne $dest.TrimEnd('\')) {
-        Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'hanafuda.ps1') -Destination $dest -Force
+        Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $dest 'hanafuda-consola.ps1') -Force
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'hanafuda.cmd') -Destination $dest -Force
         $exe = Join-Path $PSScriptRoot 'HanafudaOpti.exe'
         if (Test-Path -LiteralPath $exe) { Copy-Item -LiteralPath $exe -Destination $dest -Force }

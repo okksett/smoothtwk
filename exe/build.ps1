@@ -6,7 +6,7 @@ $data = Join-Path $root 'data'
 $out = Join-Path $root 'bin'
 New-Item -ItemType Directory -Force -Path $data, $out | Out-Null
 
-& (Join-Path $root 'tools\make-catalog.ps1') -HanafudaScript (Join-Path $root '..\hanafuda.ps1') -WinUtilConfig $WinUtilConfig -OutFile (Join-Path $data 'catalog.json')
+& (Join-Path $root 'tools\make-catalog.ps1') -HanafudaScript (Join-Path $root '..\hanafuda-consola.ps1') -WinUtilConfig $WinUtilConfig -OutFile (Join-Path $data 'catalog.json')
 
 # Icono: carta hanafuda blanca con luna negra.
 Add-Type -AssemblyName System.Drawing
