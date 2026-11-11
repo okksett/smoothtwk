@@ -19,7 +19,7 @@ namespace Hanafuda
 
     public class Tweak
     {
-        public string Id, Card, Group, Name, Desc, Device = "both", Warn = "", Special = "", Guard = "", Source = "Hanafuda", ApplyScript = "", UndoScript = "";
+        public string Id, Card, Group, Name, Desc, Help = "", Device = "both", Warn = "", Special = "", Guard = "", Source = "Hanafuda", ApplyScript = "", UndoScript = "";
         public bool Rec, Reboot, OneShot, Download;
         public List<RegEntry> Registry = new List<RegEntry>();
         public List<string[]> Services = new List<string[]>();
@@ -27,7 +27,7 @@ namespace Hanafuda
         public List<PowerEntry> Power = new List<PowerEntry>();
     }
 
-    public class ActionItem { public string Id, Card, Group, Name, Desc, Script, Warn = "", Button = "Ejecutar", Source = "Hanafuda"; public bool Download; }
+    public class ActionItem { public string Id, Card, Group, Name, Desc, Help = "", Script, Warn = "", Button = "Ejecutar", Source = "Hanafuda"; public bool Download; }
     public class AppItem { public string Id, Name, Category, Desc, Winget; public bool Selected; }
 
     public static class Json
@@ -94,7 +94,7 @@ namespace Hanafuda
                     Id = Json.S(t, "id"), Card = Json.S(t, "card"), Group = Json.S(t, "group") ?? "", Name = Json.S(t, "name"), Desc = Json.S(t, "desc") ?? "",
                     Rec = Json.B(t, "rec"), Device = Json.S(t, "device") ?? "both", Reboot = Json.B(t, "reboot"), Warn = Json.S(t, "warn") ?? "",
                     OneShot = Json.B(t, "oneshot"), Special = Json.S(t, "special") ?? "", Guard = Json.S(t, "guard") ?? "", Source = Json.S(t, "source") ?? "Hanafuda",
-                    Download = Json.B(t, "download"), ApplyScript = Json.S(t, "apply") ?? "", UndoScript = Json.S(t, "undo") ?? ""
+                    Download = Json.B(t, "download"), ApplyScript = Json.S(t, "apply") ?? "", UndoScript = Json.S(t, "undo") ?? "", Help = Json.S(t, "help") ?? ""
                 };
                 foreach (var r in Json.D(t, "registry"))
                     tw.Registry.Add(new RegEntry { Path = Json.S(r, "path"), Name = Json.S(r, "name") ?? "", Kind = Json.S(r, "type"), Value = Json.S(r, "value") });
@@ -109,7 +109,7 @@ namespace Hanafuda
                 {
                     Id = Json.S(a, "id"), Card = Json.S(a, "card"), Group = Json.S(a, "group"), Name = Json.S(a, "name"), Desc = Json.S(a, "desc") ?? "",
                     Script = Json.S(a, "script") ?? "", Warn = Json.S(a, "warn") ?? "", Button = Json.S(a, "button") ?? "Ejecutar",
-                    Download = Json.B(a, "download"), Source = Json.S(a, "source") ?? "Hanafuda"
+                    Download = Json.B(a, "download"), Source = Json.S(a, "source") ?? "Hanafuda", Help = Json.S(a, "help") ?? ""
                 });
             foreach (var a in Json.D(root, "apps"))
                 Apps.Add(new AppItem { Id = Json.S(a, "id"), Name = Json.S(a, "name"), Category = Json.S(a, "category"), Desc = Json.S(a, "desc") ?? "", Winget = Json.S(a, "winget") });
@@ -664,8 +664,10 @@ namespace Hanafuda
 
         public static string RestorePoint(Action<string> log)
         {
-            int code = RunScript("try { Checkpoint-Computer -Description 'Hanafuda Opti' -RestorePointType MODIFY_SETTINGS -ErrorAction Stop -WarningAction SilentlyContinue -WarningVariable w; if ($w) { 'Windows solo permite un punto cada 24 h.' } else { 'Punto de restauración creado.' } } catch { 'Protección del sistema apagada: no se creó el punto.' }", log);
-            return code == 0 ? "Listo" : "Error";
+            var action = Catalog.Actions.FirstOrDefault(a => a.Id == "restore-point");
+            if (action == null) return "Falta la acción de punto de restauración en el catálogo.";
+            int code = RunScript(action.Script, log);
+            return Dry ? "[simulación] Punto de restauración" : code == 0 ? "Punto de restauración listo." : "No se pudo crear el punto de restauración.";
         }
     }
 }

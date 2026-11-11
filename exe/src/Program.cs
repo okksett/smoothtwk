@@ -28,6 +28,24 @@ namespace Hanafuda
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
+        // Registro de arranque en %TEMP%\hanafuda.log, para diagnosticar cuando la ventana no aparece.
+        public static void Trace(string text)
+        {
+            try
+            {
+                var file = Path.Combine(Path.GetTempPath(), "hanafuda.log");
+                if (File.Exists(file) && new FileInfo(file).Length > 200000) File.Delete(file);
+                File.AppendAllText(file, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [" + Process.GetCurrentProcess().Id + (IsAdmin() ? " admin" : "") + "] " + text + Environment.NewLine, new UTF8Encoding(false));
+            }
+            catch { }
+        }
+
+        static void Fatal(Exception ex)
+        {
+            Trace("ERROR: " + ex);
+            try { MessageBox.Show("Hanafuda Opti tuvo un error y se va a cerrar:\n\n" + ex.Message + "\n\nDetalle en %TEMP%\\hanafuda.log", "Hanafuda Opti", MessageBoxButtons.OK, MessageBoxIcon.Error); } catch { }
+        }
+
         [STAThread]
         static int Main(string[] argv)
         {
@@ -36,22 +54,32 @@ namespace Hanafuda
             var self = Arg(args, "--selftest");
             var shot = Arg(args, "--shot");
             if (self != null) return SelfTest.Run(self);
-            try { Catalog.Load(); }
-            catch (Exception ex) { MessageBox.Show("No se pudo cargar el catálogo: " + ex.Message, "Hanafuda Opti"); return 2; }
-            if (shot != null) Engine.Dry = true;
-            Engine.Limited = args.Contains("--limited");
-            if (!Engine.Dry && !Engine.Limited && !IsAdmin())
+            Trace("inicio " + Application.ExecutablePath + " " + string.Join(" ", argv));
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.ThreadException += (s, e) => Fatal(e.Exception);
+            AppDomain.CurrentDomain.UnhandledException += (s, e) => Fatal(e.ExceptionObject as Exception ?? new Exception(Convert.ToString(e.ExceptionObject)));
+            try
             {
-                // Si el aviso de administrador se cancela, abre igual en modo solo lectura.
-                if (Elevate()) return 0;
-                Engine.Limited = true;
+                Catalog.Load();
+                if (shot != null) Engine.Dry = true;
+                Engine.Limited = args.Contains("--limited");
+                if (!Engine.Dry && !Engine.Limited && !IsAdmin())
+                {
+                    // Si el aviso de administrador se cancela, abre igual en modo solo lectura.
+                    if (Elevate()) { Trace("pidió permisos y cedió el paso a la copia de administrador"); return 0; }
+                    Trace("sin permisos: " + LastElevationError);
+                    Engine.Limited = true;
+                }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                var form = new MainForm();
+                if (shot != null) return form.Shoot(shot);
+                Trace("ventana creada, mostrando");
+                Application.Run(form);
+                Trace("ventana cerrada");
+                return 0;
             }
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            var form = new MainForm();
-            if (shot != null) return form.Shoot(shot);
-            Application.Run(form);
-            return 0;
+            catch (Exception ex) { Fatal(ex); return 3; }
         }
 
         public static string LastElevationError = "";
@@ -113,6 +141,10 @@ namespace Hanafuda
             Check("WinUtil integrado (" + Catalog.Tweaks.Count(t => t.Source == "WinUtil") + " ajustes)", Catalog.Tweaks.Count(t => t.Source == "WinUtil") > 60);
             Check("sin ajuste de Defender en el exe", Catalog.Tweaks.All(t => t.Id != "defender"));
             Check("presets de WinUtil", Catalog.Presets.ContainsKey("Standard") && Catalog.Presets["Standard"].Count > 5);
+            Check("existe la opción de punto de restauración", Catalog.Actions.Any(a => a.Id == "restore-point" && a.Script.Contains("Checkpoint-Computer")));
+            var noHelp = Catalog.Tweaks.Where(t => t.Help.Length == 0).Select(t => t.Id).Concat(Catalog.Actions.Where(a => a.Help.Length == 0).Select(a => a.Id)).ToList();
+            foreach (var id in noHelp.Take(8)) Out.AppendLine("  sin explicación: " + id);
+            Check("explicación en todas las opciones (" + (Catalog.Tweaks.Count + Catalog.Actions.Count) + ")", noHelp.Count == 0);
             Check("ningún script abre WinUtil", Catalog.Tweaks.All(t => (t.ApplyScript + t.UndoScript).IndexOf("christitus.com/win", StringComparison.OrdinalIgnoreCase) < 0)
                 && Catalog.Actions.All(a => a.Script.IndexOf("christitus.com/win", StringComparison.OrdinalIgnoreCase) < 0));
 

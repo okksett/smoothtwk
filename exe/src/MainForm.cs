@@ -32,8 +32,8 @@ namespace Hanafuda
         readonly Dictionary<string, Panel> pages = new Dictionary<string, Panel>();
         readonly Dictionary<string, Action> refreshers = new Dictionary<string, Action>();
         readonly Panel body = new Panel();
-        readonly Ctl header = new Ctl();
-        readonly Ctl topBar = new Ctl();
+        readonly GradientCtl header = new GradientCtl(Color.FromArgb(0, 0, 0), Color.FromArgb(48, 48, 48), 0f);
+        readonly GradientCtl topBar = new GradientCtl(Color.FromArgb(0, 0, 0), Color.FromArgb(32, 32, 32), 0f);
         readonly TextBox log = new TextBox();
         readonly List<Control> headerButtons = new List<Control>();
         string current, headTitle = "", headSub = "";
@@ -65,7 +65,7 @@ namespace Hanafuda
                 int titleRoom = (headerButtons.Count > 0 ? headerButtons.Min(b => b.Left) : header.Width) - 40;
                 Theme.Draw(e.Graphics, headTitle, Theme.F(titleRoom < 420 ? 15f : 20f, FontStyle.Bold), Theme.Text, new Rectangle(26, 12, titleRoom, 36), TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
                 Theme.Draw(e.Graphics, headSub, Theme.F(9f), Theme.Dim, new Rectangle(28, 48, 520, 18), TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
-                using (var pen = new Pen(Theme.Line)) e.Graphics.DrawLine(pen, 0, HeadH - 1, header.Width, HeadH - 1);
+                Theme.AccentLine(e.Graphics, 0, HeadH - 1, header.Width);
             };
             Controls.Add(header);
 
@@ -100,6 +100,19 @@ namespace Hanafuda
             timer.Tick += (s, e) => UpdateHud();
             timer.Start();
             ShowPage("inicio");
+        }
+
+        // La copia de administrador nace sin foco: se trae al frente para que no quede escondida.
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            if (Location.X < -1000) return;
+            WindowState = FormWindowState.Normal;
+            TopMost = true;
+            Activate();
+            BringToFront();
+            TopMost = false;
+            Program.Trace("ventana visible en " + Location + " tamaño " + Size);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -157,9 +170,8 @@ namespace Hanafuda
 
         void BuildSidebar()
         {
-            var side = new Ctl();
+            var side = new GradientCtl(Color.FromArgb(0, 0, 0), Color.FromArgb(56, 56, 56), 90f);
             side.SetBounds(0, TopH, SideW, ClientSize.Height - TopH);
-            side.BackColor = Theme.Bg;
             side.Paint += (s, e) =>
             {
                 var g = e.Graphics;
@@ -348,9 +360,9 @@ namespace Hanafuda
             int y = 270;
             var actions = new[]
             {
-                Btn("Aplicar recomendados", Yaku, 210, true),
-                Btn("Deshacer todo", Momiji, 160),
-                Btn("Punto de restauración", () => RunJob("Punto de restauración", () => Engine.RestorePoint(Log), null), 190),
+                Btn("Crear punto de restauración", () => RunAction(Catalog.Actions.First(a => a.Id == "restore-point")), 230, true),
+                Btn("Aplicar recomendados", Yaku, 190),
+                Btn("Deshacer todo", Momiji, 150),
                 Btn("Reiniciar Explorer", () => RunJob("Reiniciar Explorer", () => { Engine.RunScript("Invoke-WinUtilExplorerUpdate -action restart", Log); return "Explorer reiniciado."; }, null), 160)
             };
             int x = 22;
@@ -368,7 +380,8 @@ namespace Hanafuda
             {
                 var lines = new[]
                 {
-                    tweaks + " ajustes  ·  " + Catalog.Actions.Count + " acciones  ·  " + Catalog.Apps.Count + " apps",
+                    "Antes de optimizar, crea un punto de restauración: si algo sale mal, Windows vuelve a como estaba.",
+                    tweaks + " ajustes  ·  " + Catalog.Actions.Count + " acciones  ·  " + Catalog.Apps.Count + " apps  ·  pulsa ? en cualquier opción para ver qué hace",
                     wu + " opciones vienen de WinUtil de Chris Titus y corren dentro de Hanafuda.",
                     "«Aplicar recomendados» solo aplica lo pensado para " + (Engine.IsLaptop ? "laptop" : "escritorio") + " y antes intenta crear un punto de restauración.",
                     "«Deshacer todo» devuelve cada valor que Hanafuda cambió a como estaba."
@@ -435,7 +448,7 @@ namespace Hanafuda
                         toggles.Add(new KeyValuePair<Tweak, Toggle>(t, tg));
                         right = tg;
                     }
-                    var row = new Row(t.Name, t.Desc, right);
+                    var row = new Row(t.Name, t.Desc, right, null, TweakHelp(t));
                     row.Tags.AddRange(Tags(t));
                     Add(page, row);
                 }
@@ -462,9 +475,83 @@ namespace Hanafuda
             if (t.Download) yield return "DESCARGA";
         }
 
+        // ------------------------------------------------------------ textos del boton ?
+        static readonly Dictionary<string, string> PowerNames = new Dictionary<string, string>
+        {
+            { "be337238-0d82-4146-a960-4f3749d470c7", "Modo turbo del procesador" },
+            { "0cc5b647-c1df-4637-891a-dec35c318583", "Núcleos mínimos despiertos (estacionamiento)" },
+            { "ee12f906-d277-404b-b6da-e5fa1a576df5", "Ahorro de energía de PCIe" },
+            { "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "Suspensión selectiva de USB" },
+            { "12bbebe6-58d6-4636-95bb-3217ef867c1a", "Ahorro de energía del Wi-Fi" }
+        };
+
+        static string TweakHelp(Tweak t)
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.Append(t.Help.Length > 0 ? t.Help : t.Desc);
+            var lines = new List<string>();
+            foreach (var r in t.Registry)
+            {
+                var name = r.Name.Length == 0 ? "(predeterminado)" : r.Name;
+                lines.Add(r.Value == null ? "Registro: borra «" + name + "» en " + r.Path : "Registro: " + r.Path + " → " + name + " = " + (r.Value.Length == 0 ? "(vacío)" : r.Value));
+            }
+            foreach (var s in t.Services)
+                lines.Add("Servicio «" + s[0] + "»: inicio " + (s[1] == "Disabled" ? "desactivado" : s[1] == "Manual" ? "manual" : s[1] == "AutomaticDelayedStart" ? "automático retrasado" : "automático"));
+            foreach (var task in t.Tasks) lines.Add("Tarea programada desactivada: " + task);
+            foreach (var p in t.Power)
+            {
+                string label;
+                if (!PowerNames.TryGetValue(p.Setting, out label)) label = "Ajuste de energía " + p.Setting;
+                if (p.Ac.HasValue) lines.Add("Energía: " + label + " = " + p.Ac + " (enchufado)");
+                if (p.Dc.HasValue) lines.Add("Energía: " + label + " = " + p.Dc + " (con batería)");
+            }
+            switch (t.Special)
+            {
+                case "plan-high": lines.Add("Activa el plan de energía Alto rendimiento. Al deshacer vuelve a tu plan anterior."); break;
+                case "plan-ultimate": lines.Add("Crea una copia del plan Máximo rendimiento y la activa. Al deshacer vuelve a tu plan y borra la copia."); break;
+                case "overlay-best": lines.Add("Pone el modo de energía de Windows en «Mejor rendimiento» (powercfg /overlaysetactive)."); break;
+                case "hibernate-off": lines.Add("Ejecuta: powercfg /hibernate off"); break;
+                case "memcomp-off": lines.Add("Ejecuta: Disable-MMAgent -MemoryCompression"); break;
+                case "dx-windowed": lines.Add("Registro: HKCU\\Software\\Microsoft\\DirectX\\UserGpuPreferences → agrega SwapEffectUpgradeEnable=1 sin borrar tus otras opciones gráficas."); break;
+            }
+            if (t.ApplyScript.Length > 0) lines.Add("Ejecuta un script de PowerShell" + (t.Download ? " que descarga archivos de internet" : "") + (t.Source == "WinUtil" ? " (de WinUtil)" : "") + ".");
+            if (lines.Count > 0)
+            {
+                sb.Append("\n\nQué cambia exactamente:");
+                foreach (var l in lines.Take(14)) sb.Append("\n• " + l);
+                if (lines.Count > 14) sb.Append("\n• … y " + (lines.Count - 14) + " cambios más.");
+            }
+            sb.Append("\n\n¿Se puede deshacer? ");
+            if (t.OneShot) sb.Append("No. Esta acción no tiene vuelta atrás.");
+            else
+            {
+                sb.Append("Sí: apaga el interruptor o usa «Deshacer todo» en Inicio. Hanafuda guarda el valor que tenías antes.");
+                if (t.ApplyScript.Length > 0 && t.UndoScript.Length == 0) sb.Append(" La parte del script no se revierte sola.");
+            }
+            sb.Append("\nNecesita reiniciar: " + (t.Reboot ? "sí." : "no."));
+            sb.Append("\nPensado para: " + (t.Device == "desktop" ? "PC de escritorio." : t.Device == "laptop" ? "laptops." : "cualquier equipo."));
+            if (t.Rec) sb.Append(" Recomendado.");
+            return sb.ToString();
+        }
+
+        static string ActionHelp(ActionItem a)
+        {
+            var sb = new System.Text.StringBuilder(a.Help.Length > 0 ? a.Help : a.Desc);
+            var script = a.Script.Replace("\r", "").Split('\n').Select(l => l.Trim()).Where(l => l.Length > 0).ToList();
+            if (script.Count > 0)
+            {
+                sb.Append("\n\nComandos que ejecuta:");
+                foreach (var l in script.Take(10)) sb.Append("\n  " + (l.Length > 110 ? l.Substring(0, 110) + "…" : l));
+                if (script.Count > 10) sb.Append("\n  … (" + (script.Count - 10) + " líneas más)");
+            }
+            if (a.Download) sb.Append("\n\nDescarga archivos de internet.");
+            return sb.ToString();
+        }
+
         Row ActionRow(ActionItem a)
         {
-            var row = new Row(a.Name, a.Desc, Btn(a.Button, () => RunAction(a), 100));
+            var row = new Row(a.Name, a.Desc, Btn(a.Button, () => RunAction(a), 100, a.Id == "restore-point"), null, ActionHelp(a));
+            if (a.Id == "restore-point") row.Tags.Add("REC");
             if (a.Source == "WinUtil") row.Tags.Add("WINUTIL");
             if (a.Download) row.Tags.Add("DESCARGA");
             return row;
@@ -665,7 +752,8 @@ namespace Hanafuda
                 var check = new Check();
                 var a = app;
                 check.CheckedChanged += delegate { a.Selected = check.Checked; };
-                var row = new Row(app.Name, app.Desc, null, check) { Height = 50 };
+                var row = new Row(app.Name, app.Desc, null, check, app.Desc + "\n\nCategoría: " + app.Category + "\nPaquete de WinGet: " + app.Winget
+                    + "\n\nMárcala y pulsa «Instalar» arriba. Se descarga desde la fuente oficial de WinGet (Microsoft) y se instala en silencio, aceptando los términos del paquete. «Desinstalar» la quita igual.") { Height = 52 };
                 row.Tags.Add(app.Category.ToUpperInvariant());
                 Add(page, row);
                 appRows.Add(new KeyValuePair<AppItem, Row>(app, row));
@@ -745,7 +833,9 @@ namespace Hanafuda
                 var check = new Check { Checked = t.On };
                 var target = t;
                 check.CheckedChanged += delegate { target.On = check.Checked; };
-                var row = new Row(t.Name, t.Desc, null, check);
+                var row = new Row(t.Name, t.Desc, null, check, t.Recycle
+                    ? "Vacía la Papelera de reciclaje de todas las unidades. Lo que haya ahí se borra para siempre. Está apagada por defecto para que no la borres sin querer."
+                    : t.Desc + "\n\nSon archivos que Windows o los programas vuelven a crear cuando los necesitan, así que borrarlos es seguro. Si un programa está abierto y usa alguno, ese archivo se salta.\n\nCarpetas que se vacían:\n" + string.Join("\n", t.Paths.Select(p => "• " + p)));
                 row.Tags.Add(t.Recycle ? "SIN DESHACER" : "…");
                 Add(page, row);
                 cleanRows.Add(new KeyValuePair<CleanTarget, Row>(t, row));
@@ -802,7 +892,7 @@ namespace Hanafuda
                     }
                     catch (Exception ex) { Log("No se pudo cambiar: " + ex.Message); }
                 };
-                var row = new Row(item.Name, item.Command, tg);
+                var row = new Row(item.Name, item.Command, tg, null, "«" + item.Name + "» se abre solo cada vez que inicias sesión en Windows. Apagarlo hace que el PC arranque más rápido y libera memoria; el programa sigue instalado y puedes abrirlo a mano cuando quieras.\n\nEs lo mismo que desactivarlo en el Administrador de tareas > Aplicaciones de arranque: no borra nada y se puede volver a encender aquí.\n\nComando que ejecuta Windows:\n" + item.Command);
                 row.Tags.Add(item.Scope.ToUpperInvariant());
                 Add(page, row);
             }
@@ -828,6 +918,20 @@ namespace Hanafuda
                     DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
                     bmp.Save(Path.Combine(dir, (++i).ToString("00") + "-" + p[0] + ".png"));
                 }
+            }
+            var sample = Catalog.Tweaks.FirstOrDefault(t => t.Id == "boost") ?? Catalog.Tweaks[0];
+            using (var d = new HelpDialog(sample.Name, TweakHelp(sample)))
+            {
+                d.StartPosition = FormStartPosition.Manual;
+                d.Location = new Point(-5000, 0);
+                d.Show();
+                for (int k = 0; k < 10; k++) { Application.DoEvents(); Thread.Sleep(30); }
+                using (var bmp = new Bitmap(d.Width, d.Height))
+                {
+                    d.DrawToBitmap(bmp, new Rectangle(0, 0, d.Width, d.Height));
+                    bmp.Save(Path.Combine(dir, (++i).ToString("00") + "-ayuda.png"));
+                }
+                d.Close();
             }
             File.WriteAllText(Path.Combine(dir, "log.txt"), log.Text);
             Close();

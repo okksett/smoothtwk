@@ -6,6 +6,7 @@ param([Parameter(Mandatory)][string]$HanafudaScript, [Parameter(Mandatory)][stri
 $ErrorActionPreference = 'Stop'
 
 . $HanafudaScript
+$helpText = & (Join-Path $PSScriptRoot 'help-es.ps1')
 $outTweaks = New-Object System.Collections.ArrayList
 $outActions = New-Object System.Collections.ArrayList
 
@@ -24,12 +25,16 @@ function New-Tweak([hashtable]$h) {
         source = $(if ($h.source) { $h.source } else { 'Hanafuda' }); download = [bool]$h.download
         registry = @($h.registry | Where-Object { $_ }); services = @($h.services | Where-Object { $_ }); tasks = @($h.tasks | Where-Object { $_ })
         power = @($h.power | Where-Object { $_ }); apply = [string]$h.apply; undo = [string]$h.undo
+        help = [string]$helpText[$h.id]
     }
     [void]$outTweaks.Add($t)
 }
 
 function New-Action([hashtable]$h) {
+    $help = [string]$helpText[$h.id]
+    if (-not $help) { $help = [string]$h.help }
     [void]$outActions.Add([ordered]@{
+        help = $help
         id = $h.id; card = $h.card; group = $h.group; name = $h.name; desc = [string]$h.desc
         script = $h.script; warn = [string]$h.warn; button = $(if ($h.button) { $h.button } else { 'Ejecutar' }); download = [bool]$h.download
         source = $(if ($h.source) { $h.source } else { 'Hanafuda' })
@@ -113,6 +118,25 @@ foreach ($p in $wu.PSObject.Properties) {
 }
 
 # ---------------------------------------------------------------- acciones
+New-Action @{ id = 'restore-point'; card = 'susuki'; group = 'Seguridad primero'; name = 'Crear punto de restauración'; desc = 'La opción más segura: guarda una copia del sistema para volver atrás si algo sale mal.'; button = 'Crear'
+    help = 'Guarda una "foto" de la configuración de Windows: registro, drivers, programas instalados y archivos del sistema. Si después de un ajuste algo deja de funcionar, puedes volver a como estaba desde Inicio > "Crear un punto de restauración" > Restaurar sistema, o desde Mantenimiento > Paneles clásicos > Windows Restore. Tus documentos, fotos y juegos no se tocan. Es lo primero que conviene hacer antes de optimizar. Si la Protección del sistema estaba apagada en C:, Hanafuda la enciende (usa un poco de espacio del disco). Windows normalmente permite un punto cada 24 horas; Hanafuda quita ese límite solo mientras crea el punto y después lo deja como estaba.'
+    script = @'
+$k = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore'
+try { Enable-ComputerRestore -Drive "$env:SystemDrive\" -ErrorAction Stop } catch { Write-Output ('No se pudo encender la Protección del sistema: ' + $_.Exception.Message) }
+$old = (Get-ItemProperty -Path $k -Name SystemRestorePointCreationFrequency -ErrorAction SilentlyContinue).SystemRestorePointCreationFrequency
+Set-ItemProperty -Path $k -Name SystemRestorePointCreationFrequency -Type DWord -Value 0
+try {
+    Checkpoint-Computer -Description ('Hanafuda Opti ' + (Get-Date -Format 'yyyy-MM-dd HH:mm')) -RestorePointType MODIFY_SETTINGS -ErrorAction Stop
+    Write-Output 'Punto de restauración creado.'
+} catch {
+    Write-Output ('No se pudo crear el punto: ' + $_.Exception.Message)
+    exit 1
+} finally {
+    if ($null -eq $old) { Remove-ItemProperty -Path $k -Name SystemRestorePointCreationFrequency -ErrorAction SilentlyContinue }
+    else { Set-ItemProperty -Path $k -Name SystemRestorePointCreationFrequency -Value $old }
+}
+'@ }
+
 $fixes = @(
     @{ id = 'fix-wu'; name = 'Reiniciar Windows Update'; desc = 'Detiene los servicios, limpia la caché de descargas y los vuelve a iniciar.'; script = @'
 $svcs = 'wuauserv','bits','cryptsvc','msiserver'
@@ -156,7 +180,8 @@ foreach ($p in $fe.PSObject.Properties) {
         $lines += @($v.InvokeScript | Where-Object { $_ })
         New-Action @{ id = $p.Name.ToLowerInvariant(); card = 'susuki'; group = 'Funciones de Windows'; name = [string]$v.Content; desc = [string]$v.Description; button = 'Activar'; source = 'WinUtil'; script = ($lines -join "`r`n") }
     } elseif ($v.category -eq 'Legacy Windows Panels' -and $v.InvokeScript) {
-        New-Action @{ id = $p.Name.ToLowerInvariant(); card = 'susuki'; group = 'Paneles clásicos'; name = [string]$v.Content; desc = [string]$v.Description; button = 'Abrir'; source = 'WinUtil'; script = (@($v.InvokeScript) -join "`r`n") }
+        New-Action @{ id = $p.Name.ToLowerInvariant(); card = 'susuki'; group = 'Paneles clásicos'; name = [string]$v.Content; desc = [string]$v.Description; button = 'Abrir'; source = 'WinUtil'; script = (@($v.InvokeScript) -join "`r`n")
+            help = "Abre el panel clásico «$($v.Content)» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido." }
     }
 }
 New-Action @{ id = 'feat-ssh'; card = 'susuki'; group = 'Funciones de Windows'; name = 'OpenSSH Server - Enable'; desc = 'Instala el servidor SSH, lo inicia y abre el puerto 22 en el firewall.'; button = 'Activar'; source = 'WinUtil'; script = @'
@@ -181,7 +206,8 @@ $dns = Get-Content (Join-Path $WinUtilConfig 'dns.json') -Raw -Encoding UTF8 | C
 foreach ($p in $dns.PSObject.Properties) {
     $v = $p.Value
     $label = $p.Name -replace '_', ' '
-    New-Action @{ id = 'dns-' + $p.Name.ToLowerInvariant(); card = 'botan'; group = 'DNS'; name = $label; desc = "$($v.Primary) · $($v.Secondary)"; button = 'Usar'; source = 'WinUtil'; script = "Get-NetAdapter -Physical | Where-Object Status -eq 'Up' | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex `$_.ifIndex -ServerAddresses '$($v.Primary)','$($v.Secondary)'; Write-Output ('DNS $label en ' + `$_.Name) }`r`nClear-DnsClientCache" }
+    New-Action @{ id = 'dns-' + $p.Name.ToLowerInvariant(); card = 'botan'; group = 'DNS'; name = $label; desc = "$($v.Primary) · $($v.Secondary)"; button = 'Usar'; source = 'WinUtil'
+        help = "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a $label ($($v.Primary) y $($v.Secondary)). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."; script = "Get-NetAdapter -Physical | Where-Object Status -eq 'Up' | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex `$_.ifIndex -ServerAddresses '$($v.Primary)','$($v.Secondary)'; Write-Output ('DNS $label en ' + `$_.Name) }`r`nClear-DnsClientCache" }
 }
 New-Action @{ id = 'dns-auto'; card = 'botan'; group = 'DNS'; name = 'Automático'; desc = 'Vuelve al DNS de tu router.'; button = 'Usar'; script = "Get-NetAdapter -Physical | Where-Object Status -eq 'Up' | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex `$_.ifIndex -ResetServerAddresses; Write-Output ('DNS automático en ' + `$_.Name) }`r`nClear-DnsClientCache" }
 New-Action @{ id = 'dns-flush'; card = 'botan'; group = 'DNS'; name = 'Vaciar caché DNS'; desc = 'Borra respuestas DNS guardadas.'; button = 'Vaciar'; script = "Clear-DnsClientCache`r`nWrite-Output 'Caché DNS vaciada.'" }
@@ -191,6 +217,7 @@ foreach ($p in $appx.PSObject.Properties) {
     $v = $p.Value
     New-Action @{ id = $p.Name.ToLowerInvariant(); card = 'sakura'; group = 'Quitar apps de Microsoft'; name = [string]$v.Content; desc = [string]$v.Description; button = 'Quitar'; source = 'WinUtil'
         warn = 'Se puede reinstalar desde Microsoft Store.'
+        help = "Desinstala «$($v.Content)» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es (descripción de WinUtil): $($v.Description) Si la necesitas otra vez, se instala gratis desde Microsoft Store."
         script = "Get-AppxPackage -AllUsers -Name '*$($v.PackageId)*' | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue`r`nGet-AppxProvisionedPackage -Online | Where-Object DisplayName -like '*$($v.PackageId)*' | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue | Out-Null`r`nWrite-Output 'Quitado: $($v.Content)'" }
 }
 
