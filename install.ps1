@@ -11,7 +11,7 @@
     $headers = @{ Authorization = "Bearer $token"; Accept = 'application/vnd.github.raw' }
     $dest = Join-Path $env:LOCALAPPDATA 'HanafudaOpti'
     if (-not (Test-Path -LiteralPath $dest)) { [void](New-Item -ItemType Directory -Path $dest) }
-    foreach ($name in 'hanafuda.ps1', 'hanafuda.cmd') {
+    foreach ($name in 'hanafuda.ps1', 'hanafuda.cmd', 'HanafudaOpti.exe') {
         Invoke-WebRequest -UseBasicParsing -Uri "$api/$name" -Headers $headers -OutFile (Join-Path $dest $name)
     }
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dest 'hanafuda.ps1') install

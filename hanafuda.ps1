@@ -294,7 +294,6 @@ $script:Cards = @(
     @{ Key = '6'; Id = 'botan';  Title = 'BOTAN';  Sub = 'Red y DNS' }
     @{ Key = '7'; Id = 'hagi';   Title = 'HAGI';   Sub = 'Programas al iniciar' }
     @{ Key = '8'; Id = 'susuki'; Title = 'SUSUKI'; Sub = 'Reparar Windows' }
-    @{ Key = '9'; Id = 'kiri';   Title = 'KIRI';   Sub = 'WinUtil de Chris Titus' }
     @{ Key = 'x'; Id = 'yanagi'; Title = 'YANAGI'; Sub = 'Seguridad avanzada (riesgo)' }
     @{ Key = 'y'; Id = 'yaku';   Title = 'YAKU';   Sub = 'Aplicar todo lo recomendado' }
     @{ Key = 'm'; Id = 'momiji'; Title = 'MOMIJI'; Sub = 'Deshacer todo' }
@@ -1148,6 +1147,8 @@ function Install-Hanafuda {
     if ($PSScriptRoot.TrimEnd('\') -ne $dest.TrimEnd('\')) {
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'hanafuda.ps1') -Destination $dest -Force
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'hanafuda.cmd') -Destination $dest -Force
+        $exe = Join-Path $PSScriptRoot 'HanafudaOpti.exe'
+        if (Test-Path -LiteralPath $exe) { Copy-Item -LiteralPath $exe -Destination $dest -Force }
     }
     $raw = Get-UserPathRaw
     if (($raw -split ';') -notcontains $dest) { Set-UserPathRaw (($raw.TrimEnd(';') + ';' + $dest).TrimStart(';')) }
@@ -1174,8 +1175,8 @@ function Show-Catalog {
 }
 
 function Show-Usage {
-    Write-Output 'hanafuda            abre el menú'
-    Write-Output 'hanafuda winutil    abre WinUtil de Chris Titus'
+    Write-Output 'hanafuda            abre la ventana de Hanafuda Opti'
+    Write-Output 'hanafuda consola    abre el menú de consola'
     Write-Output 'hanafuda list       muestra cada ajuste y su estado'
     Write-Output 'hanafuda install    instala el comando en este usuario'
     Write-Output 'hanafuda uninstall  quita el comando'
@@ -1185,7 +1186,6 @@ function Show-Usage {
 function Invoke-Main {
     switch ($Command.ToLowerInvariant()) {
         '' { Start-Interface; return }
-        'winutil' { Start-WinUtil; if ($script:DryRun) { $script:DryLog }; return }
         'list' { Show-Catalog; return }
         'install' { Install-Hanafuda; return }
         'uninstall' { Uninstall-Hanafuda; return }
