@@ -24,29 +24,30 @@ hanafuda
 
 `HanafudaOpti.exe` pide permisos de administrador al abrir. `hanafuda consola` abre la versión de texto.
 
-## Cartas
+## Apartados
 
-| Carta | Función |
+| Apartado | Para qué sirve |
 |---|---|
-| INICIO | HUD en vivo (CPU, RAM, disco, GPU, Windows, batería), YAKU, MOMIJI y punto de restauración |
-| MATSU | Rendimiento |
-| KIKU | Energía y CPU: planes, turbo, PCIe, USB, Wi-Fi, memoria, arranque |
-| FUJI | Gaming |
-| UME | Privacidad |
-| SAKURA | Windows limpio y quitar apps de Microsoft |
-| KIRI | Tweaks de WinUtil con presets mínimo y estándar |
-| BOTAN | 239 apps con WinGet y DNS |
-| AYAME | Limpieza de disco |
-| HAGI | Programas al iniciar |
-| SUSUKI | Reparaciones, Windows Update, funciones de Windows y paneles |
-| YANAGI | Seguridad avanzada (riesgo) |
+| Inicio | HUD en vivo (CPU, RAM, disco, GPU, Windows, batería), aplicar recomendados, deshacer todo y punto de restauración |
+| Rendimiento | Respuesta del sistema y del disco |
+| Energía y CPU | Planes de energía, turbo, PCIe, USB, Wi-Fi, memoria y arranque |
+| Juegos | Prioridad y latencia para jugar |
+| Privacidad | Telemetría y rastreo |
+| Limpiar Windows | Anuncios, Copilot y quitar apps de Microsoft |
+| Ajustes de WinUtil | Opciones de Chris Titus con presets mínimo y estándar |
+| Apps y DNS | 239 apps con WinGet y cambio de DNS |
+| Liberar espacio | Temporales y caché |
+| Arranque | Programas que abren al encender el PC |
+| Mantenimiento | Reparaciones, Windows Update, funciones de Windows y paneles |
+| Seguridad avanzada | Ajustes que reducen la seguridad (con riesgo) |
 
 ## Antes de usarlo
 
-- Hanafuda detecta si el equipo es laptop o escritorio. YAKU solo aplica lo recomendado para ese tipo de equipo.
-- Cada ajuste guarda el valor anterior en `%ProgramData%\HanafudaOpti\backup-exe.json`. MOMIJI lo restaura.
-- Las acciones marcadas SIN DESHACER, la limpieza de disco y quitar apps no se pueden revertir.
-- YANAGI reduce la seguridad del equipo. Cada opción pide confirmación y ninguna entra en YAKU.
+- Hanafuda detecta si el equipo es laptop o escritorio. «Aplicar recomendados» solo aplica lo pensado para ese tipo de equipo.
+- Cada ajuste guarda el valor anterior en `%ProgramData%\HanafudaOpti\backup-exe.json`. «Deshacer todo» lo restaura.
+- Las acciones marcadas SIN DESHACER, liberar espacio y quitar apps no se pueden revertir.
+- Seguridad avanzada reduce la protección del equipo. Cada opción pide confirmación y ninguna entra en los recomendados.
+- Si cancelas el aviso de administrador, la ventana abre en solo lectura con un botón para reabrir como administrador.
 
 ## Compilar
 

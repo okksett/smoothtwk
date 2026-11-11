@@ -47,7 +47,7 @@ foreach ($t in $script:Tweaks) {
     switch ($t.Id) {
         'hibernar' { $h.special = 'hibernate-off'; $h.device = 'desktop' }
         'plan' { $h.special = 'plan-high'; $h.device = 'desktop' }
-        'puntos' { $h.oneshot = $true; $h.apply = 'vssadmin delete shadows /for=c: /all /quiet' }
+        'puntos' { $h.oneshot = $true; $h.apply = 'vssadmin delete shadows /for=c: /all /quiet'; $h.warn = 'No se puede deshacer. Ni Hanafuda ni Windows podrán volver a esos puntos.' }
         'xbox' { $h.desc = 'Libera recursos. Rompe Game Pass y la app Xbox. En Ryzen X3D puede bajar FPS.' }
         'sysmain' { $h.desc = 'Útil en discos HDD. En SSD no hay mejora medida.' }
     }
@@ -126,7 +126,7 @@ Write-Output 'Windows Update reiniciado. Reinicia el PC.'
 '@ }
     @{ id = 'fix-net'; name = 'Reiniciar la red'; desc = 'Restablece Winsock y TCP/IP y vacía la caché DNS. Requiere reinicio.'; script = "netsh winsock reset`r`nnetsh int ip reset`r`nipconfig /flushdns`r`nWrite-Output 'Red restablecida. Reinicia el PC.'" }
     @{ id = 'fix-ntp'; name = 'Hora con pool.ntp.org'; desc = 'Sincroniza el reloj con servidores públicos más precisos.'; script = "Start-Service w32time`r`nw32tm /config /update /manualpeerlist:`"pool.ntp.org,0x8`" /syncfromflags:MANUAL`r`nRestart-Service w32time`r`nw32tm /resync" }
-    @{ id = 'fix-winget'; name = 'Reparar WinGet'; desc = 'Reinstala el gestor de paquetes que usa la carta de apps.'; download = $true; script = "Install-PackageProvider -Name NuGet -Force | Out-Null`r`nInstall-Module -Name Microsoft.WinGet.Client -Force`r`nRepair-WinGetPackageManager -AllUsers" }
+    @{ id = 'fix-winget'; name = 'Reparar WinGet'; desc = 'Reinstala el gestor de paquetes que usa el apartado de apps.'; download = $true; script = "Install-PackageProvider -Name NuGet -Force | Out-Null`r`nInstall-Module -Name Microsoft.WinGet.Client -Force`r`nRepair-WinGetPackageManager -AllUsers" }
     @{ id = 'fix-sfc'; name = 'Escaneo de archivos del sistema'; desc = 'DISM y SFC reparan archivos dañados. Tarda de 10 a 30 minutos.'; script = "DISM /Online /Cleanup-Image /RestoreHealth`r`nsfc /scannow" }
     @{ id = 'fix-trim'; name = 'Optimizar SSD (TRIM)'; desc = 'Envía TRIM a la unidad del sistema. Seguro y rápido.'; script = "Optimize-Volume -DriveLetter `$env:SystemDrive[0] -ReTrim -Verbose 4>&1" }
 )

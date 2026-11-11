@@ -15,18 +15,18 @@ namespace Hanafuda
         const int TopH = 40, SideW = 214, HeadH = 76, LogH = 104;
         readonly string[][] pagesDef =
         {
-            new[] { "inicio", "INICIO", "HUD y acciones rápidas" },
-            new[] { "matsu", "MATSU", "Rendimiento" },
-            new[] { "kiku", "KIKU", "Energía y CPU" },
-            new[] { "fuji", "FUJI", "Gaming" },
-            new[] { "ume", "UME", "Privacidad" },
-            new[] { "sakura", "SAKURA", "Windows limpio" },
-            new[] { "kiri", "KIRI", "Tweaks de WinUtil" },
-            new[] { "botan", "BOTAN", "Apps y DNS" },
-            new[] { "ayame", "AYAME", "Limpieza de disco" },
-            new[] { "hagi", "HAGI", "Programas al iniciar" },
-            new[] { "susuki", "SUSUKI", "Reparar y funciones" },
-            new[] { "yanagi", "YANAGI", "Seguridad (riesgo)" }
+            new[] { "inicio", "Inicio", "Estado del PC y acciones rápidas" },
+            new[] { "matsu", "Rendimiento", "Respuesta del sistema y del disco" },
+            new[] { "kiku", "Energía y CPU", "Planes de energía y procesador" },
+            new[] { "fuji", "Juegos", "Prioridad y latencia para jugar" },
+            new[] { "ume", "Privacidad", "Telemetría y rastreo" },
+            new[] { "sakura", "Limpiar Windows", "Anuncios, Copilot y apps extra" },
+            new[] { "kiri", "Ajustes de WinUtil", "Opciones de Chris Titus" },
+            new[] { "botan", "Apps y DNS", "Instalar programas y cambiar DNS" },
+            new[] { "ayame", "Liberar espacio", "Temporales y caché" },
+            new[] { "hagi", "Arranque", "Programas al encender el PC" },
+            new[] { "susuki", "Mantenimiento", "Reparar, actualizar y funciones" },
+            new[] { "yanagi", "Seguridad avanzada", "Ajustes con riesgo" }
         };
         readonly Dictionary<string, NavButton> navs = new Dictionary<string, NavButton>();
         readonly Dictionary<string, Panel> pages = new Dictionary<string, Panel>();
@@ -283,7 +283,7 @@ namespace Hanafuda
         void SetHeaderFor(string key)
         {
             var def = pagesDef.First(p => p[0] == key);
-            var title = def[1] + "  ·  " + def[2];
+            var title = def[1];
             switch (key)
             {
                 case "inicio":
@@ -348,8 +348,8 @@ namespace Hanafuda
             int y = 270;
             var actions = new[]
             {
-                Btn("YAKU  ·  Aplicar recomendados", Yaku, 250, true),
-                Btn("MOMIJI  ·  Deshacer todo", Momiji, 220),
+                Btn("Aplicar recomendados", Yaku, 210, true),
+                Btn("Deshacer todo", Momiji, 160),
                 Btn("Punto de restauración", () => RunJob("Punto de restauración", () => Engine.RestorePoint(Log), null), 190),
                 Btn("Reiniciar Explorer", () => RunJob("Reiniciar Explorer", () => { Engine.RunScript("Invoke-WinUtilExplorerUpdate -action restart", Log); return "Explorer reiniciado."; }, null), 160)
             };
@@ -370,8 +370,8 @@ namespace Hanafuda
                 {
                     tweaks + " ajustes  ·  " + Catalog.Actions.Count + " acciones  ·  " + Catalog.Apps.Count + " apps",
                     wu + " opciones vienen de WinUtil de Chris Titus y corren dentro de Hanafuda.",
-                    "YAKU aplica solo lo recomendado para " + (Engine.IsLaptop ? "laptop" : "escritorio") + " y antes intenta crear un punto de restauración.",
-                    "MOMIJI devuelve cada valor que Hanafuda cambió a como estaba."
+                    "«Aplicar recomendados» solo aplica lo pensado para " + (Engine.IsLaptop ? "laptop" : "escritorio") + " y antes intenta crear un punto de restauración.",
+                    "«Deshacer todo» devuelve cada valor que Hanafuda cambió a como estaba."
                 };
                 for (int i = 0; i < lines.Length; i++)
                     Theme.Draw(e.Graphics, lines[i], i == 0 ? Theme.F(10f, FontStyle.Bold) : Theme.F(9f), i == 0 ? Theme.Text : Theme.Dim, new Rectangle(0, i * 24, info.Width, 22), TextFormatFlags.Left);
@@ -614,8 +614,8 @@ namespace Hanafuda
         void Yaku()
         {
             var list = Catalog.Tweaks.Where(t => t.Rec && Engine.DeviceMatches(t) && Engine.GuardReason(t) == null && !t.OneShot).ToList();
-            if (!ConfirmDialog.Ask(this, "YAKU", "Se aplican hasta " + list.Count + " ajustes recomendados para " + (Engine.IsLaptop ? "laptop" : "escritorio") + ". Antes se intenta crear un punto de restauración.", "Aplicar")) return;
-            RunJob("YAKU", () =>
+            if (!ConfirmDialog.Ask(this, "Aplicar recomendados", "Se aplican hasta " + list.Count + " ajustes recomendados para " + (Engine.IsLaptop ? "laptop" : "escritorio") + ". Antes se intenta crear un punto de restauración.", "Aplicar")) return;
+            RunJob("Aplicar recomendados", () =>
             {
                 Engine.RestorePoint(Log);
                 int n = 0;
@@ -625,7 +625,7 @@ namespace Hanafuda
                     Log(Engine.Apply(t, Log));
                     n++;
                 }
-                return "YAKU completo: " + n + " ajuste(s) aplicados.";
+                return "Recomendados listos: " + n + " ajuste(s) aplicados.";
             }, InvalidateCards);
         }
 
@@ -634,11 +634,11 @@ namespace Hanafuda
             var b = Backup.Load();
             var list = Catalog.Tweaks.Where(t => b.ContainsKey(t.Id)).ToList();
             if (list.Count == 0) { Log("No hay ajustes de Hanafuda que deshacer."); return; }
-            if (!ConfirmDialog.Ask(this, "MOMIJI", "Se restauran " + list.Count + " ajustes a como estaban antes de Hanafuda.", "Deshacer")) return;
-            RunJob("MOMIJI", () =>
+            if (!ConfirmDialog.Ask(this, "Deshacer todo", "Se restauran " + list.Count + " ajustes a como estaban antes de Hanafuda.", "Deshacer")) return;
+            RunJob("Deshacer todo", () =>
             {
                 foreach (var t in list) Log(Engine.Revert(t, Log));
-                return "MOMIJI completo: " + list.Count + " ajuste(s) restaurados.";
+                return "Listo: " + list.Count + " ajuste(s) restaurados.";
             }, InvalidateCards);
         }
 
