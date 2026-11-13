@@ -19,7 +19,7 @@ namespace Hanafuda
             new[] { "matsu", "Rendimiento", "Respuesta del sistema y del disco" },
             new[] { "kiku", "Energía y CPU", "Planes de energía y procesador" },
             new[] { "fuji", "Juegos", "Prioridad y latencia para jugar" },
-            new[] { "fivem", "FiveM", "PC check y rendimiento" },
+            new[] { "biblioteca", "Biblioteca", "Tus juegos y sus ajustes" },
             new[] { "ume", "Privacidad", "Telemetría y rastreo" },
             new[] { "sakura", "Limpiar Windows", "Anuncios, Copilot y apps extra" },
             new[] { "kiri", "Ajustes de WinUtil", "Opciones de Chris Titus" },
@@ -37,7 +37,8 @@ namespace Hanafuda
         readonly GradientCtl topBar = new GradientCtl(Color.FromArgb(0, 0, 0), Color.FromArgb(32, 32, 32), 0f);
         readonly TextBox log = new TextBox();
         readonly List<Control> headerButtons = new List<Control>();
-        string current, headTitle = "", headSub = "";
+        string current, headTitle = "", headSub = "", headMono;
+        Bitmap headIcon;
         int busy, pendingStatus;
         HudTile cpu, ram, disk, gpu, sys, power;
         readonly System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer { Interval = 1000 };
@@ -63,9 +64,17 @@ namespace Hanafuda
             header.SetBounds(SideW, TopH, ClientSize.Width - SideW, HeadH);
             header.Paint += (s, e) =>
             {
-                int titleRoom = (headerButtons.Count > 0 ? headerButtons.Min(b => b.Left) : header.Width) - 40;
-                Theme.Draw(e.Graphics, headTitle, Theme.F(titleRoom < 420 ? 15f : 20f, FontStyle.Bold), Theme.Text, new Rectangle(26, 12, titleRoom, 36), TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
-                Theme.Draw(e.Graphics, headSub, Theme.F(9f), Theme.Dim, new Rectangle(28, 48, 520, 18), TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
+                int x = 26;
+                if (headIcon != null || headMono != null)
+                {
+                    var ir = new Rectangle(24, 14, 48, 48);
+                    e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    if (headIcon != null) e.Graphics.DrawImage(headIcon, ir); else GameTile.Monogram(e.Graphics, ir, headMono, false);
+                    x = 84;
+                }
+                int titleRoom = (headerButtons.Count > 0 ? headerButtons.Min(b => b.Left) : header.Width) - x - 14;
+                Theme.Draw(e.Graphics, headTitle, Theme.F(titleRoom < 420 ? 15f : 20f, FontStyle.Bold), Theme.Text, new Rectangle(x, 12, titleRoom, 36), TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
+                Theme.Draw(e.Graphics, headSub, Theme.F(9f), Theme.Dim, new Rectangle(x + 2, 48, Math.Max(200, titleRoom), 18), TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
                 Theme.AccentLine(e.Graphics, 0, HeadH - 1, header.Width);
             };
             Controls.Add(header);
@@ -228,7 +237,9 @@ namespace Hanafuda
         public void ShowPage(string key)
         {
             current = key;
-            foreach (var n in navs) n.Value.Selected = n.Key == key;
+            var navKey = key == "fivem" || key.StartsWith("game-") ? "biblioteca" : key;
+            foreach (var n in navs) n.Value.Selected = n.Key == navKey;
+            headIcon = null; headMono = null;
             foreach (var p in pages.Values) p.Visible = false;
             Panel page;
             if (!pages.TryGetValue(key, out page))
@@ -289,13 +300,41 @@ namespace Hanafuda
                 case "ayame": BuildClean(page); break;
                 case "hagi": BuildStartup(page); break;
                 case "fivem": BuildFiveM(page); break;
-                default: BuildCard(key, page); break;
+                case "biblioteca": BuildLibrary(page); break;
+                default:
+                    if (key.StartsWith("game-")) BuildGame(key.Substring(5), page);
+                    else BuildCard(key, page);
+                    break;
             }
             Stack(page);
         }
 
+        void SetGameHeader(string id, string sub, params FlatButton[] extra)
+        {
+            var info = GameLibrary.Find(id);
+            var def = GameLibrary.Def(id);
+            headIcon = GameLibrary.Icon(info, 128);
+            headMono = headIcon == null && def != null ? def.Short : null;
+            var buttons = new List<FlatButton> { Btn("←  Biblioteca", () => ShowPage("biblioteca"), 120) };
+            buttons.AddRange(extra);
+            SetHeader(def != null ? def.Name : id, sub, buttons.ToArray());
+        }
+
         void SetHeaderFor(string key)
         {
+            if (key == "fivem")
+            {
+                SetGameHeader("fivem", "PC check y rendimiento: servicios que revisan los servidores y ajustes que no los tocan.",
+                    Btn("Actualizar", () => { if (refreshers.ContainsKey("fivem")) refreshers["fivem"](); }, 110), Btn("Restaurar para FiveM", RestoreFiveM, 180, true));
+                return;
+            }
+            if (key.StartsWith("game-"))
+            {
+                var id = key.Substring(5);
+                var gc = Catalog.Games.FirstOrDefault(g => g.Id == id);
+                SetGameHeader(id, gc != null ? gc.Tagline : "", Btn("Aplicar ajustes de este juego", () => ApplyGame(id), 220, true));
+                return;
+            }
             var def = pagesDef.First(p => p[0] == key);
             var title = def[1];
             switch (key)
@@ -317,9 +356,9 @@ namespace Hanafuda
                     SetHeader(title, "Opciones de WinUtil de Chris Titus dentro de Hanafuda.",
                         Btn("Preset mínimo", () => ApplyPreset("Minimal"), 130), Btn("Preset estándar", () => ApplyPreset("Standard"), 140, true), Btn("Deshacer carta", () => RevertCard(key), 130));
                     break;
-                case "fivem":
-                    SetHeader(title, "Servicios que revisan los servidores y optimizaciones que no los tocan.",
-                        Btn("Actualizar estado", () => { if (refreshers.ContainsKey("fivem")) refreshers["fivem"](); }, 150), Btn("Restaurar para FiveM", RestoreFiveM, 190, true));
+                case "biblioteca":
+                    SetHeader(title, "Elige un juego para ver sus ajustes. Los iconos salen de los juegos instalados en esta PC.",
+                        Btn("Buscar juegos otra vez", () => { GameLibrary.Refresh(); RebuildPage("biblioteca"); }, 190));
                     break;
                 case "susuki":
                     SetHeader(title, "Reparaciones, Windows Update, funciones de Windows y paneles.");
@@ -466,6 +505,110 @@ namespace Hanafuda
             return row;
         }
 
+        // ------------------------------------------------------------ Biblioteca de juegos
+        void BuildLibrary(Panel page)
+        {
+            var tiles = new List<KeyValuePair<GameDef, GameTile>>();
+            int w = (RowWidth - 24) / 3, h = 196, i = 0;
+            foreach (var d in GameLibrary.Defs)
+            {
+                var gc = Catalog.Games.FirstOrDefault(g => g.Id == d.Id);
+                var tile = new GameTile
+                {
+                    GameName = d.Name, Short = d.Short, Sub = gc != null && gc.AntiCheat.Length > 0 ? "Anticheat: " + gc.AntiCheat : "",
+                    Tag = "fixed", Size = new Size(w, h), Location = new Point(22 + (i % 3) * (w + 12), 12 + (i / 3) * (h + 12))
+                };
+                var id = d.Id;
+                tile.Click += delegate { ShowPage(id == "fivem" ? "fivem" : "game-" + id); };
+                page.Controls.Add(tile);
+                tiles.Add(new KeyValuePair<GameDef, GameTile>(d, tile));
+                i++;
+            }
+            var note = new Ctl { Tag = "fixed", Location = new Point(22, 12 + ((i + 2) / 3) * (h + 12) + 4), Size = new Size(RowWidth, 44) };
+            note.Paint += (s, e) => Theme.Draw(e.Graphics, "Cada juego tiene ajustes de Windows solo para sus ejecutables, ajustes generales que lo ayudan y una guía de configuración dentro del juego. Nada toca los archivos del juego ni su anticheat.",
+                Theme.F(8.75f), Theme.Dim, new Rectangle(0, 0, note.Width, note.Height), TextFormatFlags.Left | TextFormatFlags.WordBreak);
+            page.Controls.Add(note);
+            Interlocked.Increment(ref pendingStatus);
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                foreach (var kv in tiles)
+                {
+                    var info = GameLibrary.Find(kv.Key.Id);
+                    var icon = GameLibrary.Icon(info, 128);
+                    var tile = kv.Value;
+                    if (IsDisposed) return;
+                    BeginInvoke(new Action(() =>
+                    {
+                        tile.Icon = icon;
+                        tile.Installed = info.Installed;
+                        tile.Status = info.Installed ? "Instalado" : "No encontrado";
+                        tile.Invalidate();
+                    }));
+                }
+                Interlocked.Decrement(ref pendingStatus);
+            });
+        }
+
+        void BuildGame(string id, Panel page)
+        {
+            var gc = Catalog.Games.FirstOrDefault(g => g.Id == id);
+            var info = GameLibrary.Find(id);
+            var def = GameLibrary.Def(id);
+            var name = def != null ? def.Name : id;
+            var toggles = new List<KeyValuePair<Tweak, Toggle>>();
+
+            Add(page, new SectionTitle("En esta PC") { Tag = "head" });
+            var pill = new StatusPill();
+            pill.Set(info.Installed ? "INSTALADO" : "NO ENCONTRADO", info.Installed);
+            Add(page, new Row(info.Installed ? name + " está instalado" : name + " no está instalado", info.Installed ? info.Root : "Instálalo y pulsa «Buscar juegos otra vez» en la Biblioteca.", pill, null,
+                info.Installed
+                    ? "Hanafuda encontró estos ejecutables, que son los que reciben los ajustes de Windows de esta página:\n" + string.Join("\n", info.Exes.Select(x => "• " + x))
+                    : "No encontré " + name + " en Steam, Epic, Riot, Ubisoft, Battle.net, Microsoft Store ni en sus carpetas por defecto. Los ajustes de este juego se activan cuando esté instalado. Los ajustes generales funcionan igual."));
+
+            Add(page, new SectionTitle("Ajustes de Windows solo para " + name) { Tag = "head" });
+            foreach (var t in Catalog.Tweaks.Where(t => t.Card == "game-" + id)) Add(page, TweakRow(t, toggles));
+
+            if (gc != null)
+            {
+                Add(page, new SectionTitle("Ajustes generales que ayudan") { Tag = "head" });
+                foreach (var sid in gc.Shared)
+                {
+                    var t = Catalog.Tweaks.FirstOrDefault(x => x.Id == sid);
+                    if (t != null && (t.Device == "both" || Engine.DeviceMatches(t))) Add(page, TweakRow(t, toggles));
+                }
+                foreach (var group in gc.Guide.GroupBy(g => g.Group))
+                {
+                    Add(page, new SectionTitle("Dentro del juego · " + group.Key) { Tag = "head" });
+                    foreach (var item in group)
+                        Add(page, new Row(item.Name, item.Why, StatusPill.Value(item.Value), null,
+                            item.Why + "\n\nValor recomendado: " + item.Value + "\n\nEsto se cambia a mano dentro del juego, en su menú de configuración. Hanafuda no toca los archivos del juego ni el anticheat."));
+                }
+                if (gc.AntiCheat.Length > 0 || gc.Cautions.Count > 0)
+                {
+                    Add(page, new SectionTitle("Anticheat y cuidados") { Tag = "head" });
+                    foreach (var c in gc.Cautions)
+                    {
+                        var cut = c.IndexOf(". ", StringComparison.Ordinal);
+                        Add(page, new Row(cut > 0 ? c.Substring(0, cut + 1) : c, cut > 0 ? c.Substring(cut + 2) : "", null, null, c + (gc.AntiCheat.Length > 0 ? "\n\nAnticheat del juego: " + gc.AntiCheat + "." : "")));
+                    }
+                }
+            }
+            Action refresh = () => LoadStatuses(toggles);
+            refreshers["game-" + id] = refresh;
+            refresh();
+        }
+
+        void ApplyGame(string id)
+        {
+            var gc = Catalog.Games.FirstOrDefault(g => g.Id == id);
+            var list = Catalog.Tweaks.Where(t => t.Card == "game-" + id).ToList();
+            if (gc != null) list.AddRange(gc.Shared.Select(s => Catalog.Tweaks.FirstOrDefault(t => t.Id == s)).Where(t => t != null && t.Rec && Engine.DeviceMatches(t)));
+            list = list.Where(t => Engine.GuardReason(t) == null && !t.OneShot).Distinct().ToList();
+            if (list.Count == 0) { Log("No hay ajustes que se puedan aplicar para este juego en esta PC."); return; }
+            if (!ConfirmDialog.Ask(this, "Aplicar ajustes del juego", "Se aplican " + list.Count + " ajustes: " + string.Join(", ", list.Select(t => t.Name)) + ". Todos se pueden deshacer.", "Aplicar")) return;
+            RunBatch("Ajustes del juego", list, false, "game-" + id);
+        }
+
         // ------------------------------------------------------------ FiveM
         static readonly Dictionary<string, string> ServiceHelp = new Dictionary<string, string>
         {
@@ -525,7 +668,7 @@ namespace Hanafuda
             foreach (var t in Catalog.Tweaks.Where(t => t.Card == "fivem" && t.Group == "Restaurar")) Add(page, TweakRow(t, toggles));
 
             Add(page, new SectionTitle("Optimizaciones para FiveM") { Tag = "head" });
-            var ids = new[] { "fivem-gpu", "modojuego", "mmcss", "dxwindowed", "gamedvr", "hags", "sticky", "throttling", Engine.IsLaptop ? "overlay" : "plan", "usbsuspend", "pcie" };
+            var ids = new[] { "game-gpu-fivem", "game-fso-fivem", "modojuego", "mmcss", "dxwindowed", "gamedvr", "hags", "sticky", "throttling", Engine.IsLaptop ? "overlay" : "plan", "usbsuspend", "pcie" };
             foreach (var id in ids)
             {
                 var t = Catalog.Tweaks.FirstOrDefault(x => x.Id == id);
@@ -1032,16 +1175,16 @@ namespace Hanafuda
             ShowInTaskbar = false;
             Show();
             int i = 0;
-            foreach (var p in pagesDef)
+            foreach (var key in pagesDef.Select(p => p[0]).Concat(new[] { "fivem", "game-valorant", "game-minecraft" }))
             {
-                ShowPage(p[0]);
+                ShowPage(key);
                 var until = DateTime.Now.AddSeconds(40);
                 do { Application.DoEvents(); Thread.Sleep(50); } while (pendingStatus > 0 && DateTime.Now < until);
                 for (int k = 0; k < 10; k++) { Application.DoEvents(); Thread.Sleep(30); }
                 using (var bmp = new Bitmap(Width, Height))
                 {
                     DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
-                    bmp.Save(Path.Combine(dir, (++i).ToString("00") + "-" + p[0] + ".png"));
+                    bmp.Save(Path.Combine(dir, (++i).ToString("00") + "-" + key + ".png"));
                 }
             }
             var sample = Catalog.Tweaks.FirstOrDefault(t => t.Id == "boost") ?? Catalog.Tweaks[0];

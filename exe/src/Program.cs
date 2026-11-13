@@ -137,7 +137,35 @@ namespace Hanafuda
             foreach (var b in badReg.Take(5)) Out.AppendLine("  mal: " + b.t.Id + " " + b.r.Path + " " + b.r.Kind + " " + b.r.Value);
             Check("entradas de registro válidas", badReg.Count == 0);
             Check("servicios válidos", Catalog.Tweaks.SelectMany(t => t.Services).All(s => new[] { "Disabled", "Manual", "Automatic", "AutomaticDelayedStart" }.Contains(s[1])));
-            Check("cartas conocidas", Catalog.Tweaks.All(t => new[] { "matsu", "kiku", "fuji", "ume", "sakura", "kiri", "yanagi", "fivem" }.Contains(t.Card)));
+            Check("cartas conocidas", Catalog.Tweaks.All(t => new[] { "matsu", "kiku", "fuji", "ume", "sakura", "kiri", "yanagi", "fivem" }.Contains(t.Card) || t.Card.StartsWith("game-")));
+            Check("biblioteca: " + Catalog.Games.Count + " juegos con su contenido", Catalog.Games.Count == GameLibrary.Defs.Count && GameLibrary.Defs.All(d => Catalog.Games.Any(g => g.Id == d.Id)));
+            Check("cada juego tiene GPU dedicada y pantalla completa", GameLibrary.Defs.All(d => Catalog.Tweaks.Any(t => t.Id == "game-gpu-" + d.Id) && Catalog.Tweaks.Any(t => t.Id == "game-fso-" + d.Id)));
+            Check("los ajustes compartidos de cada juego existen", Catalog.Games.All(g => g.Shared.All(s => Catalog.Tweaks.Any(t => t.Id == s))));
+            foreach (var d in GameLibrary.Defs)
+            {
+                var gi = GameLibrary.Find(d.Id);
+                Out.AppendLine("  juego " + d.Id + ": " + (gi.Installed ? gi.Exes.Count + " exe en " + gi.Root + " (icono: " + (GameLibrary.Icon(gi, 128) != null ? "sí" : "no") + ")" : "no instalado"));
+            }
+            // Instalacion falsa: copia este exe con los nombres de Fortnite y de Minecraft Java para probar rutas, comodines e iconos.
+            var fakeRoot = Path.Combine(Path.GetTempPath(), "hanafuda-fakegame-" + Guid.NewGuid().ToString("N"));
+            try
+            {
+                var me = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                var fn = Path.Combine(fakeRoot, "FortniteGame\\Binaries\\Win64");
+                var mc = Path.Combine(fakeRoot, "runtime\\java-runtime-delta\\windows-x64\\java-runtime-delta\\bin");
+                Directory.CreateDirectory(fn); Directory.CreateDirectory(mc);
+                File.Copy(me, Path.Combine(fn, "FortniteClient-Win64-Shipping.exe"));
+                File.Copy(me, Path.Combine(mc, "javaw.exe"));
+                var fnDef = GameLibrary.Def("fortnite"); var mcDef = GameLibrary.Def("minecraft");
+                var fi = GameLibrary.Detect(new GameDef { Id = "t1", Name = "t", Short = "T", DefaultRoots = new[] { fakeRoot }, Exes = fnDef.Exes, IconExes = fnDef.IconExes });
+                var mi = GameLibrary.Detect(new GameDef { Id = "t2", Name = "t", Short = "T", DefaultRoots = new[] { fakeRoot }, Exes = mcDef.Exes, IconExes = mcDef.IconExes });
+                Check("detección por ruta (Fortnite falso): " + fi.Exes.Count + " exe", fi.Installed && fi.Exes[0].EndsWith("FortniteClient-Win64-Shipping.exe"));
+                Check("detección con comodines (Java de Minecraft falso): " + mi.Exes.Count + " exe", mi.Installed && mi.Exes.Any(x => x.EndsWith("javaw.exe")));
+                Check("icono del juego extraído del exe", GameLibrary.Icon(fi, 128) != null);
+            }
+            finally { try { Directory.Delete(fakeRoot, true); } catch { } }
+            var ffso = GameLibrary.ExeEntries("game-fso", "fivem");
+            Check("pantalla completa: formato de bandera correcto", ffso.All(e => e.Value.StartsWith("~ ") && e.Value.Contains("DISABLEDXMAXIMIZEDWINDOWEDMODE")));
             var conflicts = Catalog.Tweaks.Where(t => t.FiveMConflict).Select(t => t.Id).ToList();
             Check("ajustes que rompen el PC check de FiveM: " + string.Join(", ", conflicts), conflicts.Contains("sysmain") && conflicts.Contains("telemetria") && conflicts.Contains("wu-services"));
             var restore = Catalog.Actions.FirstOrDefault(a => a.Id == "fivem-restore");

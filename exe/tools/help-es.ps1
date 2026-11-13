@@ -45,7 +45,7 @@
 
     # ---------------------------------------------------------------- Seguridad avanzada
     'smartscreen'  = 'SmartScreen revisa los programas que descargas y las páginas que visitas, y te avisa si son peligrosos. Apagarlo quita esos avisos: es más cómodo, pero un archivo o una página de estafa ya no te va a advertir.'
-    'vbs'          = 'La seguridad basada en virtualización y la integridad de memoria protegen el núcleo de Windows contra drivers maliciosos. Apagarlas puede subir algunos FPS (entre 0 y 10 % según el juego). Algunos anti-cheat, como Valorant o FACEIT, exigen tenerlas encendidas.'
+    'vbs'          = 'La seguridad basada en virtualización y la integridad de memoria protegen el núcleo de Windows contra drivers maliciosos. Apagarlas puede subir algunos FPS (entre 0 y 10 % según el juego). Pero rompe juegos con anticheat moderno: VALORANT (Vanguard) puede no dejarte jugar, Fortnite te deja fuera de torneos y Call of Duty: Warzone puede fallar su verificación de seguridad. Si juegas alguno de esos, no lo actives.'
     'updates'      = 'Windows deja de descargar e instalar actualizaciones por su cuenta y no reinicia solo. Puedes actualizar a mano desde Configuración > Windows Update. Riesgo: si te olvidas, te quedas sin parches de seguridad.'
     'tpm'          = 'Permite instalar o actualizar Windows 11 en equipos sin TPM 2.0, sin Secure Boot o con un procesador no compatible. Microsoft no da soporte a esos equipos y una actualización grande podría fallar.'
     'puntos'       = 'Borra todos los puntos de restauración de la unidad C:. Libera espacio, pero ya no podrás volver a un estado anterior del sistema con ellos. No se puede deshacer.'

@@ -19,7 +19,7 @@ namespace Hanafuda
 
     public class Tweak
     {
-        public string Id, Card, Group, Name, Desc, Help = "", Device = "both", Warn = "", Special = "", Guard = "", Source = "Hanafuda", ApplyScript = "", UndoScript = "";
+        public string Id, Card, Group, Name, Desc, Help = "", Game = "", Device = "both", Warn = "", Special = "", Guard = "", Source = "Hanafuda", ApplyScript = "", UndoScript = "";
         public bool Rec, Reboot, OneShot, Download, FiveMConflict;
         public List<RegEntry> Registry = new List<RegEntry>();
         public List<string[]> Services = new List<string[]>();
@@ -29,6 +29,13 @@ namespace Hanafuda
 
     public class ActionItem { public string Id, Card, Group, Name, Desc, Help = "", Script, Warn = "", Button = "Ejecutar", Source = "Hanafuda"; public bool Download; }
     public class AppItem { public string Id, Name, Category, Desc, Winget; public bool Selected; }
+    public class GuideItem { public string Group, Name, Value, Why; }
+    public class GameContent
+    {
+        public string Id, Name, AntiCheat = "", Tagline = "";
+        public List<string> Cautions = new List<string>(), Shared = new List<string>();
+        public List<GuideItem> Guide = new List<GuideItem>();
+    }
 
     public static class Json
     {
@@ -71,6 +78,7 @@ namespace Hanafuda
         public static List<Tweak> Tweaks = new List<Tweak>();
         public static List<ActionItem> Actions = new List<ActionItem>();
         public static List<AppItem> Apps = new List<AppItem>();
+        public static List<GameContent> Games = new List<GameContent>();
         public static Dictionary<string, List<string>> Presets = new Dictionary<string, List<string>>();
         public static string Lib = "";
 
@@ -94,7 +102,7 @@ namespace Hanafuda
                     Id = Json.S(t, "id"), Card = Json.S(t, "card"), Group = Json.S(t, "group") ?? "", Name = Json.S(t, "name"), Desc = Json.S(t, "desc") ?? "",
                     Rec = Json.B(t, "rec"), Device = Json.S(t, "device") ?? "both", Reboot = Json.B(t, "reboot"), Warn = Json.S(t, "warn") ?? "",
                     OneShot = Json.B(t, "oneshot"), Special = Json.S(t, "special") ?? "", Guard = Json.S(t, "guard") ?? "", Source = Json.S(t, "source") ?? "Hanafuda",
-                    Download = Json.B(t, "download"), ApplyScript = Json.S(t, "apply") ?? "", UndoScript = Json.S(t, "undo") ?? "", Help = Json.S(t, "help") ?? ""
+                    Download = Json.B(t, "download"), ApplyScript = Json.S(t, "apply") ?? "", UndoScript = Json.S(t, "undo") ?? "", Help = Json.S(t, "help") ?? "", Game = Json.S(t, "game") ?? ""
                 };
                 foreach (var r in Json.D(t, "registry"))
                     tw.Registry.Add(new RegEntry { Path = Json.S(r, "path"), Name = Json.S(r, "name") ?? "", Kind = Json.S(r, "type"), Value = Json.S(r, "value") });
@@ -113,6 +121,15 @@ namespace Hanafuda
                 });
             foreach (var a in Json.D(root, "apps"))
                 Apps.Add(new AppItem { Id = Json.S(a, "id"), Name = Json.S(a, "name"), Category = Json.S(a, "category"), Desc = Json.S(a, "desc") ?? "", Winget = Json.S(a, "winget") });
+            foreach (var g in Json.D(root, "games"))
+            {
+                var gc = new GameContent { Id = Json.S(g, "id"), Name = Json.S(g, "name"), AntiCheat = Json.S(g, "anticheat") ?? "", Tagline = Json.S(g, "tagline") ?? "" };
+                gc.Cautions.AddRange(Json.A(g, "cautions").Select(x => Convert.ToString(x)));
+                gc.Shared.AddRange(Json.A(g, "shared").Select(x => Convert.ToString(x)));
+                foreach (var i in Json.D(g, "guide"))
+                    gc.Guide.Add(new GuideItem { Group = Json.S(i, "group"), Name = Json.S(i, "name"), Value = Json.S(i, "value"), Why = Json.S(i, "why") ?? "" });
+                Games.Add(gc);
+            }
             // Ajustes que apagan algo de lo que revisa el PC check de los servidores de FiveM.
             var critical = new HashSet<string>(Engine.FiveMServices, StringComparer.OrdinalIgnoreCase);
             foreach (var t in Tweaks)
@@ -261,6 +278,11 @@ namespace Hanafuda
 
         public static string GuardReason(Tweak t)
         {
+            if (t.Game.Length > 0 && !GameLibrary.Find(t.Game).Installed)
+            {
+                var def = GameLibrary.Def(t.Game);
+                return "No encontré " + (def != null ? def.Name : t.Game) + " instalado en esta PC.";
+            }
             if (t.FiveMConflict && FiveMGuard) return "Bloqueado por la protección de FiveM: este ajuste apaga algo que los servidores revisan en el PC check. Apaga la protección en el apartado FiveM si no juegas FiveM.";
             if (t.Guard == "x3d" && CpuName.IndexOf("X3D", StringComparison.OrdinalIgnoreCase) >= 0) return "Bloqueado en Ryzen X3D: baja FPS en esos procesadores.";
             if (t.Guard == "ram32" && RamGB < 31) return "Necesita 32 GB de RAM o más.";
@@ -492,6 +514,7 @@ namespace Hanafuda
                 list.Add(new RegEntry { Path = path, Name = "Start", Kind = "DWord", Value = start });
                 if (s[1] == "AutomaticDelayedStart") list.Add(new RegEntry { Path = path, Name = "DelayedAutostart", Kind = "DWord", Value = "1" });
             }
+            if (t.Special == "game-gpu" || t.Special == "game-fso") list.AddRange(GameLibrary.ExeEntries(t.Special, t.Game));
             if (t.Special == "dx-windowed")
             {
                 const string path = "HKCU\\Software\\Microsoft\\DirectX\\UserGpuPreferences";

@@ -264,12 +264,59 @@ namespace Hanafuda
         }
     }
 
+    // Tarjeta de un juego en la Biblioteca: icono del juego instalado o una placa con sus iniciales.
+    public class GameTile : Ctl
+    {
+        public Bitmap Icon;
+        public string GameName = "", Short = "", Status = "Buscando…", Sub = "";
+        public bool Installed;
+        public GameTile() { Size = new Size(280, 196); Cursor = Cursors.Hand; }
+
+        public static void Monogram(Graphics g, Rectangle r, string text, bool dim)
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            using (var path = Theme.Round(r, r.Width / 5))
+            using (var b = new LinearGradientBrush(r, dim ? Color.FromArgb(70, 70, 70) : Color.White, dim ? Color.FromArgb(35, 35, 35) : Color.FromArgb(185, 185, 185), 90f))
+                g.FillPath(b, path);
+            float size = r.Height * (text.Length > 2 ? 0.27f : 0.36f);
+            Theme.Draw(g, text, Theme.F(size, FontStyle.Bold), dim ? Color.FromArgb(150, 150, 150) : Theme.Bg, r, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            var r = new Rectangle(0, 0, Width - 1, Height - 1);
+            using (var path = Theme.Round(r, 16))
+            {
+                using (var b = new LinearGradientBrush(r, hover ? Color.FromArgb(44, 44, 44) : Color.FromArgb(28, 28, 28), Color.FromArgb(4, 4, 4), 90f)) g.FillPath(b, path);
+                using (var pen = new Pen(hover ? Color.FromArgb(220, 220, 220) : Color.FromArgb(48, 48, 48), hover ? 1.4f : 1f)) g.DrawPath(pen, path);
+            }
+            var iconRect = new Rectangle((Width - 84) / 2, 22, 84, 84);
+            if (Icon != null) g.DrawImage(Icon, iconRect);
+            else Monogram(g, iconRect, Short, !Installed && Status != "Buscando…");
+            Theme.Draw(g, GameName, Theme.F(11.5f, FontStyle.Bold), Theme.Text, new Rectangle(8, 116, Width - 16, 24), TextFormatFlags.HorizontalCenter | TextFormatFlags.EndEllipsis);
+            Theme.Draw(g, Status, Theme.F(8.5f, FontStyle.Bold), Installed ? Color.FromArgb(225, 225, 225) : Theme.Faint, new Rectangle(8, 142, Width - 16, 18), TextFormatFlags.HorizontalCenter | TextFormatFlags.EndEllipsis);
+            Theme.Draw(g, Sub, Theme.F(8f), Theme.Dim, new Rectangle(12, 162, Width - 24, 18), TextFormatFlags.HorizontalCenter | TextFormatFlags.EndEllipsis);
+        }
+    }
+
     // Pastilla de estado de un servicio: blanca si esta bien, con borde si no.
     public class StatusPill : Ctl
     {
         string label = "…";
         bool good;
         public StatusPill() { Size = new Size(104, 26); }
+
+        // Pastilla con un valor recomendado; el ancho se ajusta al texto.
+        public static StatusPill Value(string text)
+        {
+            var p = new StatusPill();
+            p.Width = Math.Min(230, Math.Max(80, TextRenderer.MeasureText(text, Theme.F(7.5f, FontStyle.Bold)).Width + 26));
+            p.Set(text, false);
+            return p;
+        }
         public void Set(string text, bool ok) { label = text; good = ok; Invalidate(); }
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -281,7 +328,7 @@ namespace Hanafuda
                 if (good) using (var b = new LinearGradientBrush(r, Color.White, Color.FromArgb(200, 200, 200), 90f)) g.FillPath(b, path);
                 else using (var pen = new Pen(label == "…" ? Theme.Faint : Color.FromArgb(200, 200, 200), 1.3f)) g.DrawPath(pen, path);
             }
-            Theme.Draw(g, label, Theme.F(7.5f, FontStyle.Bold), good ? Theme.Bg : Theme.Text, r, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            Theme.Draw(g, label, Theme.F(7.5f, FontStyle.Bold), good ? Theme.Bg : Theme.Text, r, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
         }
     }
 

@@ -24,7 +24,7 @@ function New-Tweak([hashtable]$h) {
         warn = [string]$h.warn; oneshot = [bool]$h.oneshot; special = [string]$h.special; guard = [string]$h.guard
         source = $(if ($h.source) { $h.source } else { 'Hanafuda' }); download = [bool]$h.download
         registry = @($h.registry | Where-Object { $_ }); services = @($h.services | Where-Object { $_ }); tasks = @($h.tasks | Where-Object { $_ })
-        power = @($h.power | Where-Object { $_ }); apply = [string]$h.apply; undo = [string]$h.undo
+        power = @($h.power | Where-Object { $_ }); apply = [string]$h.apply; undo = [string]$h.undo; game = [string]$h.game
         help = $(if ($helpText[$h.id]) { [string]$helpText[$h.id] } else { [string]$h.help })
     }
     [void]$outTweaks.Add($t)
@@ -118,24 +118,20 @@ foreach ($p in $wu.PSObject.Properties) {
 }
 
 # ---------------------------------------------------------------- FiveM (exclusivo de ese apartado)
-New-Tweak @{ id = 'fivem-gpu'; card = 'fivem'; group = 'Optimizaciones para FiveM'; name = 'GPU dedicada para FiveM'; desc = 'Obliga a FiveM y al proceso de GTA a usar la tarjeta gráfica potente.'; rec = $true
-    help = 'En laptops con dos gráficas (Intel o AMD integrada + NVIDIA o AMD dedicada) Windows a veces abre FiveM con la integrada y rinde mucho menos. Esto marca FiveM.exe y los procesos de GTA de FiveM como "Alto rendimiento" en Configuración > Pantalla > Gráficos, igual que hacerlo a mano. Si actualizas FiveM y aparece un proceso nuevo, apaga y vuelve a encender este interruptor. No toca nada del anticheat.'
-    apply = @'
-$root = Join-Path $env:LOCALAPPDATA 'FiveM'
-if (-not (Test-Path -LiteralPath $root)) { Write-Output 'FiveM no está instalado en esta cuenta.'; exit 1 }
-$k = 'HKCU:\Software\Microsoft\DirectX\UserGpuPreferences'
-if (-not (Test-Path $k)) { New-Item -Path $k -Force | Out-Null }
-$exes = @(Get-ChildItem -LiteralPath $root -Filter 'FiveM.exe' -File -ErrorAction SilentlyContinue) + @(Get-ChildItem -LiteralPath (Join-Path $root 'FiveM.app') -Filter '*GTAProcess.exe' -File -ErrorAction SilentlyContinue)
-foreach ($e in $exes) { Set-ItemProperty -Path $k -Name $e.FullName -Value 'GpuPreference=2;'; Write-Output ('GPU dedicada: ' + $e.Name) }
-if (-not $exes.Count) { Write-Output 'No se encontraron ejecutables de FiveM.'; exit 1 }
-'@
-    undo = @'
-$root = Join-Path $env:LOCALAPPDATA 'FiveM'
-$k = 'HKCU:\Software\Microsoft\DirectX\UserGpuPreferences'
-if (Test-Path $k) {
-    (Get-Item $k).GetValueNames() | Where-Object { $_ -like "$root\*" } | ForEach-Object { Remove-ItemProperty -Path $k -Name $_ -ErrorAction SilentlyContinue; Write-Output ('GPU automática: ' + (Split-Path $_ -Leaf)) }
+# ---------------------------------------------------------------- Biblioteca de juegos
+$gamesData = & (Join-Path $PSScriptRoot 'games-es.ps1')
+$outGames = New-Object System.Collections.ArrayList
+foreach ($g in $gamesData) {
+    $card = if ($g.id -eq 'fivem') { 'fivem' } else { 'game-' + $g.id }
+    $group = 'Optimizaciones para FiveM'
+    New-Tweak @{ id = 'game-gpu-' + $g.id; card = $card; group = $group; game = $g.id; special = 'game-gpu'; rec = $true
+        name = "GPU dedicada para $($g.name)"; desc = 'Usa siempre la tarjeta gráfica potente con este juego.'
+        help = "En PCs con dos gráficas (la integrada del procesador y una dedicada NVIDIA o AMD), Windows a veces abre $($g.name) con la integrada y rinde mucho menos. Esto marca los ejecutables del juego como «Alto rendimiento», igual que hacerlo a mano en Configuración > Sistema > Pantalla > Gráficos. Solo cambia una preferencia de Windows: no toca el juego ni su anticheat. Si el juego se actualiza y cambia de ejecutable, apaga y vuelve a encender el interruptor." }
+    New-Tweak @{ id = 'game-fso-' + $g.id; card = $card; group = $group; game = $g.id; special = 'game-fso'; rec = [bool]$g.fsoRec
+        name = 'Sin optimizaciones de pantalla completa'; desc = $g.fsoDesc
+        help = "Marca «Deshabilitar optimizaciones de pantalla completa» en las propiedades de compatibilidad de los ejecutables de $($g.name), como hacerlo con clic derecho > Propiedades > Compatibilidad. Windows deja de convertir la pantalla completa en una ventana especial. $($g.fsoHelp) No toca el juego ni su anticheat." }
+    [void]$outGames.Add([ordered]@{ id = $g.id; name = $g.name; tagline = $g.tagline; anticheat = $g.anticheat; cautions = @($g.cautions); shared = @($g.shared); guide = @($g.guide | ForEach-Object { [ordered]@{ group = $_[0]; name = $_[1]; value = $_[2]; why = $_[3] } }) })
 }
-'@ }
 
 $fivemServices = @'
 $svc = [ordered]@{ PcaSvc = 'auto'; DPS = 'auto'; DiagTrack = 'auto'; SysMain = 'auto'; EventLog = 'auto'; Appinfo = 'demand'; BFE = 'auto'; CDPSvc = 'delayed-auto'; DusmSvc = 'auto'; SSDPSRV = 'demand'; UmRdpService = 'demand' }
@@ -162,7 +158,7 @@ New-Tweak @{ id = 'fivem-remoteregistry'; card = 'fivem'; group = 'Restaurar'; n
     services = @([ordered]@{ name = 'RemoteRegistry'; start = 'Automatic' })
     apply = "Start-Service RemoteRegistry -ErrorAction SilentlyContinue`r`nWrite-Output 'Registro remoto activo.'"
     undo = "Stop-Service RemoteRegistry -Force -ErrorAction SilentlyContinue`r`nWrite-Output 'Registro remoto detenido.'" }
-New-Action @{ id = 'fivem-cache'; card = 'fivem'; group = 'Caché de FiveM'; name = 'Limpiar caché de FiveM'; desc = 'Borra la caché de servidores. Arregla cargas lentas y texturas rotas.'; button = 'Limpiar'
+New-Action @{ id = 'fivem-cache'; card = 'fivem'; group = 'Caché de FiveM'; name = 'Limpiar caché de FiveM'; desc = 'Solo si tienes cargas lentas, texturas rotas o errores al entrar. No sube los FPS.'; button = 'Limpiar'
     warn = 'Cierra FiveM antes. La próxima vez que entres a un servidor, FiveM vuelve a descargar sus archivos.'
     help = 'FiveM guarda los archivos de cada servidor en su carpeta de caché. Con el tiempo crece mucho y puede causar cargas lentas, texturas que no aparecen o errores al entrar. Esto borra las carpetas cache, server-cache y server-cache-priv dentro de FiveM.app\data. No borra tu configuración, tus teclas ni tu cuenta. FiveM las vuelve a crear solo.'
     script = @'
@@ -294,7 +290,7 @@ foreach ($name in 'Minimal', 'Standard') {
     $presetOut[$name] = @($presets.$name | ForEach-Object { 'wu-' + ($_ -replace '^WPF(Tweaks|Toggle)?', '').ToLowerInvariant() } | Where-Object { $id = $_; @($outTweaks | Where-Object { $_.id -eq $id }).Count })
 }
 
-$out = [ordered]@{ version = 2; tweaks = $outTweaks; actions = $outActions; apps = @($apps | Sort-Object { $_.name }); presets = $presetOut }
+$out = [ordered]@{ version = 3; tweaks = $outTweaks; actions = $outActions; apps = @($apps | Sort-Object { $_.name }); presets = $presetOut; games = $outGames }
 $json = $out | ConvertTo-Json -Depth 10 -Compress
 [IO.File]::WriteAllText($OutFile, $json, (New-Object Text.UTF8Encoding($false)))
 "catalogo: $($outTweaks.Count) ajustes, $($outActions.Count) acciones, $($apps.Count) apps"
