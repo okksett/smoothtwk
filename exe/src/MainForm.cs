@@ -19,6 +19,7 @@ namespace Hanafuda
             new[] { "matsu", "Rendimiento", "Respuesta del sistema y del disco" },
             new[] { "kiku", "Energía y CPU", "Planes de energía y procesador" },
             new[] { "fuji", "Juegos", "Prioridad y latencia para jugar" },
+            new[] { "fivem", "FiveM", "PC check y rendimiento" },
             new[] { "ume", "Privacidad", "Telemetría y rastreo" },
             new[] { "sakura", "Limpiar Windows", "Anuncios, Copilot y apps extra" },
             new[] { "kiri", "Ajustes de WinUtil", "Opciones de Chris Titus" },
@@ -180,7 +181,7 @@ namespace Hanafuda
                 Theme.Draw(g, "O P T I", Theme.F(8f, FontStyle.Bold), Theme.Dim, new Rectangle(56, 40, 160, 16), TextFormatFlags.Left);
                 using (var pen = new Pen(Theme.Line)) g.DrawLine(pen, SideW - 1, 0, SideW - 1, side.Height);
             };
-            int y = 74;
+            int y = 70;
             foreach (var p in pagesDef)
             {
                 var key = p[0];
@@ -188,7 +189,7 @@ namespace Hanafuda
                 nav.Click += delegate { ShowPage(key); };
                 navs[key] = nav;
                 side.Controls.Add(nav);
-                y += 46;
+                y += 44;
             }
             Controls.Add(side);
         }
@@ -287,6 +288,7 @@ namespace Hanafuda
                 case "botan": BuildApps(page); break;
                 case "ayame": BuildClean(page); break;
                 case "hagi": BuildStartup(page); break;
+                case "fivem": BuildFiveM(page); break;
                 default: BuildCard(key, page); break;
             }
             Stack(page);
@@ -314,6 +316,10 @@ namespace Hanafuda
                 case "kiri":
                     SetHeader(title, "Opciones de WinUtil de Chris Titus dentro de Hanafuda.",
                         Btn("Preset mínimo", () => ApplyPreset("Minimal"), 130), Btn("Preset estándar", () => ApplyPreset("Standard"), 140, true), Btn("Deshacer carta", () => RevertCard(key), 130));
+                    break;
+                case "fivem":
+                    SetHeader(title, "Servicios que revisan los servidores y optimizaciones que no los tocan.",
+                        Btn("Actualizar estado", () => { if (refreshers.ContainsKey("fivem")) refreshers["fivem"](); }, 150), Btn("Restaurar para FiveM", RestoreFiveM, 190, true));
                     break;
                 case "susuki":
                     SetHeader(title, "Reparaciones, Windows Update, funciones de Windows y paneles.");
@@ -432,26 +438,7 @@ namespace Hanafuda
             foreach (var group in Catalog.Tweaks.Where(t => t.Card == key).GroupBy(t => t.Group))
             {
                 Add(page, new SectionTitle(group.Key) { Tag = "head" });
-                foreach (var t in group)
-                {
-                    Control right;
-                    if (t.OneShot)
-                    {
-                        var tw = t;
-                        right = Btn("Ejecutar", () => RunOneShot(tw), 100);
-                    }
-                    else
-                    {
-                        var tg = new Toggle();
-                        var tw = t;
-                        tg.Click += delegate { OnToggle(tw, tg); };
-                        toggles.Add(new KeyValuePair<Tweak, Toggle>(t, tg));
-                        right = tg;
-                    }
-                    var row = new Row(t.Name, t.Desc, right, null, TweakHelp(t));
-                    row.Tags.AddRange(Tags(t));
-                    Add(page, row);
-                }
+                foreach (var t in group) Add(page, TweakRow(t, toggles));
             }
             foreach (var group in Catalog.Actions.Where(a => a.Card == key).GroupBy(a => a.Group))
             {
@@ -461,6 +448,142 @@ namespace Hanafuda
             Action refresh = () => LoadStatuses(toggles);
             refreshers[key] = refresh;
             refresh();
+        }
+
+        Row TweakRow(Tweak t, List<KeyValuePair<Tweak, Toggle>> toggles)
+        {
+            Control right;
+            if (t.OneShot) right = Btn("Ejecutar", () => RunOneShot(t), 100);
+            else
+            {
+                var tg = new Toggle();
+                tg.Click += delegate { OnToggle(t, tg); };
+                toggles.Add(new KeyValuePair<Tweak, Toggle>(t, tg));
+                right = tg;
+            }
+            var row = new Row(t.Name, t.Desc, right, null, TweakHelp(t));
+            row.Tags.AddRange(Tags(t));
+            return row;
+        }
+
+        // ------------------------------------------------------------ FiveM
+        static readonly Dictionary<string, string> ServiceHelp = new Dictionary<string, string>
+        {
+            { "PcaSvc", "Asistente para la compatibilidad de programas. Anota qué programas se abrieron y ayuda cuando uno viejo falla. Los staff lo revisan porque guarda rastro de los .exe que ejecutaste." },
+            { "DPS", "Servicio de directivas de diagnóstico. Detecta y resuelve problemas de Windows y guarda historial de diagnóstico. Si está apagado, el solucionador de problemas no funciona." },
+            { "DiagTrack", "Experiencias del usuario y telemetría. Envía datos de uso a Microsoft y registra actividad. Muchos optimizadores lo apagan; los servidores de FiveM lo piden encendido." },
+            { "SysMain", "SysMain (antes Superfetch). Precarga tus programas y mantiene los datos de Prefetch, que muestran qué ejecutables se usaron y cuándo." },
+            { "EventLog", "Registro de eventos de Windows. Guarda el historial de todo lo que pasa en el sistema. Si está apagado no queda ningún registro: casi todos los PC check lo revisan." },
+            { "Appinfo", "Información de aplicaciones. Es el servicio que muestra el aviso de administrador (UAC). Viene en manual: arranca solo cuando algo pide permisos." },
+            { "BFE", "Motor de filtrado base. Es la base del Firewall de Windows, de la seguridad de red y de muchos antivirus y anticheats." },
+            { "bam", "Moderador de actividad en segundo plano (BAM). Es un driver de Windows que registra cuándo se ejecutó cada programa. Si se apaga, vuelve a funcionar tras reiniciar." },
+            { "CDPSvc", "Servicio de plataforma de dispositivos conectados. Lo usan el portapapeles en la nube, Phone Link y compartir con dispositivos cercanos." },
+            { "DusmSvc", "Uso de datos. Cuenta cuántos datos usa cada app y aplica los límites de datos." },
+            { "SSDPSRV", "Detección SSDP. Encuentra dispositivos en tu red como impresoras, televisores y consolas." },
+            { "UmRdpService", "Redirector de puertos del Escritorio remoto. Solo se usa en conexiones de Escritorio remoto." },
+            { "RemoteRegistry", "Registro remoto. Permite leer y cambiar tu registro desde otra PC. En Windows viene apagado; enciéndelo solo si el staff lo pide." }
+        };
+        readonly List<KeyValuePair<string, Row>> fivemRows = new List<KeyValuePair<string, Row>>();
+
+        void BuildFiveM(Panel page)
+        {
+            Add(page, new SectionTitle("Protección del PC check") { Tag = "head" });
+            var guard = new Toggle { State = Engine.FiveMGuard ? "on" : "off" };
+            guard.Click += delegate
+            {
+                bool next = !Engine.FiveMGuard;
+                if (!next && !ConfirmDialog.Ask(this, "Apagar la protección", "Otros apartados podrán apagar servicios que los servidores de FiveM revisan. Si juegas FiveM, déjala encendida.", "Apagar")) return;
+                Engine.FiveMGuard = next;
+                guard.State = next ? "on" : "off";
+                Log((next ? "Protección de FiveM encendida" : "Protección de FiveM apagada") + (Engine.Dry ? " (simulación)" : "") + ".");
+                foreach (var r in refreshers.Where(r => r.Key != "fivem").ToList()) { Panel old; if (pages.TryGetValue(r.Key, out old)) { body.Controls.Remove(old); old.Dispose(); pages.Remove(r.Key); refreshers.Remove(r.Key); } }
+            };
+            var guardRow = new Row("Proteger el PC check", "Bloquea en todo Hanafuda los ajustes que apagan estos servicios.", guard, null,
+                "Con esto encendido, Hanafuda no deja aplicar ningún ajuste (de cualquier apartado ni de «Aplicar recomendados») que apague PcaSvc, DPS, DiagTrack, SysMain, EventLog, Appinfo, BFE o BAM, ni que desactive Prefetch o el Asistente de compatibilidad. Esos ajustes aparecen marcados como ROMPE FIVEM. Lo que ya habías aplicado lo puedes seguir deshaciendo. Viene encendido por defecto.");
+            guardRow.Tags.Add("REC");
+            Add(page, guardRow);
+
+            Add(page, new SectionTitle("Servicios que revisan los servidores") { Tag = "head" });
+            fivemRows.Clear();
+            foreach (var name in Engine.FiveMServices.Concat(Engine.FiveMExtras))
+            {
+                var pill = new StatusPill();
+                string help;
+                ServiceHelp.TryGetValue(name, out help);
+                bool extra = Engine.FiveMExtras.Contains(name);
+                var row = new Row(name, "Leyendo estado…", pill, null, (help ?? name) + (extra
+                    ? "\n\nNo forma parte de los servicios que suelen revisar los PC check, pero viene en Servicios.rar."
+                    : "\n\nEste servicio suele revisarse en el PC check de los servidores de FiveM. Debe estar en ejecución."));
+                if (!extra) row.Tags.Add("PC CHECK");
+                Add(page, row);
+                fivemRows.Add(new KeyValuePair<string, Row>(name, row));
+            }
+
+            Add(page, new SectionTitle("Restaurar") { Tag = "head" });
+            foreach (var a in Catalog.Actions.Where(a => a.Card == "fivem" && a.Group == "Restaurar")) Add(page, ActionRow(a));
+            var toggles = new List<KeyValuePair<Tweak, Toggle>>();
+            foreach (var t in Catalog.Tweaks.Where(t => t.Card == "fivem" && t.Group == "Restaurar")) Add(page, TweakRow(t, toggles));
+
+            Add(page, new SectionTitle("Optimizaciones para FiveM") { Tag = "head" });
+            var ids = new[] { "fivem-gpu", "modojuego", "mmcss", "dxwindowed", "gamedvr", "hags", "sticky", "throttling", Engine.IsLaptop ? "overlay" : "plan", "usbsuspend", "pcie" };
+            foreach (var id in ids)
+            {
+                var t = Catalog.Tweaks.FirstOrDefault(x => x.Id == id);
+                if (t != null) Add(page, TweakRow(t, toggles));
+            }
+            foreach (var group in Catalog.Actions.Where(a => a.Card == "fivem" && a.Group != "Restaurar").GroupBy(a => a.Group))
+            {
+                Add(page, new SectionTitle(group.Key) { Tag = "head" });
+                foreach (var a in group) Add(page, ActionRow(a));
+            }
+            Action refresh = () => { LoadStatuses(toggles); LoadServiceStatus(); };
+            refreshers["fivem"] = refresh;
+            refresh();
+        }
+
+        void LoadServiceStatus()
+        {
+            var rows = fivemRows.ToList();
+            Interlocked.Increment(ref pendingStatus);
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                int ok = 0, total = 0;
+                foreach (var kv in rows)
+                {
+                    var info = Engine.ReadService(kv.Key);
+                    bool critical = Engine.FiveMServices.Contains(kv.Key);
+                    if (critical) { total++; if (info.Running) ok++; }
+                    var row = kv.Value;
+                    if (IsDisposed) return;
+                    BeginInvoke(new Action(() =>
+                    {
+                        row.Title = info.Display.Length > 0 ? info.Display + "  (" + info.Name + ")" : info.Name;
+                        row.Desc = info.Exists ? "Estado: " + info.Status + "  ·  Inicio: " + info.Start : "No existe en este Windows";
+                        var pill = (StatusPill)row.Right;
+                        pill.Set(info.Running ? "ACTIVO" : info.Disabled ? "DESACTIVADO" : info.Exists ? "DETENIDO" : "NO EXISTE", info.Running || (!critical && !info.Disabled));
+                        row.Invalidate();
+                    }));
+                }
+                var summary = ok + " de " + total + " servicios del PC check en ejecución.";
+                if (!IsDisposed) BeginInvoke(new Action(() => Log(summary + (ok < total ? " Pulsa «Restaurar para FiveM»." : " Todo listo para el PC check."))));
+                Interlocked.Decrement(ref pendingStatus);
+            });
+        }
+
+        void RestoreFiveM()
+        {
+            var action = Catalog.Actions.First(a => a.Id == "fivem-restore");
+            var b = Backup.Load();
+            var conflicts = Catalog.Tweaks.Where(t => t.FiveMConflict && b.ContainsKey(t.Id)).ToList();
+            var text = "Se encienden los servicios del PC check con el inicio que trae Windows y se ponen BAM, Prefetch y el Asistente de compatibilidad por defecto.";
+            if (conflicts.Count > 0) text += " También se deshacen " + conflicts.Count + " ajuste(s) de Hanafuda que los apagaban: " + string.Join(", ", conflicts.Select(t => t.Name)) + ".";
+            if (!ConfirmDialog.Ask(this, "Restaurar para FiveM", text, "Restaurar")) return;
+            RunJob("Restaurar para FiveM", () =>
+            {
+                foreach (var t in conflicts) Log(Engine.Revert(t, Log));
+                int code = Engine.RunScript(action.Script, Log);
+                return (Engine.Dry ? "[simulación] " : "") + (code == 0 ? "Listo: servicios por defecto. Reinicia si BAM estaba apagado." : "Terminó con avisos: revisa el registro.");
+            }, () => { if (refreshers.ContainsKey("fivem")) refreshers["fivem"](); });
         }
 
         static IEnumerable<string> Tags(Tweak t)
@@ -473,6 +596,7 @@ namespace Hanafuda
             if (t.Reboot) yield return "REINICIO";
             if (t.Source == "WinUtil") yield return "WINUTIL";
             if (t.Download) yield return "DESCARGA";
+            if (t.FiveMConflict) yield return "ROMPE FIVEM";
         }
 
         // ------------------------------------------------------------ textos del boton ?
@@ -649,6 +773,7 @@ namespace Hanafuda
 
         void RunAction(ActionItem a)
         {
+            if (a.Id == "fivem-restore") { RestoreFiveM(); return; }
             var text = a.Warn.Length > 0 ? a.Warn : a.Desc;
             if (a.Download) text += " Descarga archivos de internet.";
             if (!ConfirmDialog.Ask(this, a.Name, text, a.Button)) return;

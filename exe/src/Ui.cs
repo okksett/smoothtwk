@@ -239,7 +239,7 @@ namespace Hanafuda
         public string Title, Sub;
         bool selected;
         public bool Selected { get { return selected; } set { selected = value; Invalidate(); } }
-        public NavButton(string title, string sub) { Title = title; Sub = sub; Size = new Size(200, 44); Cursor = Cursors.Hand; }
+        public NavButton(string title, string sub) { Title = title; Sub = sub; Size = new Size(200, 42); Cursor = Cursors.Hand; }
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
@@ -261,6 +261,27 @@ namespace Hanafuda
         protected override void OnPaint(PaintEventArgs e)
         {
             Theme.Draw(e.Graphics, Text.ToUpperInvariant(), Theme.F(8f, FontStyle.Bold), Theme.Dim, new Rectangle(4, 18, Width, 18), TextFormatFlags.Left);
+        }
+    }
+
+    // Pastilla de estado de un servicio: blanca si esta bien, con borde si no.
+    public class StatusPill : Ctl
+    {
+        string label = "…";
+        bool good;
+        public StatusPill() { Size = new Size(104, 26); }
+        public void Set(string text, bool ok) { label = text; good = ok; Invalidate(); }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            var r = new Rectangle(1, 1, Width - 3, Height - 3);
+            using (var path = Theme.Round(r, r.Height / 2))
+            {
+                if (good) using (var b = new LinearGradientBrush(r, Color.White, Color.FromArgb(200, 200, 200), 90f)) g.FillPath(b, path);
+                else using (var pen = new Pen(label == "…" ? Theme.Faint : Color.FromArgb(200, 200, 200), 1.3f)) g.DrawPath(pen, path);
+            }
+            Theme.Draw(g, label, Theme.F(7.5f, FontStyle.Bold), good ? Theme.Bg : Theme.Text, r, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
     }
 
@@ -321,7 +342,7 @@ namespace Hanafuda
                 int w = TextRenderer.MeasureText(tag, font).Width + 6;
                 if (tx + w > right) break;
                 var r = new Rectangle(tx, 12, w, 15);
-                bool strong = tag == "RIESGO" || tag == "SIN DESHACER";
+                bool strong = tag == "RIESGO" || tag == "SIN DESHACER" || tag == "ROMPE FIVEM";
                 using (var path = Theme.Round(r, 7))
                 {
                     if (strong) g.FillPath(Brushes.White, path);

@@ -20,7 +20,7 @@ namespace Hanafuda
     public class Tweak
     {
         public string Id, Card, Group, Name, Desc, Help = "", Device = "both", Warn = "", Special = "", Guard = "", Source = "Hanafuda", ApplyScript = "", UndoScript = "";
-        public bool Rec, Reboot, OneShot, Download;
+        public bool Rec, Reboot, OneShot, Download, FiveMConflict;
         public List<RegEntry> Registry = new List<RegEntry>();
         public List<string[]> Services = new List<string[]>();
         public List<string> Tasks = new List<string>();
@@ -113,6 +113,11 @@ namespace Hanafuda
                 });
             foreach (var a in Json.D(root, "apps"))
                 Apps.Add(new AppItem { Id = Json.S(a, "id"), Name = Json.S(a, "name"), Category = Json.S(a, "category"), Desc = Json.S(a, "desc") ?? "", Winget = Json.S(a, "winget") });
+            // Ajustes que apagan algo de lo que revisa el PC check de los servidores de FiveM.
+            var critical = new HashSet<string>(Engine.FiveMServices, StringComparer.OrdinalIgnoreCase);
+            foreach (var t in Tweaks)
+                t.FiveMConflict = t.Card != "fivem" && (t.Services.Any(s => critical.Contains(s[0]) && s[1] == "Disabled")
+                    || t.Registry.Any(r => r.Name == "EnablePrefetcher" || r.Name == "DisablePCA" || r.Path.EndsWith("\\Services\\bam", StringComparison.OrdinalIgnoreCase)));
             object pre;
             if (root.TryGetValue("presets", out pre) && pre is Dictionary<string, object>)
                 foreach (var kv in (Dictionary<string, object>)pre)
@@ -202,8 +207,61 @@ namespace Hanafuda
             return true;
         }
 
+        // ------------------------------------------------------------ FiveM
+        public static readonly string[] FiveMServices = { "PcaSvc", "DPS", "DiagTrack", "SysMain", "EventLog", "Appinfo", "BFE", "bam" };
+        public static readonly string[] FiveMExtras = { "CDPSvc", "DusmSvc", "SSDPSRV", "UmRdpService", "RemoteRegistry" };
+        static bool? fivemGuard;
+
+        // Protege el PC check: impide aplicar ajustes que apagan esos servicios. Encendida por defecto.
+        public static bool FiveMGuard
+        {
+            get
+            {
+                if (!fivemGuard.HasValue)
+                {
+                    var s = ReadReg("HKCU\\Software\\HanafudaOpti", "FiveMGuard");
+                    fivemGuard = !s.Exists || s.Value != "0";
+                }
+                return fivemGuard.Value;
+            }
+            set
+            {
+                fivemGuard = value;
+                if (!Dry) WriteReg("HKCU\\Software\\HanafudaOpti", "FiveMGuard", "DWord", value ? "1" : "0");
+            }
+        }
+
+        public class SvcInfo { public string Name, Display = "", Start = "", Status = ""; public bool Exists, Running, Disabled; }
+
+        public static SvcInfo ReadService(string name)
+        {
+            var info = new SvcInfo { Name = name };
+            var start = ReadReg("HKLM\\SYSTEM\\CurrentControlSet\\Services\\" + name, "Start");
+            var delayed = ReadReg("HKLM\\SYSTEM\\CurrentControlSet\\Services\\" + name, "DelayedAutostart");
+            if (start.Exists)
+            {
+                int v = ToDword(start.Value);
+                info.Disabled = v == 4;
+                info.Start = v == 0 ? "Arranque" : v == 1 ? "Sistema" : v == 2 ? (delayed.Exists && delayed.Value == "1" ? "Automático (retrasado)" : "Automático") : v == 3 ? "Manual" : "Desactivado";
+            }
+            try
+            {
+                using (var sc = new System.ServiceProcess.ServiceController(name))
+                {
+                    info.Display = sc.DisplayName;
+                    var st = sc.Status;
+                    info.Exists = true;
+                    info.Running = st == System.ServiceProcess.ServiceControllerStatus.Running;
+                    info.Status = info.Running ? "En ejecución" : st == System.ServiceProcess.ServiceControllerStatus.Stopped ? "Detenido" : st.ToString();
+                }
+            }
+            catch (InvalidOperationException) { info.Exists = start.Exists; info.Status = start.Exists ? "Sin acceso" : "No existe"; }
+            return info;
+        }
+
         public static string GuardReason(Tweak t)
         {
+            if (t.FiveMConflict && FiveMGuard) return "Bloqueado por la protección de FiveM: este ajuste apaga algo que los servidores revisan en el PC check. Apaga la protección en el apartado FiveM si no juegas FiveM.";
             if (t.Guard == "x3d" && CpuName.IndexOf("X3D", StringComparison.OrdinalIgnoreCase) >= 0) return "Bloqueado en Ryzen X3D: baja FPS en esos procesadores.";
             if (t.Guard == "ram32" && RamGB < 31) return "Necesita 32 GB de RAM o más.";
             return null;
@@ -461,7 +519,8 @@ namespace Hanafuda
         {
             try
             {
-                if (GuardReason(t) != null) return "na";
+                // Bloqueado solo si no se aplico antes: lo ya aplicado se puede seguir deshaciendo.
+                if (GuardReason(t) != null && !Backup.Has(t.Id)) return "na";
                 if (t.OneShot) return "off";
                 switch (t.Special)
                 {

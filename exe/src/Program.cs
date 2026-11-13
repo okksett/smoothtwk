@@ -137,7 +137,17 @@ namespace Hanafuda
             foreach (var b in badReg.Take(5)) Out.AppendLine("  mal: " + b.t.Id + " " + b.r.Path + " " + b.r.Kind + " " + b.r.Value);
             Check("entradas de registro válidas", badReg.Count == 0);
             Check("servicios válidos", Catalog.Tweaks.SelectMany(t => t.Services).All(s => new[] { "Disabled", "Manual", "Automatic", "AutomaticDelayedStart" }.Contains(s[1])));
-            Check("cartas conocidas", Catalog.Tweaks.All(t => new[] { "matsu", "kiku", "fuji", "ume", "sakura", "kiri", "yanagi" }.Contains(t.Card)));
+            Check("cartas conocidas", Catalog.Tweaks.All(t => new[] { "matsu", "kiku", "fuji", "ume", "sakura", "kiri", "yanagi", "fivem" }.Contains(t.Card)));
+            var conflicts = Catalog.Tweaks.Where(t => t.FiveMConflict).Select(t => t.Id).ToList();
+            Check("ajustes que rompen el PC check de FiveM: " + string.Join(", ", conflicts), conflicts.Contains("sysmain") && conflicts.Contains("telemetria") && conflicts.Contains("wu-services"));
+            var restore = Catalog.Actions.FirstOrDefault(a => a.Id == "fivem-restore");
+            Check("restaurar FiveM enciende los 7 servicios + BAM, Prefetch y PCA", restore != null && new[] { "PcaSvc", "DPS", "DiagTrack", "SysMain", "EventLog", "Appinfo", "BFE", "bam", "EnablePrefetcher", "DisablePCA" }.All(s => restore.Script.Contains(s)));
+            Check("restaurar FiveM nunca desactiva servicios", restore != null && restore.Script.IndexOf("disabled", StringComparison.OrdinalIgnoreCase) < 0 && restore.Script.IndexOf("Stop-Service", StringComparison.OrdinalIgnoreCase) < 0);
+            var evt = Engine.ReadService("EventLog");
+            Check("lee servicios: EventLog " + evt.Status + " / " + evt.Start, evt.Exists && evt.Start.Length > 0);
+            var bam = Engine.ReadService("bam");
+            Check("lee drivers: bam " + bam.Status + " / " + bam.Start, bam.Start.Length > 0);
+            Check("la protección de FiveM bloquea SysMain", !Engine.FiveMGuard || Engine.GuardReason(Catalog.Tweaks.First(t => t.Id == "sysmain")) != null);
             Check("WinUtil integrado (" + Catalog.Tweaks.Count(t => t.Source == "WinUtil") + " ajustes)", Catalog.Tweaks.Count(t => t.Source == "WinUtil") > 60);
             Check("sin ajuste de Defender en el exe", Catalog.Tweaks.All(t => t.Id != "defender"));
             Check("presets de WinUtil", Catalog.Presets.ContainsKey("Standard") && Catalog.Presets["Standard"].Count > 5);

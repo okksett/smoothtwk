@@ -25,7 +25,7 @@ function New-Tweak([hashtable]$h) {
         source = $(if ($h.source) { $h.source } else { 'Hanafuda' }); download = [bool]$h.download
         registry = @($h.registry | Where-Object { $_ }); services = @($h.services | Where-Object { $_ }); tasks = @($h.tasks | Where-Object { $_ })
         power = @($h.power | Where-Object { $_ }); apply = [string]$h.apply; undo = [string]$h.undo
-        help = [string]$helpText[$h.id]
+        help = $(if ($helpText[$h.id]) { [string]$helpText[$h.id] } else { [string]$h.help })
     }
     [void]$outTweaks.Add($t)
 }
@@ -116,6 +116,64 @@ foreach ($p in $wu.PSObject.Properties) {
         download = [bool]($apply -match 'https?://|Invoke-WebRequest|\birm\b|\biwr\b')
     }
 }
+
+# ---------------------------------------------------------------- FiveM (exclusivo de ese apartado)
+New-Tweak @{ id = 'fivem-gpu'; card = 'fivem'; group = 'Optimizaciones para FiveM'; name = 'GPU dedicada para FiveM'; desc = 'Obliga a FiveM y al proceso de GTA a usar la tarjeta gráfica potente.'; rec = $true
+    help = 'En laptops con dos gráficas (Intel o AMD integrada + NVIDIA o AMD dedicada) Windows a veces abre FiveM con la integrada y rinde mucho menos. Esto marca FiveM.exe y los procesos de GTA de FiveM como "Alto rendimiento" en Configuración > Pantalla > Gráficos, igual que hacerlo a mano. Si actualizas FiveM y aparece un proceso nuevo, apaga y vuelve a encender este interruptor. No toca nada del anticheat.'
+    apply = @'
+$root = Join-Path $env:LOCALAPPDATA 'FiveM'
+if (-not (Test-Path -LiteralPath $root)) { Write-Output 'FiveM no está instalado en esta cuenta.'; exit 1 }
+$k = 'HKCU:\Software\Microsoft\DirectX\UserGpuPreferences'
+if (-not (Test-Path $k)) { New-Item -Path $k -Force | Out-Null }
+$exes = @(Get-ChildItem -LiteralPath $root -Filter 'FiveM.exe' -File -ErrorAction SilentlyContinue) + @(Get-ChildItem -LiteralPath (Join-Path $root 'FiveM.app') -Filter '*GTAProcess.exe' -File -ErrorAction SilentlyContinue)
+foreach ($e in $exes) { Set-ItemProperty -Path $k -Name $e.FullName -Value 'GpuPreference=2;'; Write-Output ('GPU dedicada: ' + $e.Name) }
+if (-not $exes.Count) { Write-Output 'No se encontraron ejecutables de FiveM.'; exit 1 }
+'@
+    undo = @'
+$root = Join-Path $env:LOCALAPPDATA 'FiveM'
+$k = 'HKCU:\Software\Microsoft\DirectX\UserGpuPreferences'
+if (Test-Path $k) {
+    (Get-Item $k).GetValueNames() | Where-Object { $_ -like "$root\*" } | ForEach-Object { Remove-ItemProperty -Path $k -Name $_ -ErrorAction SilentlyContinue; Write-Output ('GPU automática: ' + (Split-Path $_ -Leaf)) }
+}
+'@ }
+
+$fivemServices = @'
+$svc = [ordered]@{ PcaSvc = 'auto'; DPS = 'auto'; DiagTrack = 'auto'; SysMain = 'auto'; EventLog = 'auto'; Appinfo = 'demand'; BFE = 'auto'; CDPSvc = 'delayed-auto'; DusmSvc = 'auto'; SSDPSRV = 'demand'; UmRdpService = 'demand' }
+foreach ($n in $svc.Keys) {
+    if (-not (Get-Service -Name $n -ErrorAction SilentlyContinue)) { Write-Output ('No existe en este Windows: ' + $n); continue }
+    sc.exe config $n start= $svc[$n] | Out-Null
+    try { Start-Service -Name $n -ErrorAction Stop; Write-Output ('Activo: ' + $n) } catch { Write-Output ('No arrancó ' + $n + ': ' + $_.Exception.Message) }
+}
+Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\bam' -Name Start -Type DWord -Value 1
+Write-Output 'BAM: inicio de sistema (activo tras reiniciar si estaba apagado)'
+$pf = 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters'
+Set-ItemProperty -Path $pf -Name EnablePrefetcher -Type DWord -Value 3
+Write-Output 'Prefetch: activado (3)'
+foreach ($k in 'HKCU:\Software\Policies\Microsoft\Windows\AppCompat', 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat') {
+    if (Test-Path $k) { Remove-ItemProperty -Path $k -Name DisablePCA -ErrorAction SilentlyContinue }
+}
+Write-Output 'Asistente de compatibilidad (PCA): sin bloqueo'
+'@
+New-Action @{ id = 'fivem-restore'; card = 'fivem'; group = 'Restaurar'; name = 'Restaurar servicios y registros por defecto'; desc = 'Deja todo como viene en Windows para pasar el PC check. Lo recomendado si juegas FiveM.'; button = 'Restaurar'; script = $fivemServices
+    help = 'Muchos optimizadores apagan servicios que los servidores de FiveM revisan en el PC check, y eso puede verse como que escondes algo. Esto: (1) deshace los ajustes de Hanafuda que apagaban esos servicios, si los aplicaste; (2) deja PcaSvc, DPS, DiagTrack, SysMain, EventLog, BFE, CDPSvc, DusmSvc en automático y Appinfo, SSDPSRV, UmRdpService en manual, que es como vienen en Windows, y los enciende; (3) pone BAM, Prefetch y el Asistente de compatibilidad en sus valores por defecto. Algunos cambios terminan de aplicarse al reiniciar. Es lo mismo que la opción "Activar servicios" del archivo Servicios.rar, sin RemoteRegistry.' }
+New-Tweak @{ id = 'fivem-remoteregistry'; card = 'fivem'; group = 'Restaurar'; name = 'Registro remoto encendido'; desc = 'Solo si el staff del servidor lo pide. En Windows viene apagado.'
+    warn = 'Registro remoto deja leer y cambiar tu registro de Windows desde otra PC de la red. Enciéndelo solo si el staff lo pide y apágalo después con este mismo interruptor.'
+    help = 'Enciende el servicio Registro remoto (RemoteRegistry), como hace el archivo Servicios.rar. En Windows viene desactivado porque permite que otro equipo de tu red lea y modifique tu registro si tiene credenciales. No lo necesitas para jugar; algunos staff lo piden durante una revisión. Apágalo con este mismo interruptor cuando termine: vuelve a como estaba.'
+    services = @([ordered]@{ name = 'RemoteRegistry'; start = 'Automatic' })
+    apply = "Start-Service RemoteRegistry -ErrorAction SilentlyContinue`r`nWrite-Output 'Registro remoto activo.'"
+    undo = "Stop-Service RemoteRegistry -Force -ErrorAction SilentlyContinue`r`nWrite-Output 'Registro remoto detenido.'" }
+New-Action @{ id = 'fivem-cache'; card = 'fivem'; group = 'Caché de FiveM'; name = 'Limpiar caché de FiveM'; desc = 'Borra la caché de servidores. Arregla cargas lentas y texturas rotas.'; button = 'Limpiar'
+    warn = 'Cierra FiveM antes. La próxima vez que entres a un servidor, FiveM vuelve a descargar sus archivos.'
+    help = 'FiveM guarda los archivos de cada servidor en su carpeta de caché. Con el tiempo crece mucho y puede causar cargas lentas, texturas que no aparecen o errores al entrar. Esto borra las carpetas cache, server-cache y server-cache-priv dentro de FiveM.app\data. No borra tu configuración, tus teclas ni tu cuenta. FiveM las vuelve a crear solo.'
+    script = @'
+if (Get-Process -Name 'FiveM*' -ErrorAction SilentlyContinue) { Write-Output 'Cierra FiveM y vuelve a intentar.'; exit 1 }
+$data = Join-Path $env:LOCALAPPDATA 'FiveM\FiveM.app\data'
+if (-not (Test-Path -LiteralPath $data)) { Write-Output 'No se encontró FiveM en esta cuenta.'; exit 1 }
+foreach ($n in 'cache', 'server-cache', 'server-cache-priv') {
+    $p = Join-Path $data $n
+    if (Test-Path -LiteralPath $p) { Remove-Item -LiteralPath $p -Recurse -Force -ErrorAction SilentlyContinue; Write-Output ('Borrado: ' + $n) }
+}
+'@ }
 
 # ---------------------------------------------------------------- acciones
 New-Action @{ id = 'restore-point'; card = 'susuki'; group = 'Seguridad primero'; name = 'Crear punto de restauración'; desc = 'La opción más segura: guarda una copia del sistema para volver atrás si algo sale mal.'; button = 'Crear'
