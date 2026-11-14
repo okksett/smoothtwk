@@ -63,8 +63,8 @@ Usa el compilador de .NET Framework 4.8 que trae Windows. `ZeroLag.exe --dry` ab
 zerolag uninstall
 ```
 
-Los ajustes aplicados siguen como están. Usa MOMIJI antes si quieres revertirlos.
+Los ajustes aplicados siguen como están. Usa «Deshacer todo» antes si quieres revertirlos.
 
 ## Créditos
 
-Los tweaks, apps, funciones y DNS de las cartas KIRI, BOTAN, SAKURA y SUSUKI vienen de [WinUtil](https://github.com/ChrisTitusTech/winutil) de Chris Titus Tech (licencia MIT, ver THIRD-PARTY.txt). La lista inicial de ajustes se basa en un análisis de Optimizer de hellzerg.
+Los tweaks, apps, funciones y DNS de los apartados Ajustes de WinUtil, Apps y DNS, Limpiar Windows y Mantenimiento vienen de [WinUtil](https://github.com/ChrisTitusTech/winutil) de Chris Titus Tech (licencia MIT, ver THIRD-PARTY.txt). La lista inicial de ajustes se basa en un análisis de Optimizer de hellzerg.

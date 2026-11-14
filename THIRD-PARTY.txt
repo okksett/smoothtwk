@@ -1,4 +1,4 @@
-Hanafuda Opti incluye datos de configuración de WinUtil (https://github.com/ChrisTitusTech/winutil), versión 26.10.28.
+﻿ZeroLag incluye datos de configuración de WinUtil (https://github.com/ChrisTitusTech/winutil), versión 26.10.28.
 
 MIT License
 
