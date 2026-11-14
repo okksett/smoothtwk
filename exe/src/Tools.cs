@@ -1,4 +1,4 @@
-// Limpieza de disco, programas al iniciar y lecturas del HUD.
+﻿// Limpieza de disco, programas al iniciar y lecturas del HUD.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
-namespace Hanafuda
+namespace ZeroLag
 {
     public class CleanTarget { public string Name, Desc; public List<string> Paths = new List<string>(); public bool On = true, Recycle; public long Size; }
 

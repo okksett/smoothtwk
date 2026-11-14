@@ -1,4 +1,4 @@
-# Preambulo que HanafudaOpti.exe antepone a cada script.
+﻿# Preambulo que ZeroLag.exe antepone a cada script.
 # Da a los scripts de WinUtil las funciones auxiliares que esperan, sin su interfaz.
 $ErrorActionPreference = 'Continue'
 $ProgressPreference = 'SilentlyContinue'
@@ -8,7 +8,7 @@ $OutputEncoding = [Console]::OutputEncoding
 
 $sync = @{
     ThemeButton = @{ Content = '' }
-    winutildir  = (Join-Path $env:ProgramData 'HanafudaOpti\descargas')
+    winutildir  = (Join-Path $env:ProgramData 'ZeroLag\descargas')
 }
 if (-not (Test-Path -LiteralPath $sync.winutildir)) { New-Item -ItemType Directory -Path $sync.winutildir -Force | Out-Null }
 
@@ -24,16 +24,16 @@ function Invoke-WinUtilExplorerUpdate {
         Start-Process explorer.exe
         return
     }
-    if (-not ('HanafudaBroadcast' -as [type])) {
+    if (-not ('ZeroLagBroadcast' -as [type])) {
         Add-Type -TypeDefinition @'
 using System;
 using System.Runtime.InteropServices;
-public static class HanafudaBroadcast {
+public static class ZeroLagBroadcast {
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     public static extern IntPtr SendMessageTimeout(IntPtr hWnd, uint msg, IntPtr wParam, string lParam, uint flags, uint timeout, out IntPtr result);
 }
 '@
     }
     $r = [IntPtr]::Zero
-    [void][HanafudaBroadcast]::SendMessageTimeout([IntPtr]0xffff, 0x1A, [IntPtr]::Zero, 'ImmersiveColorSet', 2, 100, [ref]$r)
+    [void][ZeroLagBroadcast]::SendMessageTimeout([IntPtr]0xffff, 0x1A, [IntPtr]::Zero, 'ImmersiveColorSet', 2, 100, [ref]$r)
 }

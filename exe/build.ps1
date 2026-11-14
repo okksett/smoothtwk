@@ -1,4 +1,4 @@
-# Compila HanafudaOpti.exe con el compilador de .NET Framework que trae Windows.
+﻿# Compila ZeroLag.exe con el compilador de .NET Framework que trae Windows.
 param([Parameter(Mandatory)][string]$WinUtilConfig)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
@@ -6,22 +6,26 @@ $data = Join-Path $root 'data'
 $out = Join-Path $root 'bin'
 New-Item -ItemType Directory -Force -Path $data, $out | Out-Null
 
-& (Join-Path $root 'tools\make-catalog.ps1') -HanafudaScript (Join-Path $root '..\hanafuda-consola.ps1') -WinUtilConfig $WinUtilConfig -OutFile (Join-Path $data 'catalog.json')
+& (Join-Path $root 'tools\make-catalog.ps1') -ZeroLagScript (Join-Path $root '..\zerolag-consola.ps1') -WinUtilConfig $WinUtilConfig -OutFile (Join-Path $data 'catalog.json')
 
-# Icono: carta hanafuda blanca con luna negra.
+# Icono provisional de ZEROLAG: cuadrado blanco con Z negra (se reemplaza por el logo definitivo).
 Add-Type -AssemblyName System.Drawing
-$ico = Join-Path $data 'hanafuda.ico'
+$ico = Join-Path $data 'zerolag.ico'
 $sizes = 16, 32, 48, 256
 $pngs = foreach ($s in $sizes) {
     $bmp = New-Object System.Drawing.Bitmap $s, $s
     $g = [System.Drawing.Graphics]::FromImage($bmp)
     $g.SmoothingMode = 'AntiAlias'
-    $g.Clear([System.Drawing.Color]::Black)
-    $w = [int]($s * 0.62); $h = [int]($s * 0.86); $x = [int](($s - $w) / 2); $y = [int](($s - $h) / 2)
-    $g.FillRectangle([System.Drawing.Brushes]::White, $x, $y, $w, $h)
-    $d = [int]($w * 0.62)
-    $g.FillEllipse([System.Drawing.Brushes]::Black, $x + [int](($w - $d) / 2), $y + [int]($h * 0.18), $d, $d)
-    $g.FillRectangle([System.Drawing.Brushes]::Black, $x + [int]($w * 0.2), $y + [int]($h * 0.78), [int]($w * 0.6), [Math]::Max(1, [int]($s / 24)))
+    $g.TextRenderingHint = 'AntiAliasGridFit'
+    $g.Clear([System.Drawing.Color]::Transparent)
+    $m = [Math]::Max(1, [int]($s * 0.06)); $side = $s - 2 * $m; $rad = [Math]::Max(2, [int]($s * 0.22))
+    $path = New-Object System.Drawing.Drawing2D.GraphicsPath
+    $path.AddArc($m, $m, $rad, $rad, 180, 90); $path.AddArc($m + $side - $rad, $m, $rad, $rad, 270, 90)
+    $path.AddArc($m + $side - $rad, $m + $side - $rad, $rad, $rad, 0, 90); $path.AddArc($m, $m + $side - $rad, $rad, $rad, 90, 90); $path.CloseFigure()
+    $g.FillPath([System.Drawing.Brushes]::White, $path)
+    $font = New-Object System.Drawing.Font('Segoe UI', [float]($s * 0.52), [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+    $fmt = New-Object System.Drawing.StringFormat; $fmt.Alignment = 'Center'; $fmt.LineAlignment = 'Center'
+    $g.DrawString('Z', $font, [System.Drawing.Brushes]::Black, (New-Object System.Drawing.RectangleF(0, [float]($s * 0.02), $s, $s)), $fmt)
     $g.Dispose()
     $ms = New-Object IO.MemoryStream
     $bmp.Save($ms, [System.Drawing.Imaging.ImageFormat]::Png)
@@ -45,7 +49,7 @@ $manifest = Join-Path $data 'app.manifest'
 @'
 <?xml version="1.0" encoding="utf-8"?>
 <assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
-  <assemblyIdentity version="1.0.0.0" name="Hanafuda.Opti"/>
+  <assemblyIdentity version="1.0.0.0" name="ZeroLag.Opti"/>
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
     <security><requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3"><requestedExecutionLevel level="asInvoker" uiAccess="false"/></requestedPrivileges></security>
   </trustInfo>
@@ -55,7 +59,7 @@ $manifest = Join-Path $data 'app.manifest'
 '@ | Set-Content -LiteralPath $manifest -Encoding UTF8
 
 $fw = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319'
-$exe = Join-Path $out 'HanafudaOpti.exe'
+$exe = Join-Path $out 'ZeroLag.exe'
 $src = Get-ChildItem (Join-Path $root 'src') -Filter *.cs | ForEach-Object { $_.FullName }
 $cscArgs = @('/nologo', '/target:winexe', '/optimize+', '/codepage:65001', '/platform:anycpu', "/out:$exe", "/win32icon:$ico", "/win32manifest:$manifest",
     '/r:System.dll', '/r:System.Core.dll', '/r:System.Drawing.dll', '/r:System.Windows.Forms.dll', '/r:System.ServiceProcess.dll', "/r:$fw\System.Web.Extensions.dll",

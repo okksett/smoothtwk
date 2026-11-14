@@ -1,10 +1,10 @@
-﻿# Hanafuda Opti - optimizador de Windows para consola.
+﻿# ZeroLag - optimizador de Windows para consola.
 # Cada ajuste guarda antes el valor original en backup.json para poder deshacerlo.
 param([string]$Command = '', [switch]$Dry, [string]$Keys = '')
 
 $ErrorActionPreference = 'Stop'
 $script:Version = '1.0'
-$script:DataDir = if ($env:HANAFUDA_DATA) { $env:HANAFUDA_DATA } else { Join-Path $env:ProgramData 'HanafudaOpti' }
+$script:DataDir = if ($env:ZEROLAG_DATA) { $env:ZEROLAG_DATA } else { Join-Path $env:ProgramData 'ZeroLag' }
 $script:BackupFile = Join-Path $script:DataDir 'backup.json'
 $script:DryRun = [bool]$Dry
 $script:DryLog = New-Object System.Collections.ArrayList
@@ -471,7 +471,7 @@ function Switch-Tweak($Tweak) {
     $hasBackup = (Get-Backup).ContainsKey($Tweak.Id)
     if ($status -eq 'on' -or ($status -eq 'partial' -and $hasBackup)) {
         if (Invoke-TweakRevert $Tweak) { $script:Message = Format-Result "Deshecho: $($Tweak.Name)" }
-        else { $script:Message = 'Ya estaba así antes de Hanafuda. No hay valor anterior que restaurar.' }
+        else { $script:Message = 'Ya estaba así antes de ZeroLag. No hay valor anterior que restaurar.' }
         return
     }
     if ($Tweak.Guard) {
@@ -488,11 +488,11 @@ function Switch-Tweak($Tweak) {
     $script:Message = Format-Result "Aplicado: $($Tweak.Name)"
 }
 
-function New-HanafudaRestorePoint {
+function New-ZeroLagRestorePoint {
     if ($script:DryRun) { return 'simulado' }
     try {
         $warn = $null
-        Checkpoint-Computer -Description 'Hanafuda Opti' -RestorePointType MODIFY_SETTINGS -ErrorAction Stop -WarningAction SilentlyContinue -WarningVariable warn
+        Checkpoint-Computer -Description 'ZeroLag' -RestorePointType MODIFY_SETTINGS -ErrorAction Stop -WarningAction SilentlyContinue -WarningVariable warn
         if ($warn) { return 'omitido (Windows solo permite uno cada 24 h)' }
         return 'creado'
     } catch { return 'no disponible (Protección del sistema apagada)' }
@@ -705,22 +705,23 @@ function Publish-Frame {
 function Get-Rule { return "$D" + ('─' * ((Get-ConsoleWidth) - 4)) }
 
 $script:Glyphs = @{
-    H = @('██╗  ██╗', '██║  ██║', '███████║', '██╔══██║', '██║  ██║', '╚═╝  ╚═╝')
+    Z = @('███████╗', '╚══███╔╝', '  ███╔╝ ', ' ███╔╝  ', '███████╗', '╚══════╝')
+    E = @('███████╗', '██╔════╝', '█████╗  ', '██╔══╝  ', '███████╗', '╚══════╝')
+    R = @('██████╗ ', '██╔══██╗', '██████╔╝', '██╔══██╗', '██║  ██║', '╚═╝  ╚═╝')
+    O = @(' ██████╗ ', '██╔═══██╗', '██║   ██║', '██║   ██║', '╚██████╔╝', ' ╚═════╝ ')
+    L = @('██╗     ', '██║     ', '██║     ', '██║     ', '███████╗', '╚══════╝')
     A = @(' █████╗ ', '██╔══██╗', '███████║', '██╔══██║', '██║  ██║', '╚═╝  ╚═╝')
-    N = @('███╗   ██╗', '████╗  ██║', '██╔██╗ ██║', '██║╚██╗██║', '██║ ╚████║', '╚═╝  ╚═══╝')
-    F = @('███████╗', '██╔════╝', '█████╗  ', '██╔══╝  ', '██║     ', '╚═╝     ')
-    U = @('██╗   ██╗', '██║   ██║', '██║   ██║', '██║   ██║', '╚██████╔╝', ' ╚═════╝ ')
-    D = @('██████╗ ', '██╔══██╗', '██║  ██║', '██║  ██║', '██████╔╝', '╚═════╝ ')
+    G = @(' ██████╗ ', '██╔════╝ ', '██║  ███╗', '██║   ██║', '╚██████╔╝', ' ╚═════╝ ')
 }
 
 function Add-Logo {
     Add-Line
     for ($row = 0; $row -lt 6; $row++) {
         $text = ''
-        foreach ($letter in 'H', 'A', 'N', 'A', 'F', 'U', 'D', 'A') { $text += $script:Glyphs[$letter][$row] }
+        foreach ($letter in 'Z', 'E', 'R', 'O', 'L', 'A', 'G') { $text += $script:Glyphs[$letter][$row] }
         Add-Line "$W$text"
     }
-    Add-Line "$G$('O P T I'.PadLeft(67))"
+    Add-Line "$G$('O P T I M I Z E R'.PadLeft(58))"
 }
 
 function Add-Footer([string]$Hint) {
@@ -731,9 +732,9 @@ function Add-Footer([string]$Hint) {
     else { Add-Line }
 }
 
-function Read-HanafudaKey {
+function Read-ZeroLagKey {
     if ($null -ne $script:KeyQueue) {
-        if ($script:KeyQueue.Count -eq 0) { throw 'hanafuda-keys-exhausted' }
+        if ($script:KeyQueue.Count -eq 0) { throw 'zerolag-keys-exhausted' }
         return [string]$script:KeyQueue.Dequeue()
     }
     $k = [Console]::ReadKey($true)
@@ -750,7 +751,7 @@ function Read-HanafudaKey {
 
 function Show-Busy([string]$Text) {
     Add-Line
-    Add-Line "$W$BD HANAFUDA OPTI$NB"
+    Add-Line "$W$BD ZEROLAG$NB"
     Add-Line (Get-Rule)
     Add-Line
     Add-Line "$W$Text"
@@ -759,7 +760,7 @@ function Show-Busy([string]$Text) {
 
 function Confirm-Choice([string]$Text, [string]$Detail = '') {
     Add-Line
-    Add-Line "$W$BD HANAFUDA OPTI$NB"
+    Add-Line "$W$BD ZEROLAG$NB"
     Add-Line (Get-Rule)
     Add-Line
     Add-Line "$W$Text"
@@ -767,7 +768,7 @@ function Confirm-Choice([string]$Text, [string]$Detail = '') {
     Add-Line
     Add-Line "$W S$G confirmar     ${W}cualquier otra tecla$G cancelar"
     Publish-Frame
-    return ((Read-HanafudaKey) -eq 's')
+    return ((Read-ZeroLagKey) -eq 's')
 }
 
 function Show-List {
@@ -801,7 +802,7 @@ function Show-List {
         Add-Footer $Hint
         Publish-Frame
 
-        $key = Read-HanafudaKey
+        $key = Read-ZeroLagKey
         $script:Message = ''
         if ($key -eq 'up') { if ($cursor -gt 0) { $cursor-- } elseif ($current.Count) { $cursor = $current.Count - 1 }; continue }
         if ($key -eq 'down') { if ($cursor -lt $current.Count - 1) { $cursor++ } else { $cursor = 0 }; continue }
@@ -988,7 +989,7 @@ function Invoke-Repair {
     & sfc.exe /scannow
     Write-Host ''
     Write-Host 'Terminado. Pulsa una tecla para volver.'
-    [void](Read-HanafudaKey)
+    [void](Read-ZeroLagKey)
     [Console]::Write("$BG$E[2J")
 }
 
@@ -1005,7 +1006,7 @@ function Invoke-Yaku {
     if (-not $pending.Count) { $script:Message = 'Todo lo recomendado ya está aplicado.'; return }
     if (-not (Confirm-Choice "Aplicar $($pending.Count) ajustes recomendados." 'Antes se intenta crear un punto de restauración. Puedes deshacerlo con MOMIJI.')) { return }
     Show-Busy 'Creando punto de restauración...'
-    $point = New-HanafudaRestorePoint
+    $point = New-ZeroLagRestorePoint
     $failed = 0; $n = 0
     foreach ($t in $pending) {
         $n++
@@ -1020,7 +1021,7 @@ function Invoke-Yaku {
 function Invoke-Momiji {
     $backup = Get-Backup
     $found = @($script:Tweaks | Where-Object { $backup.ContainsKey($_.Id) })
-    if (-not $found.Count) { $script:Message = 'No hay ajustes de Hanafuda que deshacer.'; return }
+    if (-not $found.Count) { $script:Message = 'No hay ajustes de ZeroLag que deshacer.'; return }
     if (-not (Confirm-Choice "Deshacer $($found.Count) ajustes." 'Vuelven los valores que tenías antes de aplicarlos.')) { return }
     $failed = 0
     foreach ($t in $found) {
@@ -1067,7 +1068,7 @@ function Show-Home {
         if ($line.Length -gt (Get-ConsoleWidth) - 6) { $line = $line.Substring(0, (Get-ConsoleWidth) - 6) }
         Add-Line "$G$line"
         if ($script:DryRun) { Add-Line "$W$BD MODO SIMULACIÓN: no se cambia nada$NB" }
-        elseif (-not (Test-Admin)) { Add-Line "$W$BD Sin permisos de administrador: abre con hanafuda desde cmd$NB" }
+        elseif (-not (Test-Admin)) { Add-Line "$W$BD Sin permisos de administrador: abre con zerolag desde cmd$NB" }
         Add-Line (Get-Rule)
         for ($i = 0; $i -lt $script:Cards.Count; $i++) {
             $c = $script:Cards[$i]
@@ -1077,7 +1078,7 @@ function Show-Home {
         Add-Footer '↑↓ mover   ENTER abrir   o pulsa la tecla de la carta'
         Publish-Frame
 
-        $key = Read-HanafudaKey
+        $key = Read-ZeroLagKey
         $script:Message = ''
         if ($key -eq 'up') { $cursor = ($cursor + $script:Cards.Count - 1) % $script:Cards.Count; continue }
         if ($key -eq 'down') { $cursor = ($cursor + 1) % $script:Cards.Count; continue }
@@ -1096,14 +1097,14 @@ function Show-Home {
 function Enable-VirtualTerminal {
     if ([Console]::IsOutputRedirected) { return }
     try {
-        Add-Type -Namespace Hanafuda -Name Native -MemberDefinition @'
+        Add-Type -Namespace ZeroLag -Name Native -MemberDefinition @'
 [DllImport("kernel32.dll", SetLastError=true)] public static extern IntPtr GetStdHandle(int h);
 [DllImport("kernel32.dll", SetLastError=true)] public static extern bool GetConsoleMode(IntPtr h, out uint m);
 [DllImport("kernel32.dll", SetLastError=true)] public static extern bool SetConsoleMode(IntPtr h, uint m);
 '@
-        $handle = [Hanafuda.Native]::GetStdHandle(-11)
+        $handle = [ZeroLag.Native]::GetStdHandle(-11)
         $mode = [uint32]0
-        if ([Hanafuda.Native]::GetConsoleMode($handle, [ref]$mode)) { [void][Hanafuda.Native]::SetConsoleMode($handle, ($mode -bor 4)) }
+        if ([ZeroLag.Native]::GetConsoleMode($handle, [ref]$mode)) { [void][ZeroLag.Native]::SetConsoleMode($handle, ($mode -bor 4)) }
     } catch { }
 }
 
@@ -1111,7 +1112,7 @@ function Start-Interface {
     [Console]::OutputEncoding = New-Object Text.UTF8Encoding($false)
     Enable-VirtualTerminal
     try {
-        $Host.UI.RawUI.WindowTitle = 'Hanafuda Opti'
+        $Host.UI.RawUI.WindowTitle = 'ZeroLag'
         $Host.UI.RawUI.BackgroundColor = 'Black'
         $Host.UI.RawUI.ForegroundColor = 'White'
     } catch { }
@@ -1122,7 +1123,7 @@ function Start-Interface {
     $script:SysInfo = Get-SystemLine
     [Console]::Write("$BG$E[2J$E[?25l")
     try { Show-Home }
-    catch { if ($_.Exception.Message -ne 'hanafuda-keys-exhausted') { throw } }
+    catch { if ($_.Exception.Message -ne 'zerolag-keys-exhausted') { throw } }
     finally { [Console]::Write("$E[0m$E[?25h$E[2J$E[H") }
 }
 
@@ -1138,35 +1139,47 @@ function Set-UserPathRaw([string]$Value) {
     $k = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey('Environment', $true)
     try { $k.SetValue('Path', $Value, [Microsoft.Win32.RegistryValueKind]::ExpandString) } finally { $k.Close() }
     # Avisa a Windows del cambio de entorno sin tocar ninguna variable real.
-    [Environment]::SetEnvironmentVariable('HANAFUDA_REFRESH', $null, 'User')
+    [Environment]::SetEnvironmentVariable('ZEROLAG_REFRESH', $null, 'User')
 }
 
-function Install-Hanafuda {
-    $dest = Join-Path $env:LOCALAPPDATA 'HanafudaOpti'
+function Install-ZeroLag {
+    $dest = Join-Path $env:LOCALAPPDATA 'ZeroLag'
     if (-not (Test-Path -LiteralPath $dest)) { [void](New-Item -ItemType Directory -Path $dest) }
-    # El script de consola no puede llamarse hanafuda.ps1: PowerShell lo preferiria sobre hanafuda.cmd.
-    $legacy = Join-Path $dest 'hanafuda.ps1'
+    # El script de consola no puede llamarse zerolag.ps1: PowerShell lo preferiria sobre zerolag.cmd.
+    $legacy = Join-Path $dest 'zerolag.ps1'
     if (Test-Path -LiteralPath $legacy) { Remove-Item -LiteralPath $legacy -Force }
     if ($PSScriptRoot.TrimEnd('\') -ne $dest.TrimEnd('\')) {
-        Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $dest 'hanafuda-consola.ps1') -Force
-        Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'hanafuda.cmd') -Destination $dest -Force
-        $exe = Join-Path $PSScriptRoot 'HanafudaOpti.exe'
+        Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $dest 'zerolag-consola.ps1') -Force
+        Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'zerolag.cmd') -Destination $dest -Force
+        $exe = Join-Path $PSScriptRoot 'ZeroLag.exe'
         if (Test-Path -LiteralPath $exe) { Copy-Item -LiteralPath $exe -Destination $dest -Force }
     }
-    $raw = Get-UserPathRaw
-    if (($raw -split ';') -notcontains $dest) { Set-UserPathRaw (($raw.TrimEnd(';') + ';' + $dest).TrimStart(';')) }
+    # Quita la instalación con el nombre anterior (Hanafuda Opti) para que el comando viejo no siga abriendo.
+    $old = Join-Path $env:LOCALAPPDATA 'HanafudaOpti'
+    $raw = @((Get-UserPathRaw) -split ';' | Where-Object { $_ -and $_ -ne $old }) -join ';'
+    if (($raw -split ';') -notcontains $dest) { $raw = ($raw.TrimEnd(';') + ';' + $dest).TrimStart(';') }
+    Set-UserPathRaw $raw
+    if (Test-Path -LiteralPath $old) { Remove-Item -LiteralPath $old -Recurse -Force -ErrorAction SilentlyContinue }
+    $oldData = Join-Path $env:ProgramData 'HanafudaOpti'
+    foreach ($f in 'backup.json', 'backup-exe.json') {
+        $from = Join-Path $oldData $f; $to = Join-Path $script:DataDir $f
+        if ((Test-Path -LiteralPath $from) -and -not (Test-Path -LiteralPath $to)) {
+            if (-not (Test-Path -LiteralPath $script:DataDir)) { [void](New-Item -ItemType Directory -Path $script:DataDir -Force) }
+            Copy-Item -LiteralPath $from -Destination $to -ErrorAction SilentlyContinue
+        }
+    }
     Write-Host "Instalado en $dest"
-    Write-Host 'Abre una ventana NUEVA de cmd y escribe: hanafuda'
+    Write-Host 'Abre una ventana NUEVA de cmd y escribe: zerolag'
 }
 
-function Uninstall-Hanafuda {
-    $dest = Join-Path $env:LOCALAPPDATA 'HanafudaOpti'
+function Uninstall-ZeroLag {
+    $dest = Join-Path $env:LOCALAPPDATA 'ZeroLag'
     $kept = @((Get-UserPathRaw) -split ';' | Where-Object { $_ -and $_ -ne $dest })
     Set-UserPathRaw ($kept -join ';')
     if (Test-Path -LiteralPath $dest) {
         Start-Process -FilePath 'cmd.exe' -WindowStyle Hidden -ArgumentList "/c timeout /t 2 /nobreak >nul & rmdir /s /q `"$dest`""
     }
-    Write-Host 'Hanafuda Opti desinstalado. Los ajustes aplicados siguen como están.'
+    Write-Host 'ZeroLag desinstalado. Los ajustes aplicados siguen como están.'
 }
 
 function Show-Catalog {
@@ -1178,11 +1191,11 @@ function Show-Catalog {
 }
 
 function Show-Usage {
-    Write-Output 'hanafuda            abre la ventana de Hanafuda Opti'
-    Write-Output 'hanafuda consola    abre el menú de consola'
-    Write-Output 'hanafuda list       muestra cada ajuste y su estado'
-    Write-Output 'hanafuda install    instala el comando en este usuario'
-    Write-Output 'hanafuda uninstall  quita el comando'
+    Write-Output 'zerolag            abre la ventana de ZeroLag'
+    Write-Output 'zerolag consola    abre el menú de consola'
+    Write-Output 'zerolag list       muestra cada ajuste y su estado'
+    Write-Output 'zerolag install    instala el comando en este usuario'
+    Write-Output 'zerolag uninstall  quita el comando'
     Write-Output 'Opción -Dry         simula sin cambiar nada'
 }
 
@@ -1190,8 +1203,8 @@ function Invoke-Main {
     switch ($Command.ToLowerInvariant()) {
         '' { Start-Interface; return }
         'list' { Show-Catalog; return }
-        'install' { Install-Hanafuda; return }
-        'uninstall' { Uninstall-Hanafuda; return }
+        'install' { Install-ZeroLag; return }
+        'uninstall' { Uninstall-ZeroLag; return }
         default { Show-Usage; return }
     }
 }

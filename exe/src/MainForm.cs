@@ -1,4 +1,4 @@
-// Ventana principal de Hanafuda Opti.
+﻿// Ventana principal de ZeroLag.
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Hanafuda
+namespace ZeroLag
 {
     public class MainForm : Form
     {
@@ -49,7 +49,7 @@ namespace Hanafuda
 
         public MainForm()
         {
-            Text = "Hanafuda Opti";
+            Text = "ZeroLag";
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.CenterScreen;
             ClientSize = new Size(1120, 700);
@@ -139,8 +139,8 @@ namespace Hanafuda
             topBar.Paint += (s, e) =>
             {
                 var g = e.Graphics;
-                Theme.Card(g, new Rectangle(14, 10, 14, 20));
-                Theme.Draw(g, "HANAFUDA OPTI", Theme.F(9f, FontStyle.Bold), Theme.Text, new Rectangle(36, 0, 200, TopH), TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                Theme.Card(g, new Rectangle(12, 10, 20, 20));
+                Theme.Draw(g, "ZEROLAG", Theme.F(9f, FontStyle.Bold), Theme.Text, new Rectangle(36, 0, 200, TopH), TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
                 var mode = Engine.Dry ? "MODO SIMULACIÓN" : Engine.Limited ? "SOLO LECTURA" : "ADMINISTRADOR";
                 if (Engine.Limited) mode = "SOLO LECTURA";
                 if (Engine.RebootPending) mode = "REINICIO PENDIENTE  ·  " + mode;
@@ -185,9 +185,9 @@ namespace Hanafuda
             side.Paint += (s, e) =>
             {
                 var g = e.Graphics;
-                Theme.Card(g, new Rectangle(20, 18, 26, 38));
-                Theme.Draw(g, "HANAFUDA", Theme.F(15f, FontStyle.Bold), Theme.Text, new Rectangle(54, 14, 160, 28), TextFormatFlags.Left);
-                Theme.Draw(g, "O P T I", Theme.F(8f, FontStyle.Bold), Theme.Dim, new Rectangle(56, 40, 160, 16), TextFormatFlags.Left);
+                Theme.Card(g, new Rectangle(18, 16, 38, 38));
+                Theme.Draw(g, "ZEROLAG", Theme.F(16f, FontStyle.Bold), Theme.Text, new Rectangle(62, 12, 150, 28), TextFormatFlags.Left);
+                Theme.Draw(g, "O P T I M I Z E R", Theme.F(7.5f, FontStyle.Bold), Theme.Dim, new Rectangle(64, 38, 150, 16), TextFormatFlags.Left);
                 using (var pen = new Pen(Theme.Line)) g.DrawLine(pen, SideW - 1, 0, SideW - 1, side.Height);
             };
             int y = 70;
@@ -353,7 +353,7 @@ namespace Hanafuda
                     SetHeader(title, "Igual que en el Administrador de tareas: desactivar no borra nada.", Btn("Recargar", () => { RebuildPage("hagi"); }, 110));
                     break;
                 case "kiri":
-                    SetHeader(title, "Opciones de WinUtil de Chris Titus dentro de Hanafuda.",
+                    SetHeader(title, "Opciones de WinUtil de Chris Titus dentro de ZeroLag.",
                         Btn("Preset mínimo", () => ApplyPreset("Minimal"), 130), Btn("Preset estándar", () => ApplyPreset("Standard"), 140, true), Btn("Deshacer carta", () => RevertCard(key), 130));
                     break;
                 case "biblioteca":
@@ -427,9 +427,9 @@ namespace Hanafuda
                 {
                     "Antes de optimizar, crea un punto de restauración: si algo sale mal, Windows vuelve a como estaba.",
                     tweaks + " ajustes  ·  " + Catalog.Actions.Count + " acciones  ·  " + Catalog.Apps.Count + " apps  ·  pulsa ? en cualquier opción para ver qué hace",
-                    wu + " opciones vienen de WinUtil de Chris Titus y corren dentro de Hanafuda.",
+                    wu + " opciones vienen de WinUtil de Chris Titus y corren dentro de ZeroLag.",
                     "«Aplicar recomendados» solo aplica lo pensado para " + (Engine.IsLaptop ? "laptop" : "escritorio") + " y antes intenta crear un punto de restauración.",
-                    "«Deshacer todo» devuelve cada valor que Hanafuda cambió a como estaba."
+                    "«Deshacer todo» devuelve cada valor que ZeroLag cambió a como estaba."
                 };
                 for (int i = 0; i < lines.Length; i++)
                     Theme.Draw(e.Graphics, lines[i], i == 0 ? Theme.F(10f, FontStyle.Bold) : Theme.F(9f), i == 0 ? Theme.Text : Theme.Dim, new Rectangle(0, i * 24, info.Width, 22), TextFormatFlags.Left);
@@ -562,7 +562,7 @@ namespace Hanafuda
             pill.Set(info.Installed ? "INSTALADO" : "NO ENCONTRADO", info.Installed);
             Add(page, new Row(info.Installed ? name + " está instalado" : name + " no está instalado", info.Installed ? info.Root : "Instálalo y pulsa «Buscar juegos otra vez» en la Biblioteca.", pill, null,
                 info.Installed
-                    ? "Hanafuda encontró estos ejecutables, que son los que reciben los ajustes de Windows de esta página:\n" + string.Join("\n", info.Exes.Select(x => "• " + x))
+                    ? "ZeroLag encontró estos ejecutables, que son los que reciben los ajustes de Windows de esta página:\n" + string.Join("\n", info.Exes.Select(x => "• " + x))
                     : "No encontré " + name + " en Steam, Epic, Riot, Ubisoft, Battle.net, Microsoft Store ni en sus carpetas por defecto. Los ajustes de este juego se activan cuando esté instalado. Los ajustes generales funcionan igual."));
 
             Add(page, new SectionTitle("Ajustes de Windows solo para " + name) { Tag = "head" });
@@ -581,7 +581,7 @@ namespace Hanafuda
                     Add(page, new SectionTitle("Dentro del juego · " + group.Key) { Tag = "head" });
                     foreach (var item in group)
                         Add(page, new Row(item.Name, item.Why, StatusPill.Value(item.Value), null,
-                            item.Why + "\n\nValor recomendado: " + item.Value + "\n\nEsto se cambia a mano dentro del juego, en su menú de configuración. Hanafuda no toca los archivos del juego ni el anticheat."));
+                            item.Why + "\n\nValor recomendado: " + item.Value + "\n\nEsto se cambia a mano dentro del juego, en su menú de configuración. ZeroLag no toca los archivos del juego ni el anticheat."));
                 }
                 if (gc.AntiCheat.Length > 0 || gc.Cautions.Count > 0)
                 {
@@ -641,8 +641,8 @@ namespace Hanafuda
                 Log((next ? "Protección de FiveM encendida" : "Protección de FiveM apagada") + (Engine.Dry ? " (simulación)" : "") + ".");
                 foreach (var r in refreshers.Where(r => r.Key != "fivem").ToList()) { Panel old; if (pages.TryGetValue(r.Key, out old)) { body.Controls.Remove(old); old.Dispose(); pages.Remove(r.Key); refreshers.Remove(r.Key); } }
             };
-            var guardRow = new Row("Proteger el PC check", "Bloquea en todo Hanafuda los ajustes que apagan estos servicios.", guard, null,
-                "Con esto encendido, Hanafuda no deja aplicar ningún ajuste (de cualquier apartado ni de «Aplicar recomendados») que apague PcaSvc, DPS, DiagTrack, SysMain, EventLog, Appinfo, BFE o BAM, ni que desactive Prefetch o el Asistente de compatibilidad. Esos ajustes aparecen marcados como ROMPE FIVEM. Lo que ya habías aplicado lo puedes seguir deshaciendo. Viene encendido por defecto.");
+            var guardRow = new Row("Proteger el PC check", "Bloquea en todo ZeroLag los ajustes que apagan estos servicios.", guard, null,
+                "Con esto encendido, ZeroLag no deja aplicar ningún ajuste (de cualquier apartado ni de «Aplicar recomendados») que apague PcaSvc, DPS, DiagTrack, SysMain, EventLog, Appinfo, BFE o BAM, ni que desactive Prefetch o el Asistente de compatibilidad. Esos ajustes aparecen marcados como ROMPE FIVEM. Lo que ya habías aplicado lo puedes seguir deshaciendo. Viene encendido por defecto.");
             guardRow.Tags.Add("REC");
             Add(page, guardRow);
 
@@ -719,7 +719,7 @@ namespace Hanafuda
             var b = Backup.Load();
             var conflicts = Catalog.Tweaks.Where(t => t.FiveMConflict && b.ContainsKey(t.Id)).ToList();
             var text = "Se encienden los servicios del PC check con el inicio que trae Windows y se ponen BAM, Prefetch y el Asistente de compatibilidad por defecto.";
-            if (conflicts.Count > 0) text += " También se deshacen " + conflicts.Count + " ajuste(s) de Hanafuda que los apagaban: " + string.Join(", ", conflicts.Select(t => t.Name)) + ".";
+            if (conflicts.Count > 0) text += " También se deshacen " + conflicts.Count + " ajuste(s) de ZeroLag que los apagaban: " + string.Join(", ", conflicts.Select(t => t.Name)) + ".";
             if (!ConfirmDialog.Ask(this, "Restaurar para FiveM", text, "Restaurar")) return;
             RunJob("Restaurar para FiveM", () =>
             {
@@ -792,7 +792,7 @@ namespace Hanafuda
             if (t.OneShot) sb.Append("No. Esta acción no tiene vuelta atrás.");
             else
             {
-                sb.Append("Sí: apaga el interruptor o usa «Deshacer todo» en Inicio. Hanafuda guarda el valor que tenías antes.");
+                sb.Append("Sí: apaga el interruptor o usa «Deshacer todo» en Inicio. ZeroLag guarda el valor que tenías antes.");
                 if (t.ApplyScript.Length > 0 && t.UndoScript.Length == 0) sb.Append(" La parte del script no se revierte sola.");
             }
             sb.Append("\nNecesita reiniciar: " + (t.Reboot ? "sí." : "no."));
@@ -874,7 +874,7 @@ namespace Hanafuda
         bool CanChange()
         {
             if (!Engine.Limited) return true;
-            if (ConfirmDialog.Ask(this, "Se necesitan permisos", "Para cambiar ajustes, Hanafuda tiene que abrirse como administrador. Pulsa Reabrir y luego Sí en el aviso de Windows.", "Reabrir")) Reopen();
+            if (ConfirmDialog.Ask(this, "Se necesitan permisos", "Para cambiar ajustes, ZeroLag tiene que abrirse como administrador. Pulsa Reabrir y luego Sí en el aviso de Windows.", "Reabrir")) Reopen();
             return false;
         }
 
@@ -988,8 +988,8 @@ namespace Hanafuda
         {
             var b = Backup.Load();
             var list = Catalog.Tweaks.Where(t => b.ContainsKey(t.Id)).ToList();
-            if (list.Count == 0) { Log("No hay ajustes de Hanafuda que deshacer."); return; }
-            if (!ConfirmDialog.Ask(this, "Deshacer todo", "Se restauran " + list.Count + " ajustes a como estaban antes de Hanafuda.", "Deshacer")) return;
+            if (list.Count == 0) { Log("No hay ajustes de ZeroLag que deshacer."); return; }
+            if (!ConfirmDialog.Ask(this, "Deshacer todo", "Se restauran " + list.Count + " ajustes a como estaban antes de ZeroLag.", "Deshacer")) return;
             RunJob("Deshacer todo", () =>
             {
                 foreach (var t in list) Log(Engine.Revert(t, Log));

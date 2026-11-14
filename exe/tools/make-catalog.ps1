@@ -1,11 +1,11 @@
-﻿# Genera data\catalog.json para HanafudaOpti.exe a partir de:
-#   - los ajustes de hanafuda.ps1 (consola)
+﻿# Genera data\catalog.json para ZeroLag.exe a partir de:
+#   - los ajustes de zerolag.ps1 (consola)
 #   - ajustes de energia y CPU investigados para escritorio y laptop
 #   - la configuracion de WinUtil (MIT, Chris Titus Tech) en su carpeta config
-param([Parameter(Mandatory)][string]$HanafudaScript, [Parameter(Mandatory)][string]$WinUtilConfig, [Parameter(Mandatory)][string]$OutFile)
+param([Parameter(Mandatory)][string]$ZeroLagScript, [Parameter(Mandatory)][string]$WinUtilConfig, [Parameter(Mandatory)][string]$OutFile)
 $ErrorActionPreference = 'Stop'
 
-. $HanafudaScript
+. $ZeroLagScript
 $helpText = & (Join-Path $PSScriptRoot 'help-es.ps1')
 $outTweaks = New-Object System.Collections.ArrayList
 $outActions = New-Object System.Collections.ArrayList
@@ -22,7 +22,7 @@ function New-Tweak([hashtable]$h) {
         id = $h.id; card = $h.card; group = $h.group; name = $h.name; desc = $h.desc
         rec = [bool]$h.rec; device = $(if ($h.device) { $h.device } else { 'both' }); reboot = [bool]$h.reboot
         warn = [string]$h.warn; oneshot = [bool]$h.oneshot; special = [string]$h.special; guard = [string]$h.guard
-        source = $(if ($h.source) { $h.source } else { 'Hanafuda' }); download = [bool]$h.download
+        source = $(if ($h.source) { $h.source } else { 'ZeroLag' }); download = [bool]$h.download
         registry = @($h.registry | Where-Object { $_ }); services = @($h.services | Where-Object { $_ }); tasks = @($h.tasks | Where-Object { $_ })
         power = @($h.power | Where-Object { $_ }); apply = [string]$h.apply; undo = [string]$h.undo; game = [string]$h.game
         help = $(if ($helpText[$h.id]) { [string]$helpText[$h.id] } else { [string]$h.help })
@@ -37,7 +37,7 @@ function New-Action([hashtable]$h) {
         help = $help
         id = $h.id; card = $h.card; group = $h.group; name = $h.name; desc = [string]$h.desc
         script = $h.script; warn = [string]$h.warn; button = $(if ($h.button) { $h.button } else { 'Ejecutar' }); download = [bool]$h.download
-        source = $(if ($h.source) { $h.source } else { 'Hanafuda' })
+        source = $(if ($h.source) { $h.source } else { 'ZeroLag' })
     })
 }
 
@@ -52,7 +52,7 @@ foreach ($t in $script:Tweaks) {
     switch ($t.Id) {
         'hibernar' { $h.special = 'hibernate-off'; $h.device = 'desktop' }
         'plan' { $h.special = 'plan-high'; $h.device = 'desktop' }
-        'puntos' { $h.oneshot = $true; $h.apply = 'vssadmin delete shadows /for=c: /all /quiet'; $h.warn = 'No se puede deshacer. Ni Hanafuda ni Windows podrán volver a esos puntos.' }
+        'puntos' { $h.oneshot = $true; $h.apply = 'vssadmin delete shadows /for=c: /all /quiet'; $h.warn = 'No se puede deshacer. Ni ZeroLag ni Windows podrán volver a esos puntos.' }
         'xbox' { $h.desc = 'Libera recursos. Rompe Game Pass y la app Xbox. En Ryzen X3D puede bajar FPS.' }
         'sysmain' { $h.desc = 'Útil en discos HDD. En SSD no hay mejora medida.' }
     }
@@ -151,7 +151,7 @@ foreach ($k in 'HKCU:\Software\Policies\Microsoft\Windows\AppCompat', 'HKLM:\SOF
 Write-Output 'Asistente de compatibilidad (PCA): sin bloqueo'
 '@
 New-Action @{ id = 'fivem-restore'; card = 'fivem'; group = 'Restaurar'; name = 'Restaurar servicios y registros por defecto'; desc = 'Deja todo como viene en Windows para pasar el PC check. Lo recomendado si juegas FiveM.'; button = 'Restaurar'; script = $fivemServices
-    help = 'Muchos optimizadores apagan servicios que los servidores de FiveM revisan en el PC check, y eso puede verse como que escondes algo. Esto: (1) deshace los ajustes de Hanafuda que apagaban esos servicios, si los aplicaste; (2) deja PcaSvc, DPS, DiagTrack, SysMain, EventLog, BFE, CDPSvc, DusmSvc en automático y Appinfo, SSDPSRV, UmRdpService en manual, que es como vienen en Windows, y los enciende; (3) pone BAM, Prefetch y el Asistente de compatibilidad en sus valores por defecto. Algunos cambios terminan de aplicarse al reiniciar. Es lo mismo que la opción "Activar servicios" del archivo Servicios.rar, sin RemoteRegistry.' }
+    help = 'Muchos optimizadores apagan servicios que los servidores de FiveM revisan en el PC check, y eso puede verse como que escondes algo. Esto: (1) deshace los ajustes de ZeroLag que apagaban esos servicios, si los aplicaste; (2) deja PcaSvc, DPS, DiagTrack, SysMain, EventLog, BFE, CDPSvc, DusmSvc en automático y Appinfo, SSDPSRV, UmRdpService en manual, que es como vienen en Windows, y los enciende; (3) pone BAM, Prefetch y el Asistente de compatibilidad en sus valores por defecto. Algunos cambios terminan de aplicarse al reiniciar. Es lo mismo que la opción "Activar servicios" del archivo Servicios.rar, sin RemoteRegistry.' }
 New-Tweak @{ id = 'fivem-remoteregistry'; card = 'fivem'; group = 'Restaurar'; name = 'Registro remoto encendido'; desc = 'Solo si el staff del servidor lo pide. En Windows viene apagado.'
     warn = 'Registro remoto deja leer y cambiar tu registro de Windows desde otra PC de la red. Enciéndelo solo si el staff lo pide y apágalo después con este mismo interruptor.'
     help = 'Enciende el servicio Registro remoto (RemoteRegistry), como hace el archivo Servicios.rar. En Windows viene desactivado porque permite que otro equipo de tu red lea y modifique tu registro si tiene credenciales. No lo necesitas para jugar; algunos staff lo piden durante una revisión. Apágalo con este mismo interruptor cuando termine: vuelve a como estaba.'
@@ -173,14 +173,14 @@ foreach ($n in 'cache', 'server-cache', 'server-cache-priv') {
 
 # ---------------------------------------------------------------- acciones
 New-Action @{ id = 'restore-point'; card = 'susuki'; group = 'Seguridad primero'; name = 'Crear punto de restauración'; desc = 'La opción más segura: guarda una copia del sistema para volver atrás si algo sale mal.'; button = 'Crear'
-    help = 'Guarda una "foto" de la configuración de Windows: registro, drivers, programas instalados y archivos del sistema. Si después de un ajuste algo deja de funcionar, puedes volver a como estaba desde Inicio > "Crear un punto de restauración" > Restaurar sistema, o desde Mantenimiento > Paneles clásicos > Windows Restore. Tus documentos, fotos y juegos no se tocan. Es lo primero que conviene hacer antes de optimizar. Si la Protección del sistema estaba apagada en C:, Hanafuda la enciende (usa un poco de espacio del disco). Windows normalmente permite un punto cada 24 horas; Hanafuda quita ese límite solo mientras crea el punto y después lo deja como estaba.'
+    help = 'Guarda una "foto" de la configuración de Windows: registro, drivers, programas instalados y archivos del sistema. Si después de un ajuste algo deja de funcionar, puedes volver a como estaba desde Inicio > "Crear un punto de restauración" > Restaurar sistema, o desde Mantenimiento > Paneles clásicos > Windows Restore. Tus documentos, fotos y juegos no se tocan. Es lo primero que conviene hacer antes de optimizar. Si la Protección del sistema estaba apagada en C:, ZeroLag la enciende (usa un poco de espacio del disco). Windows normalmente permite un punto cada 24 horas; ZeroLag quita ese límite solo mientras crea el punto y después lo deja como estaba.'
     script = @'
 $k = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore'
 try { Enable-ComputerRestore -Drive "$env:SystemDrive\" -ErrorAction Stop } catch { Write-Output ('No se pudo encender la Protección del sistema: ' + $_.Exception.Message) }
 $old = (Get-ItemProperty -Path $k -Name SystemRestorePointCreationFrequency -ErrorAction SilentlyContinue).SystemRestorePointCreationFrequency
 Set-ItemProperty -Path $k -Name SystemRestorePointCreationFrequency -Type DWord -Value 0
 try {
-    Checkpoint-Computer -Description ('Hanafuda Opti ' + (Get-Date -Format 'yyyy-MM-dd HH:mm')) -RestorePointType MODIFY_SETTINGS -ErrorAction Stop
+    Checkpoint-Computer -Description ('ZeroLag ' + (Get-Date -Format 'yyyy-MM-dd HH:mm')) -RestorePointType MODIFY_SETTINGS -ErrorAction Stop
     Write-Output 'Punto de restauración creado.'
 } catch {
     Write-Output ('No se pudo crear el punto: ' + $_.Exception.Message)

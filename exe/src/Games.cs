@@ -1,4 +1,4 @@
-// Biblioteca de juegos: detecta donde esta instalado cada juego, sus ejecutables y su icono.
+﻿// Biblioteca de juegos: detecta donde esta instalado cada juego, sus ejecutables y su icono.
 // Los iconos se sacan del juego instalado en la PC; no se incluye ningun logo dentro del exe.
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
-namespace Hanafuda
+namespace ZeroLag
 {
     public class GameDef
     {

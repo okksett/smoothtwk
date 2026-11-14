@@ -1,4 +1,4 @@
-// Controles propios: minimalista, negro con degradados hacia el blanco.
+﻿// Controles propios: minimalista, negro con degradados hacia el blanco.
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Hanafuda
+namespace ZeroLag
 {
     public static class Theme
     {
@@ -61,16 +61,15 @@ namespace Hanafuda
             }
         }
 
-        // Carta hanafuda: rectangulo blanco con luna negra.
+        // Marca provisional de ZEROLAG (cuadrado blanco con Z negra) hasta tener el logo definitivo.
         public static void Card(Graphics g, Rectangle r)
         {
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            using (var path = Round(r, 3))
-            using (var b = new LinearGradientBrush(r, Color.White, Color.FromArgb(200, 200, 200), 90f)) g.FillPath(b, path);
-            int d = r.Width * 6 / 10;
-            using (var b = new SolidBrush(Bg)) g.FillEllipse(b, r.X + (r.Width - d) / 2, r.Y + r.Height / 5, d, d);
-            using (var pen = new Pen(Bg, Math.Max(1, r.Width / 14f)))
-                g.DrawLine(pen, r.X + r.Width / 5, r.Bottom - r.Height / 5, r.Right - r.Width / 5, r.Bottom - r.Height / 5);
+            int s = Math.Min(r.Width, r.Height);
+            var sq = new Rectangle(r.X + (r.Width - s) / 2, r.Y + (r.Height - s) / 2, s, s);
+            using (var path = Round(sq, Math.Max(2, s / 5)))
+            using (var b = new LinearGradientBrush(sq, Color.White, Color.FromArgb(190, 190, 190), 90f)) g.FillPath(b, path);
+            Draw(g, "Z", F(Math.Max(6f, s * 0.48f), FontStyle.Bold), Bg, sq, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
     }
 

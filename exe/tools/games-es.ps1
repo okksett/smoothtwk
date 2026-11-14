@@ -28,7 +28,7 @@ $noFso = 'El juego usa DirectX 12, OpenGL o Vulkan: esta bandera de Windows no c
         fsoDesc = 'Sin efecto: Siege X solo usa DirectX 12.'; fsoHelp = $noFso
         cautions = @(
             'Legend Division pide Secure Boot y TPM. Desde octubre de 2026 esa lista exige Secure Boot y TPM activos; Ranked normal y Casual todavía no. No los apagues en la BIOS.',
-            'No uses macros. Ubisoft detecta macros y manipulación de entradas desde el Año 11: Hanafuda no incluye nada de eso.',
+            'No uses macros. Ubisoft detecta macros y manipulación de entradas desde el Año 11: ZeroLag no incluye nada de eso.',
             'Prioridad del proceso: déjala como está. BattlEye protege el proceso y no hay garantía sobre cambiarla.'
         ); shared = $base
         guide = @(

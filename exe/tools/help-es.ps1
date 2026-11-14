@@ -1,4 +1,4 @@
-﻿# Explicaciones simples de cada ajuste y accion (boton ? de HanafudaOpti.exe).
+﻿# Explicaciones simples de cada ajuste y accion (boton ? de ZeroLag.exe).
 # Clave = id del catalogo. El exe agrega debajo la lista tecnica de lo que cambia.
 @{
     # ---------------------------------------------------------------- Rendimiento
@@ -140,10 +140,10 @@
     'fix-winget'  = 'WinGet es el instalador que usa el apartado de Apps. Si falla, esto lo reinstala descargándolo de Microsoft.'
     'fix-sfc'     = 'Revisa los archivos de Windows y repara los que estén dañados. Primero DISM repara la imagen de Windows (descarga archivos de Windows Update) y después SFC revisa el sistema. Tarda de 10 a 30 minutos; no apagues el PC mientras corre.'
     'fix-trim'    = 'TRIM le avisa al SSD qué espacio quedó libre para que siga rápido. Windows lo hace solo una vez por semana; esto lo hace ahora. Es seguro y tarda segundos.'
-    'wu-default'  = 'Quita cualquier política de Windows Update que hayan puesto Hanafuda u otros programas, y deja las actualizaciones como vienen de fábrica.'
+    'wu-default'  = 'Quita cualquier política de Windows Update que hayan puesto ZeroLag u otros programas, y deja las actualizaciones como vienen de fábrica.'
     'wu-security' = 'Windows instala los parches de seguridad 4 días después de que salen, retrasa las versiones grandes (como 24H2 o 25H2) un año y no actualiza drivers solo. Es un punto medio entre estabilidad y seguridad.'
     'feat-ssh'    = 'Instala el servidor SSH de Windows para que otro equipo pueda conectarse a esta PC por consola. Abre el puerto 22 en el firewall. Solo actívalo si sabes que lo vas a usar.'
-    'oosu'        = 'Descarga y abre O&O ShutUp10++, un programa gratuito con muchos ajustes de privacidad. Hanafuda solo lo abre; los cambios los decides dentro de ese programa.'
+    'oosu'        = 'Descarga y abre O&O ShutUp10++, un programa gratuito con muchos ajustes de privacidad. ZeroLag solo lo abre; los cambios los decides dentro de ese programa.'
     'autologon'   = 'Descarga y abre Autologon de Microsoft (Sysinternals), que permite iniciar sesión sin escribir la contraseña. Cualquiera que encienda el PC entrará a tu cuenta.'
     'dns-auto'    = 'Vuelve a usar el DNS que te da tu router o tu proveedor de internet.'
     'dns-flush'   = 'Borra la lista de direcciones que Windows recuerda. Útil si una página no carga después de cambiar de DNS o de red.'
