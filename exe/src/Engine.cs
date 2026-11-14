@@ -1,4 +1,4 @@
-﻿// Motor de ZeroLag: catalogo, registro, servicios, tareas, energia, scripts y respaldo.
+﻿// Motor de SmoothTwk: catalogo, registro, servicios, tareas, energia, scripts y respaldo.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,14 +12,14 @@ using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using Microsoft.Win32;
 
-namespace ZeroLag
+namespace SmoothTwk
 {
     public class RegEntry { public string Path, Name, Kind, Value; }
     public class PowerEntry { public string Sub, Setting; public int? Ac, Dc; }
 
     public class Tweak
     {
-        public string Id, Card, Group, Name, Desc, Help = "", Game = "", Device = "both", Warn = "", Special = "", Guard = "", Source = "ZeroLag", ApplyScript = "", UndoScript = "";
+        public string Id, Card, Group, Name, Desc, Help = "", Game = "", Device = "both", Warn = "", Special = "", Guard = "", Source = "SmoothTwk", ApplyScript = "", UndoScript = "";
         public bool Rec, Reboot, OneShot, Download, FiveMConflict;
         public List<RegEntry> Registry = new List<RegEntry>();
         public List<string[]> Services = new List<string[]>();
@@ -27,7 +27,7 @@ namespace ZeroLag
         public List<PowerEntry> Power = new List<PowerEntry>();
     }
 
-    public class ActionItem { public string Id, Card, Group, Name, Desc, Help = "", Script, Warn = "", Button = "Ejecutar", Source = "ZeroLag"; public bool Download; }
+    public class ActionItem { public string Id, Card, Group, Name, Desc, Help = "", Script, Warn = "", Button = "Ejecutar", Source = "SmoothTwk"; public bool Download; }
     public class AppItem { public string Id, Name, Category, Desc, Winget; public bool Selected; }
     public class GuideItem { public string Group, Name, Value, Why; }
     public class GameContent
@@ -101,7 +101,7 @@ namespace ZeroLag
                 {
                     Id = Json.S(t, "id"), Card = Json.S(t, "card"), Group = Json.S(t, "group") ?? "", Name = Json.S(t, "name"), Desc = Json.S(t, "desc") ?? "",
                     Rec = Json.B(t, "rec"), Device = Json.S(t, "device") ?? "both", Reboot = Json.B(t, "reboot"), Warn = Json.S(t, "warn") ?? "",
-                    OneShot = Json.B(t, "oneshot"), Special = Json.S(t, "special") ?? "", Guard = Json.S(t, "guard") ?? "", Source = Json.S(t, "source") ?? "ZeroLag",
+                    OneShot = Json.B(t, "oneshot"), Special = Json.S(t, "special") ?? "", Guard = Json.S(t, "guard") ?? "", Source = Json.S(t, "source") ?? "SmoothTwk",
                     Download = Json.B(t, "download"), ApplyScript = Json.S(t, "apply") ?? "", UndoScript = Json.S(t, "undo") ?? "", Help = Json.S(t, "help") ?? "", Game = Json.S(t, "game") ?? ""
                 };
                 foreach (var r in Json.D(t, "registry"))
@@ -117,7 +117,7 @@ namespace ZeroLag
                 {
                     Id = Json.S(a, "id"), Card = Json.S(a, "card"), Group = Json.S(a, "group"), Name = Json.S(a, "name"), Desc = Json.S(a, "desc") ?? "",
                     Script = Json.S(a, "script") ?? "", Warn = Json.S(a, "warn") ?? "", Button = Json.S(a, "button") ?? "Ejecutar",
-                    Download = Json.B(a, "download"), Source = Json.S(a, "source") ?? "ZeroLag", Help = Json.S(a, "help") ?? ""
+                    Download = Json.B(a, "download"), Source = Json.S(a, "source") ?? "SmoothTwk", Help = Json.S(a, "help") ?? ""
                 });
             foreach (var a in Json.D(root, "apps"))
                 Apps.Add(new AppItem { Id = Json.S(a, "id"), Name = Json.S(a, "name"), Category = Json.S(a, "category"), Desc = Json.S(a, "desc") ?? "", Winget = Json.S(a, "winget") });
@@ -144,7 +144,7 @@ namespace ZeroLag
 
     public static class Backup
     {
-        public static string FilePath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "ZeroLag"), "backup-exe.json");
+        public static string FilePath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "SmoothTwk"), "backup-exe.json");
         static readonly object Gate = new object();
 
         public static Dictionary<string, object> Load()
@@ -172,15 +172,23 @@ namespace ZeroLag
 
         public static bool Has(string id) { return Load().ContainsKey(id); }
 
-        // El programa se llamaba Hanafuda Opti: trae su respaldo para que «Deshacer todo» siga funcionando.
+        // Nombres anteriores del programa, del más nuevo al más viejo.
+        public static readonly string[] OldNames = { "ZeroLag", "HanafudaOpti" };
+
+        // Trae el respaldo guardado con un nombre anterior para que «Deshacer todo» siga funcionando.
         public static void MigrateFromOldName()
         {
             try
             {
-                var old = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "HanafudaOpti"), "backup-exe.json");
-                if (File.Exists(FilePath) || !File.Exists(old) || Engine.Dry) return;
-                Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
-                File.Copy(old, FilePath);
+                if (File.Exists(FilePath) || Engine.Dry) return;
+                foreach (var name in OldNames)
+                {
+                    var old = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), name), "backup-exe.json");
+                    if (!File.Exists(old)) continue;
+                    Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+                    File.Copy(old, FilePath);
+                    return;
+                }
             }
             catch { }
         }
@@ -249,8 +257,8 @@ namespace ZeroLag
             {
                 if (!fivemGuard.HasValue)
                 {
-                    var s = ReadReg("HKCU\\Software\\ZeroLag", "FiveMGuard");
-                    if (!s.Exists) s = ReadReg("HKCU\\Software\\HanafudaOpti", "FiveMGuard");   // nombre anterior del programa
+                    var s = ReadReg("HKCU\\Software\\SmoothTwk", "FiveMGuard");
+                    foreach (var name in Backup.OldNames) { if (s.Exists) break; s = ReadReg("HKCU\\Software\\" + name, "FiveMGuard"); }   // nombres anteriores
                     fivemGuard = !s.Exists || s.Value != "0";
                 }
                 return fivemGuard.Value;
@@ -258,7 +266,7 @@ namespace ZeroLag
             set
             {
                 fivemGuard = value;
-                if (!Dry) WriteReg("HKCU\\Software\\ZeroLag", "FiveMGuard", "DWord", value ? "1" : "0");
+                if (!Dry) WriteReg("HKCU\\Software\\SmoothTwk", "FiveMGuard", "DWord", value ? "1" : "0");
             }
         }
 
@@ -445,7 +453,7 @@ namespace ZeroLag
                 log("[simulación] script: " + (first.Length > 90 ? first.Substring(0, 90) + "…" : first));
                 return 0;
             }
-            var file = Path.Combine(Path.GetTempPath(), "zerolag-" + System.Guid.NewGuid().ToString("N") + ".ps1");
+            var file = Path.Combine(Path.GetTempPath(), "smoothtwk-" + System.Guid.NewGuid().ToString("N") + ".ps1");
             File.WriteAllText(file, Catalog.Lib + "\r\n" + script + "\r\n", new UTF8Encoding(true));
             try
             {
@@ -699,7 +707,7 @@ namespace ZeroLag
         {
             var backup = Backup.Load();
             object raw;
-            if (!backup.TryGetValue(t.Id, out raw)) return "Ya estaba así antes de ZeroLag: no hay valor anterior que restaurar.";
+            if (!backup.TryGetValue(t.Id, out raw)) return "Ya estaba así antes de SmoothTwk: no hay valor anterior que restaurar.";
             var rec = (Dictionary<string, object>)raw;
             int fails = 0;
             var saved = Json.D(rec, "entries").ToList();

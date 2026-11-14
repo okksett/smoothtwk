@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
-namespace ZeroLag
+namespace SmoothTwk
 {
     public class CleanTarget { public string Name, Desc; public List<string> Paths = new List<string>(); public bool On = true, Recycle; public long Size; }
 

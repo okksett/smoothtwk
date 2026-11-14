@@ -1,10 +1,10 @@
-﻿# ZeroLag - optimizador de Windows para consola.
+﻿# SmoothTwk - optimizador de Windows para consola.
 # Cada ajuste guarda antes el valor original en backup.json para poder deshacerlo.
 param([string]$Command = '', [switch]$Dry, [string]$Keys = '')
 
 $ErrorActionPreference = 'Stop'
 $script:Version = '1.0'
-$script:DataDir = if ($env:ZEROLAG_DATA) { $env:ZEROLAG_DATA } else { Join-Path $env:ProgramData 'ZeroLag' }
+$script:DataDir = if ($env:SMOOTHTWK_DATA) { $env:SMOOTHTWK_DATA } else { Join-Path $env:ProgramData 'SmoothTwk' }
 $script:BackupFile = Join-Path $script:DataDir 'backup.json'
 $script:DryRun = [bool]$Dry
 $script:DryLog = New-Object System.Collections.ArrayList
@@ -471,7 +471,7 @@ function Switch-Tweak($Tweak) {
     $hasBackup = (Get-Backup).ContainsKey($Tweak.Id)
     if ($status -eq 'on' -or ($status -eq 'partial' -and $hasBackup)) {
         if (Invoke-TweakRevert $Tweak) { $script:Message = Format-Result "Deshecho: $($Tweak.Name)" }
-        else { $script:Message = 'Ya estaba así antes de ZeroLag. No hay valor anterior que restaurar.' }
+        else { $script:Message = 'Ya estaba así antes de SmoothTwk. No hay valor anterior que restaurar.' }
         return
     }
     if ($Tweak.Guard) {
@@ -488,11 +488,11 @@ function Switch-Tweak($Tweak) {
     $script:Message = Format-Result "Aplicado: $($Tweak.Name)"
 }
 
-function New-ZeroLagRestorePoint {
+function New-SmoothTwkRestorePoint {
     if ($script:DryRun) { return 'simulado' }
     try {
         $warn = $null
-        Checkpoint-Computer -Description 'ZeroLag' -RestorePointType MODIFY_SETTINGS -ErrorAction Stop -WarningAction SilentlyContinue -WarningVariable warn
+        Checkpoint-Computer -Description 'SmoothTwk' -RestorePointType MODIFY_SETTINGS -ErrorAction Stop -WarningAction SilentlyContinue -WarningVariable warn
         if ($warn) { return 'omitido (Windows solo permite uno cada 24 h)' }
         return 'creado'
     } catch { return 'no disponible (Protección del sistema apagada)' }
@@ -705,23 +705,23 @@ function Publish-Frame {
 function Get-Rule { return "$D" + ('─' * ((Get-ConsoleWidth) - 4)) }
 
 $script:Glyphs = @{
-    Z = @('███████╗', '╚══███╔╝', '  ███╔╝ ', ' ███╔╝  ', '███████╗', '╚══════╝')
-    E = @('███████╗', '██╔════╝', '█████╗  ', '██╔══╝  ', '███████╗', '╚══════╝')
-    R = @('██████╗ ', '██╔══██╗', '██████╔╝', '██╔══██╗', '██║  ██║', '╚═╝  ╚═╝')
+    S = @('███████╗', '██╔════╝', '███████╗', '╚════██║', '███████║', '╚══════╝')
+    M = @('███╗   ███╗', '████╗ ████║', '██╔████╔██║', '██║╚██╔╝██║', '██║ ╚═╝ ██║', '╚═╝     ╚═╝')
     O = @(' ██████╗ ', '██╔═══██╗', '██║   ██║', '██║   ██║', '╚██████╔╝', ' ╚═════╝ ')
-    L = @('██╗     ', '██║     ', '██║     ', '██║     ', '███████╗', '╚══════╝')
-    A = @(' █████╗ ', '██╔══██╗', '███████║', '██╔══██║', '██║  ██║', '╚═╝  ╚═╝')
-    G = @(' ██████╗ ', '██╔════╝ ', '██║  ███╗', '██║   ██║', '╚██████╔╝', ' ╚═════╝ ')
+    T = @('████████╗', '╚══██╔══╝', '   ██║   ', '   ██║   ', '   ██║   ', '   ╚═╝   ')
+    H = @('██╗  ██╗', '██║  ██║', '███████║', '██╔══██║', '██║  ██║', '╚═╝  ╚═╝')
+    W = @('██╗    ██╗', '██║    ██║', '██║ █╗ ██║', '██║███╗██║', '╚███╔███╔╝', ' ╚══╝╚══╝ ')
+    K = @('██╗  ██╗', '██║ ██╔╝', '█████╔╝ ', '██╔═██╗ ', '██║  ██╗', '╚═╝  ╚═╝')
 }
 
 function Add-Logo {
     Add-Line
     for ($row = 0; $row -lt 6; $row++) {
         $text = ''
-        foreach ($letter in 'Z', 'E', 'R', 'O', 'L', 'A', 'G') { $text += $script:Glyphs[$letter][$row] }
+        foreach ($letter in 'S', 'M', 'O', 'O', 'T', 'H', 'T', 'W', 'K') { $text += $script:Glyphs[$letter][$row] }
         Add-Line "$W$text"
     }
-    Add-Line "$G$('O P T I M I Z E R'.PadLeft(58))"
+    Add-Line "$G$('O P T I M I Z E R'.PadLeft(81))"
 }
 
 function Add-Footer([string]$Hint) {
@@ -732,9 +732,9 @@ function Add-Footer([string]$Hint) {
     else { Add-Line }
 }
 
-function Read-ZeroLagKey {
+function Read-SmoothTwkKey {
     if ($null -ne $script:KeyQueue) {
-        if ($script:KeyQueue.Count -eq 0) { throw 'zerolag-keys-exhausted' }
+        if ($script:KeyQueue.Count -eq 0) { throw 'smoothtwk-keys-exhausted' }
         return [string]$script:KeyQueue.Dequeue()
     }
     $k = [Console]::ReadKey($true)
@@ -751,7 +751,7 @@ function Read-ZeroLagKey {
 
 function Show-Busy([string]$Text) {
     Add-Line
-    Add-Line "$W$BD ZEROLAG$NB"
+    Add-Line "$W$BD SMOOTHTWK$NB"
     Add-Line (Get-Rule)
     Add-Line
     Add-Line "$W$Text"
@@ -760,7 +760,7 @@ function Show-Busy([string]$Text) {
 
 function Confirm-Choice([string]$Text, [string]$Detail = '') {
     Add-Line
-    Add-Line "$W$BD ZEROLAG$NB"
+    Add-Line "$W$BD SMOOTHTWK$NB"
     Add-Line (Get-Rule)
     Add-Line
     Add-Line "$W$Text"
@@ -768,7 +768,7 @@ function Confirm-Choice([string]$Text, [string]$Detail = '') {
     Add-Line
     Add-Line "$W S$G confirmar     ${W}cualquier otra tecla$G cancelar"
     Publish-Frame
-    return ((Read-ZeroLagKey) -eq 's')
+    return ((Read-SmoothTwkKey) -eq 's')
 }
 
 function Show-List {
@@ -802,7 +802,7 @@ function Show-List {
         Add-Footer $Hint
         Publish-Frame
 
-        $key = Read-ZeroLagKey
+        $key = Read-SmoothTwkKey
         $script:Message = ''
         if ($key -eq 'up') { if ($cursor -gt 0) { $cursor-- } elseif ($current.Count) { $cursor = $current.Count - 1 }; continue }
         if ($key -eq 'down') { if ($cursor -lt $current.Count - 1) { $cursor++ } else { $cursor = 0 }; continue }
@@ -989,7 +989,7 @@ function Invoke-Repair {
     & sfc.exe /scannow
     Write-Host ''
     Write-Host 'Terminado. Pulsa una tecla para volver.'
-    [void](Read-ZeroLagKey)
+    [void](Read-SmoothTwkKey)
     [Console]::Write("$BG$E[2J")
 }
 
@@ -1006,7 +1006,7 @@ function Invoke-Yaku {
     if (-not $pending.Count) { $script:Message = 'Todo lo recomendado ya está aplicado.'; return }
     if (-not (Confirm-Choice "Aplicar $($pending.Count) ajustes recomendados." 'Antes se intenta crear un punto de restauración. Puedes deshacerlo con MOMIJI.')) { return }
     Show-Busy 'Creando punto de restauración...'
-    $point = New-ZeroLagRestorePoint
+    $point = New-SmoothTwkRestorePoint
     $failed = 0; $n = 0
     foreach ($t in $pending) {
         $n++
@@ -1021,7 +1021,7 @@ function Invoke-Yaku {
 function Invoke-Momiji {
     $backup = Get-Backup
     $found = @($script:Tweaks | Where-Object { $backup.ContainsKey($_.Id) })
-    if (-not $found.Count) { $script:Message = 'No hay ajustes de ZeroLag que deshacer.'; return }
+    if (-not $found.Count) { $script:Message = 'No hay ajustes de SmoothTwk que deshacer.'; return }
     if (-not (Confirm-Choice "Deshacer $($found.Count) ajustes." 'Vuelven los valores que tenías antes de aplicarlos.')) { return }
     $failed = 0
     foreach ($t in $found) {
@@ -1068,7 +1068,7 @@ function Show-Home {
         if ($line.Length -gt (Get-ConsoleWidth) - 6) { $line = $line.Substring(0, (Get-ConsoleWidth) - 6) }
         Add-Line "$G$line"
         if ($script:DryRun) { Add-Line "$W$BD MODO SIMULACIÓN: no se cambia nada$NB" }
-        elseif (-not (Test-Admin)) { Add-Line "$W$BD Sin permisos de administrador: abre con zerolag desde cmd$NB" }
+        elseif (-not (Test-Admin)) { Add-Line "$W$BD Sin permisos de administrador: abre con smoothtwk desde cmd$NB" }
         Add-Line (Get-Rule)
         for ($i = 0; $i -lt $script:Cards.Count; $i++) {
             $c = $script:Cards[$i]
@@ -1078,7 +1078,7 @@ function Show-Home {
         Add-Footer '↑↓ mover   ENTER abrir   o pulsa la tecla de la carta'
         Publish-Frame
 
-        $key = Read-ZeroLagKey
+        $key = Read-SmoothTwkKey
         $script:Message = ''
         if ($key -eq 'up') { $cursor = ($cursor + $script:Cards.Count - 1) % $script:Cards.Count; continue }
         if ($key -eq 'down') { $cursor = ($cursor + 1) % $script:Cards.Count; continue }
@@ -1097,14 +1097,14 @@ function Show-Home {
 function Enable-VirtualTerminal {
     if ([Console]::IsOutputRedirected) { return }
     try {
-        Add-Type -Namespace ZeroLag -Name Native -MemberDefinition @'
+        Add-Type -Namespace SmoothTwk -Name Native -MemberDefinition @'
 [DllImport("kernel32.dll", SetLastError=true)] public static extern IntPtr GetStdHandle(int h);
 [DllImport("kernel32.dll", SetLastError=true)] public static extern bool GetConsoleMode(IntPtr h, out uint m);
 [DllImport("kernel32.dll", SetLastError=true)] public static extern bool SetConsoleMode(IntPtr h, uint m);
 '@
-        $handle = [ZeroLag.Native]::GetStdHandle(-11)
+        $handle = [SmoothTwk.Native]::GetStdHandle(-11)
         $mode = [uint32]0
-        if ([ZeroLag.Native]::GetConsoleMode($handle, [ref]$mode)) { [void][ZeroLag.Native]::SetConsoleMode($handle, ($mode -bor 4)) }
+        if ([SmoothTwk.Native]::GetConsoleMode($handle, [ref]$mode)) { [void][SmoothTwk.Native]::SetConsoleMode($handle, ($mode -bor 4)) }
     } catch { }
 }
 
@@ -1112,7 +1112,7 @@ function Start-Interface {
     [Console]::OutputEncoding = New-Object Text.UTF8Encoding($false)
     Enable-VirtualTerminal
     try {
-        $Host.UI.RawUI.WindowTitle = 'ZeroLag'
+        $Host.UI.RawUI.WindowTitle = 'SmoothTwk'
         $Host.UI.RawUI.BackgroundColor = 'Black'
         $Host.UI.RawUI.ForegroundColor = 'White'
     } catch { }
@@ -1123,7 +1123,7 @@ function Start-Interface {
     $script:SysInfo = Get-SystemLine
     [Console]::Write("$BG$E[2J$E[?25l")
     try { Show-Home }
-    catch { if ($_.Exception.Message -ne 'zerolag-keys-exhausted') { throw } }
+    catch { if ($_.Exception.Message -ne 'smoothtwk-keys-exhausted') { throw } }
     finally { [Console]::Write("$E[0m$E[?25h$E[2J$E[H") }
 }
 
@@ -1139,47 +1139,50 @@ function Set-UserPathRaw([string]$Value) {
     $k = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey('Environment', $true)
     try { $k.SetValue('Path', $Value, [Microsoft.Win32.RegistryValueKind]::ExpandString) } finally { $k.Close() }
     # Avisa a Windows del cambio de entorno sin tocar ninguna variable real.
-    [Environment]::SetEnvironmentVariable('ZEROLAG_REFRESH', $null, 'User')
+    [Environment]::SetEnvironmentVariable('SMOOTHTWK_REFRESH', $null, 'User')
 }
 
-function Install-ZeroLag {
-    $dest = Join-Path $env:LOCALAPPDATA 'ZeroLag'
+function Install-SmoothTwk {
+    $dest = Join-Path $env:LOCALAPPDATA 'SmoothTwk'
     if (-not (Test-Path -LiteralPath $dest)) { [void](New-Item -ItemType Directory -Path $dest) }
-    # El script de consola no puede llamarse zerolag.ps1: PowerShell lo preferiria sobre zerolag.cmd.
-    $legacy = Join-Path $dest 'zerolag.ps1'
+    # El script de consola no puede llamarse smoothtwk.ps1: PowerShell lo preferiria sobre smoothtwk.cmd.
+    $legacy = Join-Path $dest 'smoothtwk.ps1'
     if (Test-Path -LiteralPath $legacy) { Remove-Item -LiteralPath $legacy -Force }
     if ($PSScriptRoot.TrimEnd('\') -ne $dest.TrimEnd('\')) {
-        Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $dest 'zerolag-consola.ps1') -Force
-        Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'zerolag.cmd') -Destination $dest -Force
-        $exe = Join-Path $PSScriptRoot 'ZeroLag.exe'
+        Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $dest 'smoothtwk-consola.ps1') -Force
+        Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'smoothtwk.cmd') -Destination $dest -Force
+        $exe = Join-Path $PSScriptRoot 'SmoothTwk.exe'
         if (Test-Path -LiteralPath $exe) { Copy-Item -LiteralPath $exe -Destination $dest -Force }
     }
-    # Quita la instalación con el nombre anterior (Hanafuda Opti) para que el comando viejo no siga abriendo.
-    $old = Join-Path $env:LOCALAPPDATA 'HanafudaOpti'
-    $raw = @((Get-UserPathRaw) -split ';' | Where-Object { $_ -and $_ -ne $old }) -join ';'
+    # Quita las instalaciones con nombres anteriores (ZeroLag, Hanafuda Opti) para que los comandos viejos no sigan abriendo.
+    $oldNames = 'ZeroLag', 'HanafudaOpti'
+    $olds = @($oldNames | ForEach-Object { Join-Path $env:LOCALAPPDATA $_ })
+    $raw = @((Get-UserPathRaw) -split ';' | Where-Object { $_ -and $olds -notcontains $_ }) -join ';'
     if (($raw -split ';') -notcontains $dest) { $raw = ($raw.TrimEnd(';') + ';' + $dest).TrimStart(';') }
     Set-UserPathRaw $raw
-    if (Test-Path -LiteralPath $old) { Remove-Item -LiteralPath $old -Recurse -Force -ErrorAction SilentlyContinue }
-    $oldData = Join-Path $env:ProgramData 'HanafudaOpti'
-    foreach ($f in 'backup.json', 'backup-exe.json') {
-        $from = Join-Path $oldData $f; $to = Join-Path $script:DataDir $f
-        if ((Test-Path -LiteralPath $from) -and -not (Test-Path -LiteralPath $to)) {
-            if (-not (Test-Path -LiteralPath $script:DataDir)) { [void](New-Item -ItemType Directory -Path $script:DataDir -Force) }
-            Copy-Item -LiteralPath $from -Destination $to -ErrorAction SilentlyContinue
+    foreach ($old in $olds) { if (Test-Path -LiteralPath $old) { Remove-Item -LiteralPath $old -Recurse -Force -ErrorAction SilentlyContinue } }
+    foreach ($name in $oldNames) {
+        $oldData = Join-Path $env:ProgramData $name
+        foreach ($f in 'backup.json', 'backup-exe.json') {
+            $from = Join-Path $oldData $f; $to = Join-Path $script:DataDir $f
+            if ((Test-Path -LiteralPath $from) -and -not (Test-Path -LiteralPath $to)) {
+                if (-not (Test-Path -LiteralPath $script:DataDir)) { [void](New-Item -ItemType Directory -Path $script:DataDir -Force) }
+                Copy-Item -LiteralPath $from -Destination $to -ErrorAction SilentlyContinue
+            }
         }
     }
     Write-Host "Instalado en $dest"
-    Write-Host 'Abre una ventana NUEVA de cmd y escribe: zerolag'
+    Write-Host 'Abre una ventana NUEVA de cmd y escribe: smoothtwk'
 }
 
-function Uninstall-ZeroLag {
-    $dest = Join-Path $env:LOCALAPPDATA 'ZeroLag'
+function Uninstall-SmoothTwk {
+    $dest = Join-Path $env:LOCALAPPDATA 'SmoothTwk'
     $kept = @((Get-UserPathRaw) -split ';' | Where-Object { $_ -and $_ -ne $dest })
     Set-UserPathRaw ($kept -join ';')
     if (Test-Path -LiteralPath $dest) {
         Start-Process -FilePath 'cmd.exe' -WindowStyle Hidden -ArgumentList "/c timeout /t 2 /nobreak >nul & rmdir /s /q `"$dest`""
     }
-    Write-Host 'ZeroLag desinstalado. Los ajustes aplicados siguen como están.'
+    Write-Host 'SmoothTwk desinstalado. Los ajustes aplicados siguen como están.'
 }
 
 function Show-Catalog {
@@ -1191,11 +1194,11 @@ function Show-Catalog {
 }
 
 function Show-Usage {
-    Write-Output 'zerolag            abre la ventana de ZeroLag'
-    Write-Output 'zerolag consola    abre el menú de consola'
-    Write-Output 'zerolag list       muestra cada ajuste y su estado'
-    Write-Output 'zerolag install    instala el comando en este usuario'
-    Write-Output 'zerolag uninstall  quita el comando'
+    Write-Output 'smoothtwk            abre la ventana de SmoothTwk'
+    Write-Output 'smoothtwk consola    abre el menú de consola'
+    Write-Output 'smoothtwk list       muestra cada ajuste y su estado'
+    Write-Output 'smoothtwk install    instala el comando en este usuario'
+    Write-Output 'smoothtwk uninstall  quita el comando'
     Write-Output 'Opción -Dry         simula sin cambiar nada'
 }
 
@@ -1203,8 +1206,8 @@ function Invoke-Main {
     switch ($Command.ToLowerInvariant()) {
         '' { Start-Interface; return }
         'list' { Show-Catalog; return }
-        'install' { Install-ZeroLag; return }
-        'uninstall' { Uninstall-ZeroLag; return }
+        'install' { Install-SmoothTwk; return }
+        'uninstall' { Uninstall-SmoothTwk; return }
         default { Show-Usage; return }
     }
 }

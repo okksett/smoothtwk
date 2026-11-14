@@ -6,7 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ZeroLag
+namespace SmoothTwk
 {
     public static class Theme
     {
@@ -61,15 +61,31 @@ namespace ZeroLag
             }
         }
 
-        // Marca provisional de ZEROLAG (cuadrado blanco con Z negra) hasta tener el logo definitivo.
+        // Logo de SmoothTwk: la S de Smooth con la perilla de un switch. Misma geometría que logo/smoothtwk/smoothtwk.svg
+        // (lienzo 256, marca en x 50..206, y 24..232), dibujada en blanco con degradado hacia gris.
         public static void Card(Graphics g, Rectangle r)
         {
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            int s = Math.Min(r.Width, r.Height);
-            var sq = new Rectangle(r.X + (r.Width - s) / 2, r.Y + (r.Height - s) / 2, s, s);
-            using (var path = Round(sq, Math.Max(2, s / 5)))
-            using (var b = new LinearGradientBrush(sq, Color.White, Color.FromArgb(190, 190, 190), 90f)) g.FillPath(b, path);
-            Draw(g, "Z", F(Math.Max(6f, s * 0.48f), FontStyle.Bold), Bg, sq, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            float k = Math.Min(r.Width / 156f, r.Height / 208f);
+            float ox = r.X + (r.Width - 156f * k) / 2f - 50f * k, oy = r.Y + (r.Height - 208f * k) / 2f - 24f * k;
+            Func<float, float> X = v => ox + v * k, Y = v => oy + v * k;
+            Func<float, float, float, RectangleF> Box = (cx, cy, rad) => new RectangleF(X(cx - rad), Y(cy - rad), 2 * rad * k, 2 * rad * k);
+            using (var p = new GraphicsPath())
+            {
+                p.AddLine(X(138), Y(36), X(106), Y(36));
+                p.AddArc(Box(106, 92, 56), 270, -180);
+                p.AddArc(Box(106, 176, 28), 270, 180);
+                p.AddLine(X(106), Y(204), X(50), Y(204));
+                p.AddLine(X(50), Y(204), X(50), Y(232));
+                p.AddLine(X(50), Y(232), X(106), Y(232));
+                p.AddArc(Box(106, 176, 56), 90, -180);
+                p.AddArc(Box(106, 92, 28), 90, 180);
+                p.AddLine(X(106), Y(64), X(138), Y(64));
+                p.CloseFigure();
+                p.AddEllipse(Box(180, 50, 26));
+                var bounds = new RectangleF(X(50), Y(24), 156 * k, 208 * k + 1);
+                using (var b = new LinearGradientBrush(bounds, Color.White, Color.FromArgb(200, 200, 200), 90f)) g.FillPath(b, p);
+            }
         }
     }
 

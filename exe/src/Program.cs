@@ -1,8 +1,8 @@
-﻿// Entrada de ZeroLag.exe
+﻿// Entrada de SmoothTwk.exe
 //   (sin argumentos)       abre la ventana y pide administrador
 //   --dry                  simulacion: no cambia nada
 //   --shot <carpeta>       guarda una captura de cada pagina (implica --dry)
-//   --selftest <archivo>   pruebas internas; solo escribe en HKCU\Software\ZeroLagTest
+//   --selftest <archivo>   pruebas internas; solo escribe en HKCU\Software\SmoothTwkTest
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ZeroLag
+namespace SmoothTwk
 {
     static class Program
     {
@@ -28,12 +28,12 @@ namespace ZeroLag
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        // Registro de arranque en %TEMP%\zerolag.log, para diagnosticar cuando la ventana no aparece.
+        // Registro de arranque en %TEMP%\smoothtwk.log, para diagnosticar cuando la ventana no aparece.
         public static void Trace(string text)
         {
             try
             {
-                var file = Path.Combine(Path.GetTempPath(), "zerolag.log");
+                var file = Path.Combine(Path.GetTempPath(), "smoothtwk.log");
                 if (File.Exists(file) && new FileInfo(file).Length > 200000) File.Delete(file);
                 File.AppendAllText(file, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [" + Process.GetCurrentProcess().Id + (IsAdmin() ? " admin" : "") + "] " + text + Environment.NewLine, new UTF8Encoding(false));
             }
@@ -43,7 +43,7 @@ namespace ZeroLag
         static void Fatal(Exception ex)
         {
             Trace("ERROR: " + ex);
-            try { MessageBox.Show("ZeroLag tuvo un error y se va a cerrar:\n\n" + ex.Message + "\n\nDetalle en %TEMP%\\zerolag.log", "ZeroLag", MessageBoxButtons.OK, MessageBoxIcon.Error); } catch { }
+            try { MessageBox.Show("SmoothTwk tuvo un error y se va a cerrar:\n\n" + ex.Message + "\n\nDetalle en %TEMP%\\smoothtwk.log", "SmoothTwk", MessageBoxButtons.OK, MessageBoxIcon.Error); } catch { }
         }
 
         [STAThread]
@@ -110,13 +110,13 @@ namespace ZeroLag
 
         public static int Run(string file)
         {
-            var key = "HKCU\\Software\\ZeroLagTest";
-            Backup.FilePath = Path.Combine(Path.GetTempPath(), "zerolag-selftest-" + Guid.NewGuid().ToString("N") + ".json");
+            var key = "HKCU\\Software\\SmoothTwkTest";
+            Backup.FilePath = Path.Combine(Path.GetTempPath(), "smoothtwk-selftest-" + Guid.NewGuid().ToString("N") + ".json");
             try { Body(key); }
             catch (Exception ex) { Check("excepción: " + ex, false); }
             finally
             {
-                try { Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.CurrentUser, Microsoft.Win32.RegistryView.Registry64).DeleteSubKeyTree("Software\\ZeroLagTest", false); } catch { }
+                try { Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.CurrentUser, Microsoft.Win32.RegistryView.Registry64).DeleteSubKeyTree("Software\\SmoothTwkTest", false); } catch { }
                 try { File.Delete(Backup.FilePath); } catch { }
             }
             Check("clave de prueba eliminada", !Engine.KeyExists(key));
@@ -148,7 +148,7 @@ namespace ZeroLag
                 Out.AppendLine("  juego " + d.Id + ": " + (gi.Installed ? gi.Exes.Count + " exe en " + gi.Root + " (icono: " + (GameLibrary.Icon(gi, 128) != null ? "sí" : "no") + ")" : "no instalado"));
             }
             // Instalacion falsa: copia este exe con los nombres de Fortnite y de Minecraft Java para probar rutas, comodines e iconos.
-            var fakeRoot = Path.Combine(Path.GetTempPath(), "zerolag-fakegame-" + Guid.NewGuid().ToString("N"));
+            var fakeRoot = Path.Combine(Path.GetTempPath(), "smoothtwk-fakegame-" + Guid.NewGuid().ToString("N"));
             try
             {
                 var me = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -219,7 +219,7 @@ namespace ZeroLag
             var states = Catalog.Tweaks.Select(t => Engine.Status(t)).ToList();
             Check("estado legible de " + states.Count + " ajustes en " + sw.Elapsed.TotalSeconds.ToString("0.0") + " s (on " + states.Count(s => s == "on") + ")", states.All(s => s == "on" || s == "off" || s == "partial" || s == "na"));
             Check("tarea programada legible", Engine.TaskEnabled("\\Microsoft\\Windows\\Defrag\\ScheduledDefrag").HasValue);
-            Check("tarea inexistente = null", !Engine.TaskEnabled("\\ZeroLag\\NoExiste").HasValue);
+            Check("tarea inexistente = null", !Engine.TaskEnabled("\\SmoothTwk\\NoExiste").HasValue);
             Check("plan activo legible", Engine.ActivePlan().Length == 36);
 
             var outLines = new List<string>();
@@ -230,7 +230,7 @@ namespace ZeroLag
             var scripts = new List<KeyValuePair<string, string>>();
             foreach (var t in Catalog.Tweaks) { if (t.ApplyScript.Length > 0) scripts.Add(new KeyValuePair<string, string>(t.Id + ".apply", t.ApplyScript)); if (t.UndoScript.Length > 0) scripts.Add(new KeyValuePair<string, string>(t.Id + ".undo", t.UndoScript)); }
             foreach (var a in Catalog.Actions) scripts.Add(new KeyValuePair<string, string>(a.Id, a.Script));
-            var dir = Path.Combine(Path.GetTempPath(), "zerolag-parse-" + Guid.NewGuid().ToString("N"));
+            var dir = Path.Combine(Path.GetTempPath(), "smoothtwk-parse-" + Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(dir);
             try
             {
