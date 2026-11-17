@@ -1,0 +1,2740 @@
+{
+    "tweaks":  [
+                   {
+                       "id":  "respuesta",
+                       "source":  "SmoothTwk",
+                       "card":  "matsu",
+                       "group":  "Sistema",
+                       "name":  "Cierre rápido de apps colgadas",
+                       "desc":  "Windows espera menos a los programas que no responden y apaga más rápido.",
+                       "warn":  "",
+                       "help":  "Cuando un programa se congela, Windows espera varios segundos antes de dejarte cerrarlo, y al apagar espera a que cada programa termine. Con esto encendido espera 1 o 2 segundos en lugar de 5 a 20. El apagado es más rápido, pero un programa colgado se cierra solo al apagar y podrías perder lo que no guardaste ahí."
+                   },
+                   {
+                       "id":  "menus",
+                       "source":  "SmoothTwk",
+                       "card":  "matsu",
+                       "group":  "Sistema",
+                       "name":  "Menús instantáneos",
+                       "desc":  "Quita la demora al abrir menús y al pasar el mouse.",
+                       "warn":  "",
+                       "help":  "Windows espera 400 milisegundos antes de abrir un submenú o mostrar una pista al pasar el mouse. Esto quita esa espera para que todo se sienta más inmediato. No cambia la velocidad real del PC, solo la sensación al usarlo."
+                   },
+                   {
+                       "id":  "lastaccess",
+                       "source":  "SmoothTwk",
+                       "card":  "matsu",
+                       "group":  "Sistema",
+                       "name":  "NTFS sin fecha de último acceso",
+                       "desc":  "El disco deja de escribir la fecha cada vez que se lee un archivo.",
+                       "warn":  "",
+                       "help":  "Cada vez que abres o lees un archivo, Windows anota la fecha en el disco. Con esto encendido deja de hacerlo, así el disco escribe menos. No pierdes nada: solo deja de guardarse \"último acceso\" en las propiedades del archivo."
+                   },
+                   {
+                       "id":  "longpaths",
+                       "source":  "SmoothTwk",
+                       "card":  "matsu",
+                       "group":  "Sistema",
+                       "name":  "Rutas largas",
+                       "desc":  "Permite rutas de más de 260 caracteres.",
+                       "warn":  "",
+                       "help":  "Windows limita las rutas de archivos a 260 caracteres. Algunos programas de desarrollo y juegos con carpetas muy profundas fallan por eso. Esto quita el límite. No tiene efectos negativos conocidos."
+                   },
+                   {
+                       "id":  "sysmain",
+                       "source":  "SmoothTwk",
+                       "card":  "matsu",
+                       "group":  "Sistema",
+                       "name":  "Apagar SysMain (Superfetch)",
+                       "desc":  "Útil en discos HDD. En SSD no hay mejora medida.",
+                       "warn":  "",
+                       "help":  "SysMain (antes Superfetch) carga en memoria los programas que más usas para que abran antes. En discos HDD a veces deja el disco al 100 %. En un SSD casi no hay diferencia. Apagarlo libera disco y algo de RAM."
+                   },
+                   {
+                       "id":  "wsearch",
+                       "source":  "SmoothTwk",
+                       "card":  "matsu",
+                       "group":  "Sistema",
+                       "name":  "Apagar indexador de búsqueda",
+                       "desc":  "Libera CPU y disco, pero la búsqueda de archivos se vuelve lenta.",
+                       "warn":  "",
+                       "help":  "El indexador recorre tus archivos para que la búsqueda de Windows sea instantánea. Apagarlo libera CPU y disco, pero buscar archivos desde Inicio o el Explorador se vuelve mucho más lento."
+                   },
+                   {
+                       "id":  "hibernar",
+                       "source":  "SmoothTwk",
+                       "card":  "matsu",
+                       "group":  "Sistema",
+                       "name":  "Apagar hibernación",
+                       "desc":  "Libera varios GB en C:. También apaga el Inicio rápido; no conviene en laptops.",
+                       "warn":  "",
+                       "help":  "La hibernación guarda la memoria en un archivo oculto (hiberfil.sys) del tamaño de varios GB. Apagarla libera ese espacio en C:. También desactiva el \"Inicio rápido\". En laptops no conviene: es lo que evita que la batería se agote si la dejas suspendida mucho tiempo."
+                   },
+                   {
+                       "id":  "plan",
+                       "source":  "SmoothTwk",
+                       "card":  "matsu",
+                       "group":  "Sistema",
+                       "name":  "Plan Alto rendimiento",
+                       "desc":  "CPU sin ahorro de energía. Más consumo y más calor; no conviene con batería.",
+                       "warn":  "",
+                       "help":  "Activa el plan de energía \"Alto rendimiento\": el procesador no baja su velocidad para ahorrar energía. Responde más rápido, pero gasta más luz y se calienta más. Pensado para escritorio enchufado."
+                   },
+                   {
+                       "id":  "modojuego",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Modo juego",
+                       "desc":  "Windows prioriza el juego abierto.",
+                       "warn":  "",
+                       "help":  "El Modo juego de Windows da prioridad al juego abierto y frena actualizaciones y tareas de fondo mientras juegas. Viene de Microsoft y es seguro dejarlo encendido."
+                   },
+                   {
+                       "id":  "mmcss",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Prioridad multimedia para juegos",
+                       "desc":  "Sube la prioridad de CPU y GPU de las tareas de juego.",
+                       "warn":  "",
+                       "help":  "Windows tiene un \"programador multimedia\" que reparte la CPU entre audio, video y juegos. Esto sube la prioridad de los juegos en CPU y GPU y reduce la reserva para tareas de fondo. Ayuda a tener menos tirones en algunos juegos."
+                   },
+                   {
+                       "id":  "throttling",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Red sin limitación multimedia",
+                       "desc":  "Quita el freno de red que Windows aplica durante audio y video.",
+                       "warn":  "",
+                       "help":  "Mientras suena audio o video, Windows limita el tráfico de red de otras cosas para que no se corte el sonido. Esto quita ese límite. Puede ayudar a descargas y juegos en línea. Necesita reiniciar."
+                   },
+                   {
+                       "id":  "gamedvr",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Apagar grabación GameDVR",
+                       "desc":  "Quita la captura en segundo plano. Win+G deja de grabar.",
+                       "warn":  "",
+                       "help":  "Game DVR graba en segundo plano los últimos minutos de juego por si quieres guardar un clip. Eso consume GPU y disco todo el tiempo. Apagarlo libera esos recursos; Win+G deja de grabar clips."
+                   },
+                   {
+                       "id":  "sticky",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Apagar aviso de teclas especiales",
+                       "desc":  "Evita que Shift x5 interrumpa el juego.",
+                       "warn":  "",
+                       "help":  "Si presionas Shift 5 veces, Windows abre un aviso de \"Teclas especiales\" que te saca del juego. Esto desactiva ese atajo y el de las teclas de filtro y alternancia. Las teclas especiales siguen disponibles desde Configuración."
+                   },
+                   {
+                       "id":  "hags",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Programación de GPU por hardware",
+                       "desc":  "Menos latencia en GPUs modernas. En algunas configuraciones da inestabilidad.",
+                       "warn":  "",
+                       "help":  "La programación de GPU por hardware deja que la tarjeta gráfica organice su propio trabajo en lugar de Windows. En GPUs modernas baja la latencia y es necesaria para la generación de fotogramas de NVIDIA. En algunas configuraciones da inestabilidad: si notas fallos, apágalo. Necesita reiniciar."
+                   },
+                   {
+                       "id":  "fse",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Apagar optimizaciones de pantalla completa",
+                       "desc":  "Pantalla completa real en juegos antiguos.",
+                       "warn":  "",
+                       "help":  "Windows convierte los juegos de pantalla completa en una ventana especial para poder mostrar notificaciones encima. Esto vuelve a la pantalla completa real, que en juegos antiguos puede dar menos retraso."
+                   },
+                   {
+                       "id":  "xbox",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Apagar servicios Xbox",
+                       "desc":  "Libera recursos. Rompe Game Pass y la app Xbox. En Ryzen X3D puede bajar FPS.",
+                       "warn":  "",
+                       "help":  "Apaga los servicios de Xbox Live, guardado en la nube de Xbox y controles Xbox inalámbricos por adaptador. Libera algo de memoria. Si usas Game Pass, la app Xbox o tienes un Ryzen X3D, no lo actives: en X3D esos servicios ayudan a repartir el juego en los núcleos correctos."
+                   },
+                   {
+                       "id":  "telemetria",
+                       "source":  "SmoothTwk",
+                       "card":  "ume",
+                       "group":  "Privacidad",
+                       "name":  "Apagar telemetría de Windows",
+                       "desc":  "Corta DiagTrack y los envíos de diagnóstico.",
+                       "warn":  "",
+                       "help":  "Windows envía a Microsoft datos de uso y diagnóstico de forma constante. Esto los reduce al mínimo y apaga los servicios que los recogen (DiagTrack). En Windows Home el mínimo permitido sigue enviando algo, pero mucho menos."
+                   },
+                   {
+                       "id":  "tareas",
+                       "source":  "SmoothTwk",
+                       "card":  "ume",
+                       "group":  "Privacidad",
+                       "name":  "Apagar tareas de telemetría",
+                       "desc":  "Desactiva las tareas programadas que recopilan datos.",
+                       "warn":  "",
+                       "help":  "Windows tiene tareas programadas que revisan tu equipo y envían informes (programa de mejora, compatibilidad, diagnóstico de disco). Esto las desactiva. No afecta a las actualizaciones."
+                   },
+                   {
+                       "id":  "publicidad",
+                       "source":  "SmoothTwk",
+                       "card":  "ume",
+                       "group":  "Privacidad",
+                       "name":  "Apagar ID de publicidad",
+                       "desc":  "Las apps dejan de recibir tu identificador publicitario.",
+                       "warn":  "",
+                       "help":  "Windows le da a cada usuario un identificador para que las apps muestren anuncios personalizados. Esto lo apaga. Seguirás viendo anuncios, pero no basados en lo que haces."
+                   },
+                   {
+                       "id":  "actividad",
+                       "source":  "SmoothTwk",
+                       "card":  "ume",
+                       "group":  "Privacidad",
+                       "name":  "Apagar historial de actividad",
+                       "desc":  "No guarda ni sube lo que abres.",
+                       "warn":  "",
+                       "help":  "Windows guarda un historial de las apps y archivos que abres y puede subirlo a tu cuenta de Microsoft. Esto deja de guardarlo y de subirlo."
+                   },
+                   {
+                       "id":  "escritura",
+                       "source":  "SmoothTwk",
+                       "card":  "ume",
+                       "group":  "Privacidad",
+                       "name":  "Apagar recopilación de escritura",
+                       "desc":  "Windows deja de aprender de lo que tecleas y escribes a mano.",
+                       "warn":  "",
+                       "help":  "Windows aprende de lo que escribes con el teclado y a mano para mejorar sugerencias, y puede enviarlo a Microsoft. Esto lo desactiva. Las sugerencias de texto pueden ser menos precisas."
+                   },
+                   {
+                       "id":  "errores",
+                       "source":  "SmoothTwk",
+                       "card":  "ume",
+                       "group":  "Privacidad",
+                       "name":  "Apagar informes de errores",
+                       "desc":  "Los fallos dejan de enviarse a Microsoft.",
+                       "warn":  "",
+                       "help":  "Cuando un programa se cierra por un error, Windows envía un informe a Microsoft. Esto deja de enviarlos y apaga el servicio que los procesa. No afecta a la estabilidad."
+                   },
+                   {
+                       "id":  "ubicacion",
+                       "source":  "SmoothTwk",
+                       "card":  "ume",
+                       "group":  "Privacidad",
+                       "name":  "Apagar ubicación",
+                       "desc":  "Clima, mapas y Encontrar mi dispositivo dejan de saber dónde estás.",
+                       "warn":  "",
+                       "help":  "Apaga la ubicación para todo el sistema. Clima, mapas, la hora automática por zona y \"Encontrar mi dispositivo\" dejan de saber dónde estás."
+                   },
+                   {
+                       "id":  "navegadores",
+                       "source":  "SmoothTwk",
+                       "card":  "ume",
+                       "group":  "Privacidad",
+                       "name":  "Telemetría de Chrome, Edge y Firefox",
+                       "desc":  "Los navegadores mostrarán \"administrado por tu organización\".",
+                       "warn":  "",
+                       "help":  "Desactiva el envío de estadísticas de uso de Chrome, Edge y Firefox, y el agente que Firefox usa para pedir ser navegador predeterminado. Los navegadores mostrarán \"Administrado por tu organización\": es normal, viene de estas políticas."
+                   },
+                   {
+                       "id":  "anuncios",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Quitar anuncios y sugerencias",
+                       "desc":  "Sin apps instaladas solas ni publicidad en Inicio y Configuración.",
+                       "warn":  "",
+                       "help":  "Windows instala apps sugeridas por su cuenta y muestra \"consejos\" y publicidad en Inicio, en la pantalla de bloqueo y en Configuración. Esto lo apaga. Las apps que ya se instalaron no se quitan solas: usa \"Quitar apps de Microsoft\"."
+                   },
+                   {
+                       "id":  "bing",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Quitar Bing del menú Inicio",
+                       "desc":  "La búsqueda de Inicio queda solo local.",
+                       "warn":  "",
+                       "help":  "Cuando buscas en el menú Inicio, Windows también busca en internet con Bing. Esto deja la búsqueda solo para tu PC: más rápida y sin resultados web."
+                   },
+                   {
+                       "id":  "copilot",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Quitar Copilot y Recall",
+                       "desc":  "Apaga el asistente y las capturas de IA.",
+                       "warn":  "",
+                       "help":  "Apaga Copilot (el asistente de IA de Windows) y Recall (las capturas automáticas de pantalla para que la IA \"recuerde\" lo que hiciste). Quita también el botón de Copilot de la barra de tareas."
+                   },
+                   {
+                       "id":  "widgets",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Quitar Widgets y noticias",
+                       "desc":  "Sin panel de noticias en la barra de tareas.",
+                       "warn":  "",
+                       "help":  "Quita el panel de Widgets y noticias que se abre desde la esquina de la barra de tareas. Deja de cargar noticias y clima en segundo plano."
+                   },
+                   {
+                       "id":  "extensiones",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Mostrar extensiones de archivo",
+                       "desc":  "Ves .exe, .pdf, etc. Ayuda a detectar archivos falsos.",
+                       "warn":  "",
+                       "help":  "Muestra la extensión de cada archivo (.exe, .pdf, .jpg). Ayuda a ver si un archivo es lo que dice: \"foto.jpg.exe\" es un programa, no una foto."
+                   },
+                   {
+                       "id":  "ocultos",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Mostrar archivos ocultos",
+                       "desc":  "El Explorador muestra carpetas ocultas como AppData.",
+                       "warn":  "",
+                       "help":  "Muestra en el Explorador las carpetas y archivos ocultos, como AppData. Útil para encontrar archivos de juegos o configuraciones. Ten cuidado al borrar cosas que no conoces."
+                   },
+                   {
+                       "id":  "clasico",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Menú contextual clásico",
+                       "desc":  "Clic derecho completo, sin \"Mostrar más opciones\".",
+                       "warn":  "",
+                       "help":  "Windows 11 muestra un menú de clic derecho corto y esconde el resto en \"Mostrar más opciones\". Esto vuelve al menú completo de Windows 10. Necesita reiniciar el Explorador o el PC."
+                   },
+                   {
+                       "id":  "barra",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Barra de tareas a la izquierda",
+                       "desc":  "Inicio vuelve a la esquina.",
+                       "warn":  "",
+                       "help":  "Mueve el botón de Inicio y los iconos de la barra de tareas a la izquierda, como en Windows 10."
+                   },
+                   {
+                       "id":  "edge",
+                       "source":  "SmoothTwk",
+                       "card":  "sakura",
+                       "group":  "Interfaz",
+                       "name":  "Edge sin barra lateral",
+                       "desc":  "Quita la barra lateral y el widget. Edge mostrará \"administrado\".",
+                       "warn":  "",
+                       "help":  "Quita la barra lateral de Edge (Copilot, compras, herramientas) y el widget flotante de búsqueda. Edge mostrará \"Administrado por tu organización\"."
+                   },
+                   {
+                       "id":  "smartscreen",
+                       "source":  "SmoothTwk",
+                       "card":  "yanagi",
+                       "group":  "Riesgo",
+                       "name":  "Apagar SmartScreen",
+                       "desc":  "Windows y Edge dejan de revisar descargas y sitios peligrosos.",
+                       "warn":  "Las descargas y páginas de phishing dejan de mostrar advertencia.",
+                       "help":  "SmartScreen revisa los programas que descargas y las páginas que visitas, y te avisa si son peligrosos. Apagarlo quita esos avisos: es más cómodo, pero un archivo o una página de estafa ya no te va a advertir."
+                   },
+                   {
+                       "id":  "vbs",
+                       "source":  "SmoothTwk",
+                       "card":  "yanagi",
+                       "group":  "Riesgo",
+                       "name":  "Apagar VBS e integridad de memoria",
+                       "desc":  "Puede subir FPS. Algunos anti-cheat exigen tenerlo encendido.",
+                       "warn":  "Pierdes la protección del kernel contra drivers maliciosos.",
+                       "help":  "La seguridad basada en virtualización y la integridad de memoria protegen el núcleo de Windows contra drivers maliciosos. Apagarlas puede subir algunos FPS (entre 0 y 10 % según el juego). Pero rompe juegos con anticheat moderno: VALORANT (Vanguard) puede no dejarte jugar, Fortnite te deja fuera de torneos y Call of Duty: Warzone puede fallar su verificación de seguridad. Si juegas alguno de esos, no lo actives."
+                   },
+                   {
+                       "id":  "updates",
+                       "source":  "SmoothTwk",
+                       "card":  "yanagi",
+                       "group":  "Riesgo",
+                       "name":  "Apagar actualizaciones automáticas",
+                       "desc":  "Windows solo actualiza cuando lo pidas en Configuración.",
+                       "warn":  "Dejas de recibir solo los parches de seguridad. Tendrás que buscarlos a mano.",
+                       "help":  "Windows deja de descargar e instalar actualizaciones por su cuenta y no reinicia solo. Puedes actualizar a mano desde Configuración \u003e Windows Update. Riesgo: si te olvidas, te quedas sin parches de seguridad."
+                   },
+                   {
+                       "id":  "tpm",
+                       "source":  "SmoothTwk",
+                       "card":  "yanagi",
+                       "group":  "Riesgo",
+                       "name":  "Saltar requisitos de Windows 11",
+                       "desc":  "Permite instalar o actualizar sin TPM, Secure Boot ni CPU compatible.",
+                       "warn":  "Microsoft no da soporte a equipos instalados así y una actualización puede fallar.",
+                       "help":  "Permite instalar o actualizar Windows 11 en equipos sin TPM 2.0, sin Secure Boot o con un procesador no compatible. Microsoft no da soporte a esos equipos y una actualización grande podría fallar."
+                   },
+                   {
+                       "id":  "puntos",
+                       "source":  "SmoothTwk",
+                       "card":  "yanagi",
+                       "group":  "Riesgo",
+                       "name":  "Borrar puntos de restauración de C:",
+                       "desc":  "Libera espacio, pero elimina todos tus puntos de restauración.",
+                       "warn":  "No se puede deshacer. Ni SmoothTwk ni Windows podrán volver a esos puntos.",
+                       "help":  "Borra todos los puntos de restauración de la unidad C:. Libera espacio, pero ya no podrás volver a un estado anterior del sistema con ellos. No se puede deshacer."
+                   },
+                   {
+                       "id":  "smoothplan",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Planes de energía",
+                       "name":  "Plan de energía SmoothTwk",
+                       "desc":  "Plan propio de SmoothTwk: prioriza rendimiento y baja latencia para jugar.",
+                       "warn":  "",
+                       "help":  "Instala y activa el plan de energía propio de SmoothTwk, hecho para jugar: el procesador y los dispositivos dejan de ahorrar energía para responder más rápido y con menos latencia. Aparece en Panel de control \u003e Opciones de energía como \"SmoothTwk Power Plan\". En laptop gasta más batería y se calienta más. Al deshacerlo vuelve tu plan anterior y se borra el plan de SmoothTwk."
+                   },
+                   {
+                       "id":  "ultimate",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Planes de energía",
+                       "name":  "Plan Máximo rendimiento",
+                       "desc":  "Activa el plan oculto Ultimate Performance. Pensado para escritorio enchufado.",
+                       "warn":  "",
+                       "help":  "Crea y activa el plan oculto \"Máximo rendimiento\" de Microsoft: quita casi todos los ahorros de energía del procesador y los dispositivos. La mejora sobre \"Alto rendimiento\" es pequeña y consume más luz. Pensado para escritorio enchufado."
+                   },
+                   {
+                       "id":  "overlay",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Planes de energía",
+                       "name":  "Modo Mejor rendimiento",
+                       "desc":  "Pone el control de energía de Windows al máximo. Requiere el plan Equilibrado.",
+                       "warn":  "",
+                       "help":  "Es lo mismo que mover el control de energía de Windows (Configuración \u003e Sistema \u003e Energía) a \"Mejor rendimiento\": el procesador sube de velocidad antes y las apps no se frenan. En laptop es la forma recomendada por Microsoft de tener más potencia. Solo funciona con el plan Equilibrado."
+                   },
+                   {
+                       "id":  "boost",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Procesador",
+                       "name":  "Turbo agresivo enchufado",
+                       "desc":  "El CPU sube de frecuencia antes. Más calor y consumo.",
+                       "warn":  "",
+                       "help":  "Cambia el modo turbo del procesador a \"agresivo\" cuando está enchufado: sube a su máxima frecuencia antes y la mantiene más tiempo. Más rendimiento en ráfagas, más calor y ventiladores."
+                   },
+                   {
+                       "id":  "parking",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Procesador",
+                       "name":  "Sin estacionamiento de núcleos",
+                       "desc":  "Mantiene todos los núcleos despiertos. Bloqueado en Ryzen X3D porque baja FPS.",
+                       "warn":  "",
+                       "help":  "Windows \"estaciona\" (duerme) núcleos del procesador cuando no hay mucho trabajo. Esto mantiene todos los núcleos despiertos para responder al instante. Gasta más energía. En Ryzen X3D está bloqueado porque baja los FPS."
+                   },
+                   {
+                       "id":  "throttleoff",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Procesador",
+                       "name":  "Sin freno a apps en segundo plano",
+                       "desc":  "Windows deja de bajar la potencia de apps en segundo plano. Más calor.",
+                       "warn":  "",
+                       "help":  "Windows reduce la potencia de las apps que están en segundo plano para ahorrar energía. Esto lo desactiva: todas las apps corren a máxima potencia. Más calor y consumo. Necesita reiniciar."
+                   },
+                   {
+                       "id":  "timerres",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Procesador",
+                       "name":  "Temporizador global de alta resolución",
+                       "desc":  "Solo ayuda a juegos que piden temporizador fino. Sube el consumo.",
+                       "warn":  "",
+                       "help":  "Algunos juegos piden a Windows un reloj interno más preciso. Desde Windows 11 ese pedido solo afecta a la app que lo hizo. Esto vuelve al comportamiento global anterior. Puede mejorar la fluidez en algunos juegos, pero el PC duerme menos y gasta más. Necesita reiniciar."
+                   },
+                   {
+                       "id":  "coolbat",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Procesador",
+                       "name":  "Modo fresco con batería",
+                       "desc":  "Sin turbo cuando no está enchufada: menos calor y más batería.",
+                       "warn":  "",
+                       "help":  "Cuando la laptop no está enchufada, apaga el turbo del procesador. Va algo más lenta en ráfagas, pero se calienta mucho menos y la batería dura bastante más. Enchufada no cambia nada."
+                   },
+                   {
+                       "id":  "pcie",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Dispositivos",
+                       "name":  "PCIe sin ahorro de energía enchufado",
+                       "desc":  "Menos demora al despertar GPU y discos NVMe.",
+                       "warn":  "",
+                       "help":  "Las ranuras PCIe (tarjeta de video, discos NVMe) entran en ahorro de energía cuando no se usan y tardan un poco en despertar. Esto lo desactiva cuando está enchufado. Menos demoras; algo más de consumo en reposo."
+                   },
+                   {
+                       "id":  "usbsuspend",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Dispositivos",
+                       "name":  "USB sin suspensión enchufado",
+                       "desc":  "Evita cortes en mouse, teclado y audio USB.",
+                       "warn":  "",
+                       "help":  "Windows apaga los puertos USB que cree que no se usan. A veces eso corta el mouse, el teclado o el audio USB por un instante. Esto lo desactiva cuando está enchufado."
+                   },
+                   {
+                       "id":  "wifiperf",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Dispositivos",
+                       "name":  "Wi-Fi sin ahorro de energía enchufado",
+                       "desc":  "Puede reducir picos de ping en algunos adaptadores.",
+                       "warn":  "",
+                       "help":  "El adaptador Wi-Fi ahorra energía entre paquetes, lo que en algunos equipos da picos de ping. Esto lo pone en máximo rendimiento cuando está enchufado."
+                   },
+                   {
+                       "id":  "nicpower",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Dispositivos",
+                       "name":  "Red cableada sin ahorro de energía",
+                       "desc":  "Evita caídas de enlace. Quita Wake-on-LAN.",
+                       "warn":  "",
+                       "help":  "Windows puede apagar la tarjeta de red cableada para ahorrar energía, lo que a veces corta la conexión. Esto lo desactiva. También deja de funcionar \"Wake-on-LAN\" (encender el PC por red)."
+                   },
+                   {
+                       "id":  "memcomp",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Memoria",
+                       "name":  "Sin compresión de memoria",
+                       "desc":  "Solo disponible con 32 GB o más. Con menos RAM empeora.",
+                       "warn":  "",
+                       "help":  "Windows comprime parte de la RAM para que quepan más cosas. Con 32 GB o más casi nunca hace falta y apagarlo ahorra un poco de CPU. Con menos RAM empeora el rendimiento, por eso solo se habilita con 32 GB o más. Necesita reiniciar."
+                   },
+                   {
+                       "id":  "startupdelay",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Arranque",
+                       "name":  "Sin retraso de apps al iniciar",
+                       "desc":  "Las apps de inicio arrancan apenas entras a Windows.",
+                       "warn":  "",
+                       "help":  "Windows espera unos 10 segundos después de iniciar sesión antes de abrir los programas de inicio. Esto quita la espera. Los programas aparecen antes, aunque compiten con el escritorio mientras carga."
+                   },
+                   {
+                       "id":  "edgeboost",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Arranque",
+                       "name":  "Edge sin precarga ni segundo plano",
+                       "desc":  "Libera RAM. Edge mostrará \"administrado por tu organización\".",
+                       "warn":  "",
+                       "help":  "Edge se queda abierto en segundo plano (aunque lo cierres) y se precarga al encender el PC para abrir más rápido. Esto lo apaga y libera RAM. Edge mostrará \"Administrado por tu organización\"."
+                   },
+                   {
+                       "id":  "bgapps",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Arranque",
+                       "name":  "Bloquear apps de la Store en segundo plano",
+                       "desc":  "Ahorra RAM y batería. Rompe notificaciones de apps de la Store.",
+                       "warn":  "",
+                       "help":  "Impide que las apps de la Microsoft Store sigan funcionando cuando están cerradas. Ahorra RAM y batería. Esas apps dejan de mostrar notificaciones y de sincronizar en segundo plano."
+                   },
+                   {
+                       "id":  "dohttp",
+                       "source":  "SmoothTwk",
+                       "card":  "kiku",
+                       "group":  "Red",
+                       "name":  "Windows Update sin compartir P2P",
+                       "desc":  "Tu PC deja de subir actualizaciones a otros equipos.",
+                       "warn":  "",
+                       "help":  "Windows Update comparte pedazos de actualizaciones con otros equipos de internet o de tu red (P2P), usando tu subida. Esto lo limita a descargar directo de Microsoft."
+                   },
+                   {
+                       "id":  "dxwindowed",
+                       "source":  "SmoothTwk",
+                       "card":  "fuji",
+                       "group":  "Juegos",
+                       "name":  "Optimización para juegos en ventana",
+                       "desc":  "Menos latencia en juegos DirectX 10/11 en ventana sin bordes.",
+                       "warn":  "",
+                       "help":  "Activa la \"Optimización para juegos en ventana\" de Windows: los juegos DirectX 10 y 11 en ventana sin bordes usan el mismo modo rápido que pantalla completa. Baja la latencia y habilita Auto HDR. Es una opción oficial de Configuración \u003e Pantalla \u003e Gráficos."
+                   },
+                   {
+                       "id":  "wu-activity",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Activity History - Disable",
+                       "desc":  "Stops Windows from publishing or uploading user activities while preserving clipboard history.",
+                       "warn":  "",
+                       "help":  "Windows guarda un historial de las apps y archivos que usas. Esto deja de guardarlo y de enviarlo a Microsoft. El historial del portapapeles no se toca."
+                   },
+                   {
+                       "id":  "wu-hiber",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Hibernation - Disable",
+                       "desc":  "Hibernation is really meant for laptops as it saves what\u0027s in memory before turning the PC off. It really should never be used.",
+                       "warn":  "",
+                       "help":  "Apaga la hibernación y quita la opción del menú de apagado. Libera el archivo hiberfil.sys (varios GB). En laptops no conviene."
+                   },
+                   {
+                       "id":  "wu-widget",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Widgets - Remove",
+                       "desc":  "Removes the annoying widgets in the bottom left of the Taskbar.",
+                       "warn":  "Esta acción no se puede deshacer.",
+                       "help":  "Desinstala el paquete de Widgets de Windows. No hay forma automática de volver a ponerlo: habría que reinstalarlo desde la Microsoft Store."
+                   },
+                   {
+                       "id":  "wu-revertstartmenu",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Start Menu Previous Layout - Enable",
+                       "desc":  "Bring back the old Start Menu layout from before the gradual rollout of the new one in 25H2. On newer versions of Windows !!THIS TWEAK WILL NOT WORK!!",
+                       "warn":  "",
+                       "help":  "Vuelve al diseño del menú Inicio anterior a la versión nueva de 25H2. En versiones más nuevas de Windows este ajuste puede dejar de funcionar."
+                   },
+                   {
+                       "id":  "wu-disablestoresearch",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Microsoft Store Recommended Search Results - Disable",
+                       "desc":  "Will not display recommended Microsoft Store apps when searching for apps in the Start menu.",
+                       "warn":  "",
+                       "help":  "Deja de mostrar apps recomendadas de la Microsoft Store cuando buscas en el menú Inicio."
+                   },
+                   {
+                       "id":  "wu-location",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Location Tracking - Disable",
+                       "desc":  "Disables Location Tracking.",
+                       "warn":  "",
+                       "help":  "Apaga el rastreo de ubicación y el servicio que lo provee. Mapas, clima y \"Encontrar mi dispositivo\" dejan de saber dónde estás."
+                   },
+                   {
+                       "id":  "wu-services",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Services - Set to Manual",
+                       "desc":  "Sets some services to Manual startup.",
+                       "warn":  "",
+                       "help":  "Cambia varios servicios a \"manual\" o \"desactivado\": archivos sin conexión, telemetría, mapas descargados, almacenamiento y conexión compartida a internet. Arrancan solo si algo los necesita."
+                   },
+                   {
+                       "id":  "wu-svchostsplitting",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "svchost.exe Splitting - Disable",
+                       "desc":  "Disables service-host splitting to reduce the number of svchost.exe processes and modestly lower memory overhead. Recommended for low-performance systems with 12 GB of RAM or less. Can interfere with Xbox services. Restart Windows after changing this setting.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Windows separa cada servicio en su propio proceso svchost.exe. Esto los agrupa para que aparezcan menos procesos. No mejora el rendimiento de forma medible."
+                   },
+                   {
+                       "id":  "wu-bravedebloat",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Brave Browser - Debloat",
+                       "desc":  "Disables various annoyances like Brave Rewards, Leo AI, Crypto Wallet and VPN.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Quita de Brave las recompensas, la billetera cripto, la VPN y la IA (Leo). Brave queda como navegador simple."
+                   },
+                   {
+                       "id":  "wu-disablewarningforunsignedrdp",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "RDP Unsigned File Warnings - Disable",
+                       "desc":  "Disables warnings shown when launching unsigned RDP files introduced with the latest Windows 10 and 11 updates.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Deja de mostrar el aviso de seguridad al abrir archivos de Escritorio remoto (.rdp) sin firmar. Solo hazlo si confías en los archivos .rdp que abres."
+                   },
+                   {
+                       "id":  "wu-edgedebloat",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Microsoft Edge - Debloat",
+                       "desc":  "Disables various telemetry options, popups, and other annoyances in Edge.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Quita de Edge accesos directos, sugerencias, compras, telemetría y otras funciones extra. Edge mostrará \"Administrado por tu organización\"."
+                   },
+                   {
+                       "id":  "wu-consumerfeatures",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "ConsumerFeatures - Disable",
+                       "desc":  "Stops promoted app installs and reduces app suggestions from Microsoft Store content.",
+                       "warn":  "",
+                       "help":  "Evita que Windows instale juegos y apps promocionadas por su cuenta (como Candy Crush) en cuentas nuevas."
+                   },
+                   {
+                       "id":  "wu-telemetry",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Telemetry - Disable",
+                       "desc":  "Disables Microsoft Telemetry.",
+                       "warn":  "",
+                       "help":  "Desactiva la telemetría de Windows, los informes de errores, las experiencias personalizadas y el ID de publicidad, y apaga sus servicios."
+                   },
+                   {
+                       "id":  "wu-deliveryoptimization",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Delivery Optimization - Disable",
+                       "desc":  "Stops Windows from using your bandwidth to upload updates to other PCs on the internet or local network.",
+                       "warn":  "",
+                       "help":  "Windows Update deja de compartir actualizaciones con otros equipos (P2P) y solo descarga directo de Microsoft."
+                   },
+                   {
+                       "id":  "wu-removeedge",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Microsoft Edge - Remove",
+                       "desc":  "Uninstalls Microsoft Edge by creating dummy MicrosoftEdge.exe file in the legacy Edge folder. This tricks Windows into unlocking the official Edge uninstaller allowing for a system-level removal.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Desinstala Microsoft Edge. Algunas funciones de Windows que abren páginas web pueden fallar. Se puede reinstalar descargando Edge desde microsoft.com."
+                   },
+                   {
+                       "id":  "wu-disablebitlocker",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "BitLocker - Disable",
+                       "desc":  "Disables BitLocker.",
+                       "warn":  "",
+                       "help":  "Desactiva el cifrado BitLocker y descifra la unidad. Tus archivos quedan sin cifrar: si te roban el PC, se pueden leer sacando el disco. El descifrado tarda."
+                   },
+                   {
+                       "id":  "wu-utc",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Date \u0026 Time - Set Time to UTC",
+                       "desc":  "Essential for computers that are dual booting. Fixes the time sync with Linux systems.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Hace que Windows guarde la hora del reloj interno en UTC. Solo sirve si usas Linux en el mismo PC y la hora se desajusta al cambiar de sistema."
+                   },
+                   {
+                       "id":  "wu-removeonedrive",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Microsoft OneDrive - Remove",
+                       "desc":  "Denies permission to remove OneDrive user files, then uses its own uninstaller to remove it and restores the original permission afterward.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Desinstala OneDrive. Tus archivos de la nube siguen en tu cuenta, pero dejan de sincronizarse con el PC. Revisa que todo esté en la nube antes."
+                   },
+                   {
+                       "id":  "wu-removehomeandgallery",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "File Explorer Home and Gallery - Disable",
+                       "desc":  "Removes the Home and Gallery from Explorer and sets This PC as default.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Quita las secciones \"Inicio\" y \"Galería\" del panel izquierdo del Explorador de archivos."
+                   },
+                   {
+                       "id":  "wu-display",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Visual Effects - Set to Best Performance",
+                       "desc":  "Sets the system preferences to performance. You can do this manually with sysdm.cpl as well.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Pone los efectos visuales de Windows en \"mejor rendimiento\": sin animaciones, sombras ni transparencias. Ayuda en equipos lentos; en equipos potentes casi no cambia nada."
+                   },
+                   {
+                       "id":  "wu-reservedstorage",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Disable Reserved Storage",
+                       "desc":  "Disables Windows Reserved Storage (7-10 GB held for updates/temp files). Recommended only on small drives. Re-enable before major Windows feature updates to avoid installation failures.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Windows reserva unos 7 GB del disco para que las actualizaciones siempre tengan espacio. Esto libera esa reserva. Si el disco se llena, una actualización podría fallar."
+                   },
+                   {
+                       "id":  "wu-endtaskontaskbar",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "End Task With Right Click - Enable",
+                       "desc":  "Enables option to end task when right-clicking a program in the taskbar.",
+                       "warn":  "",
+                       "help":  "Agrega \"Finalizar tarea\" al clic derecho de los programas en la barra de tareas, para cerrar uno colgado sin abrir el Administrador de tareas."
+                   },
+                   {
+                       "id":  "wu-storage",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Storage Sense - Disable",
+                       "desc":  "Storage Sense deletes temp files automatically.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Apaga el Sensor de almacenamiento, que borra solo archivos temporales y de la Papelera cuando falta espacio."
+                   },
+                   {
+                       "id":  "wu-windowsai",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Windows AI - Disable And Remove",
+                       "desc":  "Removes and disables all AI features/packages",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Desactiva y quita funciones de IA de Windows (Copilot, Recall, IA del Bloc de notas y de Paint). La parte que quita paquetes no se puede deshacer automáticamente."
+                   },
+                   {
+                       "id":  "wu-wpbt",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Windows Platform Binary Table (WPBT) - Disable",
+                       "desc":  "If enabled, WPBT allows your computer vendor to execute programs at boot time, such as anti-theft software, software drivers, as well as force install software without user consent. Poses potential security risk.",
+                       "warn":  "",
+                       "help":  "Impide que el fabricante del PC ejecute programas guardados en la BIOS al iniciar Windows (por ejemplo, instaladores de software del fabricante)."
+                   },
+                   {
+                       "id":  "wu-preventdevicemetadatafromnetwork",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Prevent Device Companion Apps",
+                       "desc":  "Prevents additional software from being installed when plugging in devices (e.g. Ads when plugging in a monitor). Poses potential security risk.",
+                       "warn":  "",
+                       "help":  "Evita que Windows descargue apps acompañantes y metadatos de fabricantes cuando conectas un dispositivo."
+                   },
+                   {
+                       "id":  "wu-razerblock",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Razer Software Auto-Install - Disable",
+                       "desc":  "Blocks ALL Razer Software installations. The hardware works fine without any software.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Evita que Windows instale solo el software de Razer al conectar un periférico Razer."
+                   },
+                   {
+                       "id":  "wu-logiblock",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Logitech Download Assistant Auto-Install - Disable",
+                       "desc":  "Blocks the Logi Download Assistant that Windows Update keeps reinstalling with Logitech device drivers. Logitech hardware keeps working without it.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Evita que se instale solo el asistente de descargas de Logitech."
+                   },
+                   {
+                       "id":  "wu-disablenotifications",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "System Tray Notifications \u0026 Calendar - Disable",
+                       "desc":  "Disables all Notifications INCLUDING Calendar.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Apaga el centro de notificaciones y el calendario de la barra de tareas. Dejarás de ver notificaciones de apps."
+                   },
+                   {
+                       "id":  "wu-blockadobenet",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Adobe URL Block List - Enable",
+                       "desc":  "Reduces user interruptions by selectively blocking connections to Adobe\u0027s activation and telemetry servers. Credit: Ruddernation-Designs",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Agrega al archivo hosts una lista que bloquea direcciones de Adobe (verificación de licencias y telemetría). Descarga la lista de internet."
+                   },
+                   {
+                       "id":  "wu-rightclickmenu",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Right-Click Menu Previous Layout - Enable",
+                       "desc":  "Restores the classic context menu when right-clicking in File Explorer, replacing the simplified Windows 11 version.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Vuelve al menú de clic derecho completo de Windows 10."
+                   },
+                   {
+                       "id":  "wu-diskcleanup",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Disk Cleanup - Run",
+                       "desc":  "Runs Disk Cleanup on Drive C: and removes old Windows Updates.",
+                       "warn":  "Esta acción no se puede deshacer.",
+                       "help":  "Ejecuta el Liberador de espacio de Windows y limpia componentes viejos de actualizaciones. No se puede deshacer."
+                   },
+                   {
+                       "id":  "wu-deletetempfiles",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "Temporary Files - Remove",
+                       "desc":  "Erases TEMP Folders.",
+                       "warn":  "Esta acción no se puede deshacer.",
+                       "help":  "Borra los archivos temporales del usuario y de Windows. No se puede deshacer."
+                   },
+                   {
+                       "id":  "wu-ipv46",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "IPv6 - Set IPv4 as Preferred",
+                       "desc":  "Setting the IPv4 preference can have latency and security benefits on private networks where IPv6 is not configured.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Hace que Windows prefiera IPv4 sobre IPv6 al conectarse. Útil si tu red tiene problemas con IPv6."
+                   },
+                   {
+                       "id":  "wu-teredo",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Teredo - Disable",
+                       "desc":  "Teredo network tunneling is an IPv6 feature that can cause additional latency, but may cause problems with some games.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Apaga Teredo, un túnel para usar IPv6 sobre IPv4. Algunos juegos de Xbox y el chat de grupo de Xbox lo usan."
+                   },
+                   {
+                       "id":  "wu-disableipv6",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "IPv6 - Disable",
+                       "desc":  "Disables IPv6.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Desactiva IPv6 por completo. Algunas funciones de Windows y ciertas redes lo necesitan; solo hazlo si sabes que no lo usas."
+                   },
+                   {
+                       "id":  "wu-disablebgapps",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Avanzados",
+                       "name":  "Background Apps - Disable",
+                       "desc":  "Disables all Microsoft Store apps from running in the background, which has to be done individually since Windows 11.",
+                       "warn":  "Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.",
+                       "help":  "Impide que las apps de la Microsoft Store funcionen en segundo plano. Ahorra recursos, pero pierdes sus notificaciones."
+                   },
+                   {
+                       "id":  "wu-disableexplorerautodiscovery",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Esenciales",
+                       "name":  "File Explorer Automatic Folder Discovery - Disable",
+                       "desc":  "Windows Explorer automatically tries to guess the type of the folder based on its contents, slowing down the browsing experience. WARNING! Will disable File Explorer grouping.",
+                       "warn":  "",
+                       "help":  "Evita que el Explorador cambie solo la vista de las carpetas según su contenido (fotos, música). Las carpetas abren más rápido."
+                   },
+                   {
+                       "id":  "wu-detailedbsod",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "BSoD Verbose Mode",
+                       "desc":  "Gives more information when you blue screen.",
+                       "warn":  "",
+                       "help":  "Encendido: el pantallazo azul muestra información técnica del error en lugar de la carita triste. Útil para buscar la causa."
+                   },
+                   {
+                       "id":  "wu-batterypercentage",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "System Tray Battery Percentage",
+                       "desc":  "Shows numeric battery percentage next to the battery icon in the system tray.",
+                       "warn":  "",
+                       "help":  "Encendido: muestra el porcentaje de batería junto al icono en la barra de tareas."
+                   },
+                   {
+                       "id":  "wu-darkmode",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Dark Theme for Windows",
+                       "desc":  "Dark Mode for the system and applications.",
+                       "warn":  "",
+                       "help":  "Encendido: Windows y las apps usan el tema oscuro. Apagado: vuelve al tema claro."
+                   },
+                   {
+                       "id":  "wu-showext",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "File Explorer File Extensions",
+                       "desc":  "Shows .file extensions in Explorer (.exe, .png, etc.)",
+                       "warn":  "",
+                       "help":  "Encendido: el Explorador muestra la extensión de los archivos (.exe, .pdf)."
+                   },
+                   {
+                       "id":  "wu-hiddenfiles",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "File Explorer Hidden Files",
+                       "desc":  "Reveals hidden files in Explorer.",
+                       "warn":  "",
+                       "help":  "Encendido: el Explorador muestra archivos y carpetas ocultos."
+                   },
+                   {
+                       "id":  "wu-verboselogon",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Logon Verbose Mode",
+                       "desc":  "Show detailed messages during startup/shutdown.",
+                       "warn":  "",
+                       "help":  "Encendido: al iniciar y apagar, Windows muestra qué está haciendo en cada paso en lugar de \"Espere\". Útil si se queda trabado."
+                   },
+                   {
+                       "id":  "wu-newoutlook",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Microsoft Outlook New Version",
+                       "desc":  "This will ensure the new Outlook application is used.",
+                       "warn":  "",
+                       "help":  "Encendido: usa la versión nueva de Outlook. Apagado: vuelve al Outlook clásico."
+                   },
+                   {
+                       "id":  "wu-scrollbars",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Scrollbars Always Visible",
+                       "desc":  "If enabled, scrollbars will always be visible. If disabled, Windows will automatically hide scrollbars when not in use.",
+                       "warn":  "",
+                       "help":  "Encendido: las barras de desplazamiento se ven siempre, en lugar de esconderse cuando no mueves el mouse."
+                   },
+                   {
+                       "id":  "wu-multiplaneoverlay",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Multiplane Overlay - Disable",
+                       "desc":  "Desactiva MPO (OverlayTestMode=5). Solo para parpadeos o tirones.",
+                       "warn":  "",
+                       "help":  "Desactiva el \"Multiplane Overlay\" de Windows. Solo sirve si tienes parpadeos, pantallas negras o tirones con varios monitores o al mirar videos. Si no tienes esos problemas, mejor no tocarlo."
+                   },
+                   {
+                       "id":  "wu-mouseacceleration",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Mouse Acceleration",
+                       "desc":  "Makes it so Cursor movement is affected by the speed of your physical mouse movements.",
+                       "warn":  "",
+                       "help":  "Encendido: el puntero se mueve más lejos cuanto más rápido mueves el mouse (aceleración). Apagado: la distancia depende solo de cuánto lo mueves, lo que prefieren muchos jugadores."
+                   },
+                   {
+                       "id":  "wu-numlock",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Num Lock on Startup",
+                       "desc":  "Toggle the Num Lock key state when your computer starts.",
+                       "warn":  "",
+                       "help":  "Encendido: el teclado numérico queda activado al encender el PC."
+                   },
+                   {
+                       "id":  "wu-windowsnapping",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Window Snapping",
+                       "desc":  "Toggles the window snapping feature when dragging windows.",
+                       "warn":  "",
+                       "help":  "Encendido: al arrastrar una ventana a un borde de la pantalla se acomoda sola a la mitad o en una esquina."
+                   },
+                   {
+                       "id":  "wu-standbyfix",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "S0 Sleep Network Connectivity",
+                       "desc":  "Toggles network connectivity during S0 Sleep which is low power idle in modern laptops.",
+                       "warn":  "",
+                       "help":  "Encendido: el PC mantiene la red conectada mientras está suspendido (enchufado), para recibir correos y actualizaciones. Apagado: corta la red al suspender."
+                   },
+                   {
+                       "id":  "wu-s3sleep",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "S3 Sleep",
+                       "desc":  "Toggles between Modern Standby and S3 Sleep, which cuts off power to the CPU while continuing to refresh the memory.",
+                       "warn":  "",
+                       "help":  "Encendido: usa la suspensión clásica S3 en lugar de la suspensión moderna. Puede evitar que la laptop se caliente o gaste batería dentro de la mochila. Solo funciona si tu equipo admite S3."
+                   },
+                   {
+                       "id":  "wu-hidesettingshome",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Settings Home Page",
+                       "desc":  "Toggles the Home Page in the Windows Settings app.",
+                       "warn":  "",
+                       "help":  "Encendido: Configuración muestra su página de Inicio con recomendaciones. Apagado: la oculta."
+                   },
+                   {
+                       "id":  "wu-bingsearch",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Start Menu Bing Search",
+                       "desc":  "Toggles Bing web search results in Windows Search.",
+                       "warn":  "",
+                       "help":  "Encendido: el menú Inicio también busca en internet con Bing. Apagado: solo busca en tu PC."
+                   },
+                   {
+                       "id":  "wu-loginblur",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Logon Screen Acrylic Blur",
+                       "desc":  "Toggles the acrylic blur effect on login screen background.",
+                       "warn":  "",
+                       "help":  "Encendido: la pantalla de inicio de sesión muestra el fondo desenfocado. Apagado: lo muestra nítido."
+                   },
+                   {
+                       "id":  "wu-disablelockscreen",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Lock Screen - Disable",
+                       "desc":  "Skips the lock screen entirely and goes directly to the sign-in screen on boot and wake.",
+                       "warn":  "",
+                       "help":  "Encendido: quita la pantalla de bloqueo con la imagen y va directo a pedir la contraseña."
+                   },
+                   {
+                       "id":  "wu-startmenurecommendations",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Start Menu Recommendations",
+                       "desc":  "Toggles the recommendations section in the Start Menu. WARNING: This will also disable Windows Spotlight on your Lock Screen as a side effect.",
+                       "warn":  "",
+                       "help":  "Encendido: el menú Inicio muestra la sección \"Recomendado\" con archivos y apps recientes. Apagado: la oculta."
+                   },
+                   {
+                       "id":  "wu-stickykeys",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Sticky Keys",
+                       "desc":  "Toggles the Sticky Keys, which activate when clicking shift rapidly.",
+                       "warn":  "",
+                       "help":  "Encendido: desactiva el atajo que abre Teclas especiales al presionar Shift 5 veces."
+                   },
+                   {
+                       "id":  "wu-taskbaralignment",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Taskbar Centered Icons",
+                       "desc":  "Toggles the Taskbar alignment either to the left or center.",
+                       "warn":  "",
+                       "help":  "Encendido: los iconos de la barra de tareas van al centro (estilo Windows 11). Apagado: van a la izquierda."
+                   },
+                   {
+                       "id":  "wu-taskbarsearch",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Taskbar Search Icon",
+                       "desc":  "Toggles the Search Button on the Taskbar.",
+                       "warn":  "",
+                       "help":  "Encendido: muestra el icono de búsqueda en la barra de tareas."
+                   },
+                   {
+                       "id":  "wu-taskview",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Taskbar Task View Icon",
+                       "desc":  "Toggles the Task View Button in the Taskbar.",
+                       "warn":  "",
+                       "help":  "Encendido: muestra el botón de Vista de tareas (escritorios virtuales) en la barra de tareas."
+                   },
+                   {
+                       "id":  "wu-gamemode",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Game Mode",
+                       "desc":  "Toggles Windows prioritizes gaming performance by allocating system resources to games.",
+                       "warn":  "",
+                       "help":  "Encendido: activa el Modo juego de Windows, que prioriza el juego abierto."
+                   },
+                   {
+                       "id":  "wu-longpaths",
+                       "source":  "WinUtil",
+                       "card":  "kiri",
+                       "group":  "Preferencias",
+                       "name":  "Enable Long Paths",
+                       "desc":  "Toggles support for file paths longer than 260 characters in Explorer.",
+                       "warn":  "",
+                       "help":  "Encendido: permite rutas de archivos de más de 260 caracteres."
+                   },
+                   {
+                       "id":  "game-gpu-fivem",
+                       "source":  "SmoothTwk",
+                       "card":  "fivem",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "GPU dedicada para FiveM",
+                       "desc":  "Usa siempre la tarjeta gráfica potente con este juego.",
+                       "warn":  "",
+                       "help":  "En PCs con dos gráficas (la integrada del procesador y una dedicada NVIDIA o AMD), Windows a veces abre FiveM con la integrada y rinde mucho menos. Esto marca los ejecutables del juego como «Alto rendimiento», igual que hacerlo a mano en Configuración \u003e Sistema \u003e Pantalla \u003e Gráficos. Solo cambia una preferencia de Windows: no toca el juego ni su anticheat. Si el juego se actualiza y cambia de ejecutable, apaga y vuelve a encender el interruptor."
+                   },
+                   {
+                       "id":  "game-fso-fivem",
+                       "source":  "SmoothTwk",
+                       "card":  "fivem",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "Sin optimizaciones de pantalla completa",
+                       "desc":  "Posible mejora pequeña en GTA V Legacy (DirectX 11); sin efecto en Enhanced.",
+                       "warn":  "",
+                       "help":  "Marca «Deshabilitar optimizaciones de pantalla completa» en las propiedades de compatibilidad de los ejecutables de FiveM, como hacerlo con clic derecho \u003e Propiedades \u003e Compatibilidad. Windows deja de convertir la pantalla completa en una ventana especial. En GTA V Legacy (DirectX 11) la bandera aplica, pero no hay mediciones que muestren una mejora clara. En la versión Enhanced (DirectX 12) no tiene efecto. No toca el juego ni su anticheat."
+                   },
+                   {
+                       "id":  "game-gpu-r6",
+                       "source":  "SmoothTwk",
+                       "card":  "game-r6",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "GPU dedicada para Rainbow Six Siege",
+                       "desc":  "Usa siempre la tarjeta gráfica potente con este juego.",
+                       "warn":  "",
+                       "help":  "En PCs con dos gráficas (la integrada del procesador y una dedicada NVIDIA o AMD), Windows a veces abre Rainbow Six Siege con la integrada y rinde mucho menos. Esto marca los ejecutables del juego como «Alto rendimiento», igual que hacerlo a mano en Configuración \u003e Sistema \u003e Pantalla \u003e Gráficos. Solo cambia una preferencia de Windows: no toca el juego ni su anticheat. Si el juego se actualiza y cambia de ejecutable, apaga y vuelve a encender el interruptor."
+                   },
+                   {
+                       "id":  "game-fso-r6",
+                       "source":  "SmoothTwk",
+                       "card":  "game-r6",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "Sin optimizaciones de pantalla completa",
+                       "desc":  "Sin efecto: Siege X solo usa DirectX 12.",
+                       "warn":  "",
+                       "help":  "Marca «Deshabilitar optimizaciones de pantalla completa» en las propiedades de compatibilidad de los ejecutables de Rainbow Six Siege, como hacerlo con clic derecho \u003e Propiedades \u003e Compatibilidad. Windows deja de convertir la pantalla completa en una ventana especial. El juego usa DirectX 12, OpenGL o Vulkan: esta bandera de Windows no cambia su rendimiento. Queda disponible, pero no está recomendada. No toca el juego ni su anticheat."
+                   },
+                   {
+                       "id":  "game-gpu-valorant",
+                       "source":  "SmoothTwk",
+                       "card":  "game-valorant",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "GPU dedicada para VALORANT",
+                       "desc":  "Usa siempre la tarjeta gráfica potente con este juego.",
+                       "warn":  "",
+                       "help":  "En PCs con dos gráficas (la integrada del procesador y una dedicada NVIDIA o AMD), Windows a veces abre VALORANT con la integrada y rinde mucho menos. Esto marca los ejecutables del juego como «Alto rendimiento», igual que hacerlo a mano en Configuración \u003e Sistema \u003e Pantalla \u003e Gráficos. Solo cambia una preferencia de Windows: no toca el juego ni su anticheat. Si el juego se actualiza y cambia de ejecutable, apaga y vuelve a encender el interruptor."
+                   },
+                   {
+                       "id":  "game-fso-valorant",
+                       "source":  "SmoothTwk",
+                       "card":  "game-valorant",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "Sin optimizaciones de pantalla completa",
+                       "desc":  "Aplica en DirectX 11; ayuda con alt-tab y tirones en algunos equipos.",
+                       "warn":  "",
+                       "help":  "Marca «Deshabilitar optimizaciones de pantalla completa» en las propiedades de compatibilidad de los ejecutables de VALORANT, como hacerlo con clic derecho \u003e Propiedades \u003e Compatibilidad. Windows deja de convertir la pantalla completa en una ventana especial. VALORANT usa DirectX 11, así que la bandera aplica. No hay mediciones de menos latencia, pero en algunos equipos mejora el alt-tab y los tirones. No toca el juego ni su anticheat."
+                   },
+                   {
+                       "id":  "game-gpu-fortnite",
+                       "source":  "SmoothTwk",
+                       "card":  "game-fortnite",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "GPU dedicada para Fortnite",
+                       "desc":  "Usa siempre la tarjeta gráfica potente con este juego.",
+                       "warn":  "",
+                       "help":  "En PCs con dos gráficas (la integrada del procesador y una dedicada NVIDIA o AMD), Windows a veces abre Fortnite con la integrada y rinde mucho menos. Esto marca los ejecutables del juego como «Alto rendimiento», igual que hacerlo a mano en Configuración \u003e Sistema \u003e Pantalla \u003e Gráficos. Solo cambia una preferencia de Windows: no toca el juego ni su anticheat. Si el juego se actualiza y cambia de ejecutable, apaga y vuelve a encender el interruptor."
+                   },
+                   {
+                       "id":  "game-fso-fortnite",
+                       "source":  "SmoothTwk",
+                       "card":  "game-fortnite",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "Sin optimizaciones de pantalla completa",
+                       "desc":  "Sin efecto en rendimiento; Epic lo sugiere solo si el juego no abre.",
+                       "warn":  "",
+                       "help":  "Marca «Deshabilitar optimizaciones de pantalla completa» en las propiedades de compatibilidad de los ejecutables de Fortnite, como hacerlo con clic derecho \u003e Propiedades \u003e Compatibilidad. Windows deja de convertir la pantalla completa en una ventana especial. Fortnite ya no tiene DirectX 11: corre en DirectX 12 o en Modo Rendimiento (también DirectX 12), así que no mejora los FPS. Epic lo recomienda solo como arreglo cuando el juego no abre. No toca el juego ni su anticheat."
+                   },
+                   {
+                       "id":  "game-gpu-warzone",
+                       "source":  "SmoothTwk",
+                       "card":  "game-warzone",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "GPU dedicada para Call of Duty: Warzone",
+                       "desc":  "Usa siempre la tarjeta gráfica potente con este juego.",
+                       "warn":  "",
+                       "help":  "En PCs con dos gráficas (la integrada del procesador y una dedicada NVIDIA o AMD), Windows a veces abre Call of Duty: Warzone con la integrada y rinde mucho menos. Esto marca los ejecutables del juego como «Alto rendimiento», igual que hacerlo a mano en Configuración \u003e Sistema \u003e Pantalla \u003e Gráficos. Solo cambia una preferencia de Windows: no toca el juego ni su anticheat. Si el juego se actualiza y cambia de ejecutable, apaga y vuelve a encender el interruptor."
+                   },
+                   {
+                       "id":  "game-fso-warzone",
+                       "source":  "SmoothTwk",
+                       "card":  "game-warzone",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "Sin optimizaciones de pantalla completa",
+                       "desc":  "Sin efecto: Warzone solo usa DirectX 12.",
+                       "warn":  "",
+                       "help":  "Marca «Deshabilitar optimizaciones de pantalla completa» en las propiedades de compatibilidad de los ejecutables de Call of Duty: Warzone, como hacerlo con clic derecho \u003e Propiedades \u003e Compatibilidad. Windows deja de convertir la pantalla completa en una ventana especial. El juego usa DirectX 12, OpenGL o Vulkan: esta bandera de Windows no cambia su rendimiento. Queda disponible, pero no está recomendada. No toca el juego ni su anticheat."
+                   },
+                   {
+                       "id":  "game-gpu-minecraft",
+                       "source":  "SmoothTwk",
+                       "card":  "game-minecraft",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "GPU dedicada para Minecraft",
+                       "desc":  "Usa siempre la tarjeta gráfica potente con este juego.",
+                       "warn":  "",
+                       "help":  "En PCs con dos gráficas (la integrada del procesador y una dedicada NVIDIA o AMD), Windows a veces abre Minecraft con la integrada y rinde mucho menos. Esto marca los ejecutables del juego como «Alto rendimiento», igual que hacerlo a mano en Configuración \u003e Sistema \u003e Pantalla \u003e Gráficos. Solo cambia una preferencia de Windows: no toca el juego ni su anticheat. Si el juego se actualiza y cambia de ejecutable, apaga y vuelve a encender el interruptor."
+                   },
+                   {
+                       "id":  "game-fso-minecraft",
+                       "source":  "SmoothTwk",
+                       "card":  "game-minecraft",
+                       "group":  "Optimizaciones para FiveM",
+                       "name":  "Sin optimizaciones de pantalla completa",
+                       "desc":  "Sin efecto: Minecraft usa OpenGL, Vulkan o DirectX 12.",
+                       "warn":  "",
+                       "help":  "Marca «Deshabilitar optimizaciones de pantalla completa» en las propiedades de compatibilidad de los ejecutables de Minecraft, como hacerlo con clic derecho \u003e Propiedades \u003e Compatibilidad. Windows deja de convertir la pantalla completa en una ventana especial. El juego usa DirectX 12, OpenGL o Vulkan: esta bandera de Windows no cambia su rendimiento. Queda disponible, pero no está recomendada. No toca el juego ni su anticheat."
+                   },
+                   {
+                       "id":  "fivem-remoteregistry",
+                       "source":  "SmoothTwk",
+                       "card":  "fivem",
+                       "group":  "Restaurar",
+                       "name":  "Registro remoto encendido",
+                       "desc":  "Solo si el staff del servidor lo pide. En Windows viene apagado.",
+                       "warn":  "Registro remoto deja leer y cambiar tu registro de Windows desde otra PC de la red. Enciéndelo solo si el staff lo pide y apágalo después con este mismo interruptor.",
+                       "help":  "Enciende el servicio Registro remoto (RemoteRegistry), como hace el archivo Servicios.rar. En Windows viene desactivado porque permite que otro equipo de tu red lea y modifique tu registro si tiene credenciales. No lo necesitas para jugar; algunos staff lo piden durante una revisión. Apágalo con este mismo interruptor cuando termine: vuelve a como estaba."
+                   }
+               ],
+    "actions":  [
+                    {
+                        "id":  "fivem-restore",
+                        "source":  "SmoothTwk",
+                        "card":  "fivem",
+                        "group":  "Restaurar",
+                        "name":  "Restaurar servicios y registros por defecto",
+                        "desc":  "Deja todo como viene en Windows para pasar el PC check. Lo recomendado si juegas FiveM.",
+                        "warn":  "",
+                        "button":  "Restaurar",
+                        "help":  "Muchos optimizadores apagan servicios que los servidores de FiveM revisan en el PC check, y eso puede verse como que escondes algo. Esto: (1) deshace los ajustes de SmoothTwk que apagaban esos servicios, si los aplicaste; (2) deja PcaSvc, DPS, DiagTrack, SysMain, EventLog, BFE, CDPSvc, DusmSvc en automático y Appinfo, SSDPSRV, UmRdpService en manual, que es como vienen en Windows, y los enciende; (3) pone BAM, Prefetch y el Asistente de compatibilidad en sus valores por defecto. Algunos cambios terminan de aplicarse al reiniciar. Es lo mismo que la opción \"Activar servicios\" del archivo Servicios.rar, sin RemoteRegistry."
+                    },
+                    {
+                        "id":  "fivem-cache",
+                        "source":  "SmoothTwk",
+                        "card":  "fivem",
+                        "group":  "Caché de FiveM",
+                        "name":  "Limpiar caché de FiveM",
+                        "desc":  "Solo si tienes cargas lentas, texturas rotas o errores al entrar. No sube los FPS.",
+                        "warn":  "Cierra FiveM antes. La próxima vez que entres a un servidor, FiveM vuelve a descargar sus archivos.",
+                        "button":  "Limpiar",
+                        "help":  "FiveM guarda los archivos de cada servidor en su carpeta de caché. Con el tiempo crece mucho y puede causar cargas lentas, texturas que no aparecen o errores al entrar. Esto borra las carpetas cache, server-cache y server-cache-priv dentro de FiveM.app\\data. No borra tu configuración, tus teclas ni tu cuenta. FiveM las vuelve a crear solo."
+                    },
+                    {
+                        "id":  "restore-point",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Seguridad primero",
+                        "name":  "Crear punto de restauración",
+                        "desc":  "La opción más segura: guarda una copia del sistema para volver atrás si algo sale mal.",
+                        "warn":  "",
+                        "button":  "Crear",
+                        "help":  "Guarda una \"foto\" de la configuración de Windows: registro, drivers, programas instalados y archivos del sistema. Si después de un ajuste algo deja de funcionar, puedes volver a como estaba desde Inicio \u003e \"Crear un punto de restauración\" \u003e Restaurar sistema, o desde Mantenimiento \u003e Paneles clásicos \u003e Windows Restore. Tus documentos, fotos y juegos no se tocan. Es lo primero que conviene hacer antes de optimizar. Si la Protección del sistema estaba apagada en C:, SmoothTwk la enciende (usa un poco de espacio del disco). Windows normalmente permite un punto cada 24 horas; SmoothTwk quita ese límite solo mientras crea el punto y después lo deja como estaba."
+                    },
+                    {
+                        "id":  "fix-wu",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Reparaciones",
+                        "name":  "Reiniciar Windows Update",
+                        "desc":  "Detiene los servicios, limpia la caché de descargas y los vuelve a iniciar.",
+                        "warn":  "",
+                        "button":  "Ejecutar",
+                        "help":  "Si Windows Update se queda trabado o da errores, esto detiene sus servicios, renombra la carpeta de descargas de actualizaciones y los vuelve a iniciar. Windows vuelve a descargar lo que necesite. Reinicia el PC después."
+                    },
+                    {
+                        "id":  "fix-net",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Reparaciones",
+                        "name":  "Reiniciar la red",
+                        "desc":  "Restablece Winsock y TCP/IP y vacía la caché DNS. Requiere reinicio.",
+                        "warn":  "",
+                        "button":  "Ejecutar",
+                        "help":  "Si internet funciona mal o no conecta, esto restablece la configuración de red de Windows (Winsock y TCP/IP) y borra la caché DNS. Tus redes Wi-Fi guardadas no se borran. Reinicia el PC después."
+                    },
+                    {
+                        "id":  "fix-ntp",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Reparaciones",
+                        "name":  "Hora con pool.ntp.org",
+                        "desc":  "Sincroniza el reloj con servidores públicos más precisos.",
+                        "warn":  "",
+                        "button":  "Ejecutar",
+                        "help":  "Cambia el servidor de hora de Windows (time.windows.com) por pool.ntp.org, que suele ser más preciso, y sincroniza el reloj ahora."
+                    },
+                    {
+                        "id":  "fix-winget",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Reparaciones",
+                        "name":  "Reparar WinGet",
+                        "desc":  "Reinstala el gestor de paquetes que usa el apartado de apps.",
+                        "warn":  "",
+                        "button":  "Ejecutar",
+                        "help":  "WinGet es el instalador que usa el apartado de Apps. Si falla, esto lo reinstala descargándolo de Microsoft."
+                    },
+                    {
+                        "id":  "fix-sfc",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Reparaciones",
+                        "name":  "Escaneo de archivos del sistema",
+                        "desc":  "DISM y SFC reparan archivos dañados. Tarda de 10 a 30 minutos.",
+                        "warn":  "",
+                        "button":  "Ejecutar",
+                        "help":  "Revisa los archivos de Windows y repara los que estén dañados. Primero DISM repara la imagen de Windows (descarga archivos de Windows Update) y después SFC revisa el sistema. Tarda de 10 a 30 minutos; no apagues el PC mientras corre."
+                    },
+                    {
+                        "id":  "fix-trim",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Reparaciones",
+                        "name":  "Optimizar SSD (TRIM)",
+                        "desc":  "Envía TRIM a la unidad del sistema. Seguro y rápido.",
+                        "warn":  "",
+                        "button":  "Ejecutar",
+                        "help":  "TRIM le avisa al SSD qué espacio quedó libre para que siga rápido. Windows lo hace solo una vez por semana; esto lo hace ahora. Es seguro y tarda segundos."
+                    },
+                    {
+                        "id":  "wu-default",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Windows Update",
+                        "name":  "Actualizaciones predeterminadas",
+                        "desc":  "Quita las políticas de actualización y deja Windows como viene.",
+                        "warn":  "",
+                        "button":  "Aplicar",
+                        "help":  "Quita cualquier política de Windows Update que hayan puesto SmoothTwk u otros programas, y deja las actualizaciones como vienen de fábrica."
+                    },
+                    {
+                        "id":  "wu-security",
+                        "source":  "SmoothTwk",
+                        "card":  "susuki",
+                        "group":  "Windows Update",
+                        "name":  "Solo seguridad",
+                        "desc":  "Parches de seguridad a los 4 días, versiones nuevas un año después y sin drivers.",
+                        "warn":  "",
+                        "button":  "Aplicar",
+                        "help":  "Windows instala los parches de seguridad 4 días después de que salen, retrasa las versiones grandes (como 24H2 o 25H2) un año y no actualiza drivers solo. Es un punto medio entre estabilidad y seguridad."
+                    },
+                    {
+                        "id":  "wpffeaturesdotnet",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Funciones de Windows",
+                        "name":  ".NET Framework (Versions 2, 3, 4) - Enable",
+                        "desc":  ".NET and .NET Framework is a developer platform made up of tools, programming languages, and libraries for building many different types of applications.",
+                        "warn":  "",
+                        "button":  "Activar",
+                        "help":  "Activa .NET Framework 3.5 (incluye 2.0 y 3.0) y 4.x. Algunos programas y juegos viejos no abren sin esto."
+                    },
+                    {
+                        "id":  "wpffeatureshyperv",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Funciones de Windows",
+                        "name":  "Hyper-V - Enable",
+                        "desc":  "Hyper-V is a hardware virtualization product developed by Microsoft that allows users to create and manage virtual machines.",
+                        "warn":  "",
+                        "button":  "Activar",
+                        "help":  "Activa Hyper-V, el sistema de máquinas virtuales de Windows. Solo en Windows Pro o superior. Puede bajar un poco el rendimiento en juegos y chocar con otros programas de virtualización."
+                    },
+                    {
+                        "id":  "wpffeatureslegacymedia",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Funciones de Windows",
+                        "name":  "Legacy Media Components (WMP, DirectPlay) - Enable",
+                        "desc":  "Enables legacy programs from previous versions of Windows.",
+                        "warn":  "",
+                        "button":  "Activar",
+                        "help":  "Activa el Reproductor de Windows Media clásico y DirectPlay, que necesitan algunos juegos antiguos."
+                    },
+                    {
+                        "id":  "wpffeaturewsl",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Funciones de Windows",
+                        "name":  "Windows Subsystem for Linux (WSL) - Enable",
+                        "desc":  "Windows Subsystem for Linux is an optional feature of Windows that allows Linux programs to run natively on Windows without the need for a separate virtual machine or dual booting.",
+                        "warn":  "",
+                        "button":  "Activar",
+                        "help":  "Activa el Subsistema de Windows para Linux, para usar Linux dentro de Windows. Necesita reiniciar."
+                    },
+                    {
+                        "id":  "wpffeaturenfs",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Funciones de Windows",
+                        "name":  "Network File System (NFS) - Enable",
+                        "desc":  "Network File System (NFS) is a mechanism for storing files on a network.",
+                        "warn":  "",
+                        "button":  "Activar",
+                        "help":  "Activa el cliente NFS para conectarte a carpetas compartidas de servidores Linux o NAS."
+                    },
+                    {
+                        "id":  "wpffeaturessandbox",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Funciones de Windows",
+                        "name":  "Windows Sandbox - Enable",
+                        "desc":  "Windows Sandbox is a lightweight virtual machine that provides a temporary desktop environment to safely run applications and programs in isolation.",
+                        "warn":  "",
+                        "button":  "Activar",
+                        "help":  "Activa Windows Sandbox: un Windows desechable para probar programas sospechosos sin riesgo. Solo en Windows Pro o superior."
+                    },
+                    {
+                        "id":  "wpfpanelcomputer",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Computer Management",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Computer Management» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelcontrol",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Control Panel",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Control Panel» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelmouse",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Mouse Properties",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Mouse Properties» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelnetwork",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Network Connections",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Network Connections» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelpower",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Power Panel",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Power Panel» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelprinter",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Printer Panel",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Printer Panel» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelprograms",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Programs and Features",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Programs and Features» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelregion",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Region",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Region» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelsecurity",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Security and Maintenance",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Security and Maintenance» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelsound",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Sound Settings",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Sound Settings» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelsystem",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "System Properties",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «System Properties» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpaneltimedate",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Time and Date",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Time and Date» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelfirewall",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Windows Defender Firewall",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Windows Defender Firewall» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "wpfpanelrestore",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Paneles clásicos",
+                        "name":  "Windows Restore",
+                        "desc":  "",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Abre el panel clásico «Windows Restore» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+                    },
+                    {
+                        "id":  "feat-ssh",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Funciones de Windows",
+                        "name":  "OpenSSH Server - Enable",
+                        "desc":  "Instala el servidor SSH, lo inicia y abre el puerto 22 en el firewall.",
+                        "warn":  "",
+                        "button":  "Activar",
+                        "help":  "Instala el servidor SSH de Windows para que otro equipo pueda conectarse a esta PC por consola. Abre el puerto 22 en el firewall. Solo actívalo si sabes que lo vas a usar."
+                    },
+                    {
+                        "id":  "oosu",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Herramientas externas",
+                        "name":  "O\u0026O ShutUp10++",
+                        "desc":  "Descarga y abre la herramienta de privacidad de O\u0026O Software.",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Descarga y abre O\u0026O ShutUp10++, un programa gratuito con muchos ajustes de privacidad. SmoothTwk solo lo abre; los cambios los decides dentro de ese programa."
+                    },
+                    {
+                        "id":  "autologon",
+                        "source":  "WinUtil",
+                        "card":  "susuki",
+                        "group":  "Herramientas externas",
+                        "name":  "AutoLogon de Sysinternals",
+                        "desc":  "Descarga y abre la herramienta de Microsoft para iniciar sesión sin contraseña.",
+                        "warn":  "",
+                        "button":  "Abrir",
+                        "help":  "Descarga y abre Autologon de Microsoft (Sysinternals), que permite iniciar sesión sin escribir la contraseña. Cualquiera que encienda el PC entrará a tu cuenta."
+                    },
+                    {
+                        "id":  "dns-google",
+                        "source":  "WinUtil",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "Google",
+                        "desc":  "8.8.8.8 · 8.8.4.4",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Google (8.8.8.8 y 8.8.4.4). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+                    },
+                    {
+                        "id":  "dns-cloudflare",
+                        "source":  "WinUtil",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "Cloudflare",
+                        "desc":  "1.1.1.1 · 1.0.0.1",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Cloudflare (1.1.1.1 y 1.0.0.1). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+                    },
+                    {
+                        "id":  "dns-cloudflare_malware",
+                        "source":  "WinUtil",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "Cloudflare Malware",
+                        "desc":  "1.1.1.2 · 1.0.0.2",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Cloudflare Malware (1.1.1.2 y 1.0.0.2). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+                    },
+                    {
+                        "id":  "dns-cloudflare_malware_adult",
+                        "source":  "WinUtil",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "Cloudflare Malware Adult",
+                        "desc":  "1.1.1.3 · 1.0.0.3",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Cloudflare Malware Adult (1.1.1.3 y 1.0.0.3). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+                    },
+                    {
+                        "id":  "dns-open_dns",
+                        "source":  "WinUtil",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "Open DNS",
+                        "desc":  "208.67.222.222 · 208.67.220.220",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Open DNS (208.67.222.222 y 208.67.220.220). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+                    },
+                    {
+                        "id":  "dns-quad9",
+                        "source":  "WinUtil",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "Quad9",
+                        "desc":  "9.9.9.9 · 149.112.112.112",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Quad9 (9.9.9.9 y 149.112.112.112). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+                    },
+                    {
+                        "id":  "dns-adguard_ads_trackers",
+                        "source":  "WinUtil",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "AdGuard Ads Trackers",
+                        "desc":  "94.140.14.14 · 94.140.15.15",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a AdGuard Ads Trackers (94.140.14.14 y 94.140.15.15). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+                    },
+                    {
+                        "id":  "dns-adguard_ads_trackers_malware_adult",
+                        "source":  "WinUtil",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "AdGuard Ads Trackers Malware Adult",
+                        "desc":  "94.140.14.15 · 94.140.15.16",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a AdGuard Ads Trackers Malware Adult (94.140.14.15 y 94.140.15.16). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+                    },
+                    {
+                        "id":  "dns-auto",
+                        "source":  "SmoothTwk",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "Automático",
+                        "desc":  "Vuelve al DNS de tu router.",
+                        "warn":  "",
+                        "button":  "Usar",
+                        "help":  "Vuelve a usar el DNS que te da tu router o tu proveedor de internet."
+                    },
+                    {
+                        "id":  "dns-flush",
+                        "source":  "SmoothTwk",
+                        "card":  "botan",
+                        "group":  "DNS",
+                        "name":  "Vaciar caché DNS",
+                        "desc":  "Borra respuestas DNS guardadas.",
+                        "warn":  "",
+                        "button":  "Vaciar",
+                        "help":  "Borra la lista de direcciones que Windows recuerda. Útil si una página no carga después de cambiar de DNS o de red."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowsfeedbackhub",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Feedback Hub",
+                        "desc":  "Allows users to submit bug reports, feature suggestions, and diagnostic data directly to Microsoft.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Feedback Hub» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Allows users to submit bug reports, feature suggestions, and diagnostic data directly to Microsoft. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_gethelp",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Get Help",
+                        "desc":  "Provides access to automated troubleshooting guides, support documentation, and direct Microsoft customer assistance.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Get Help» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides access to automated troubleshooting guides, support documentation, and direct Microsoft customer assistance. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_outlookforwindows",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Outlook for Windows",
+                        "desc":  "Provides modern email management, calendar scheduling, and contact organization features.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Outlook for Windows» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides modern email management, calendar scheduling, and contact organization features. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmsteams",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Microsoft Teams",
+                        "desc":  "Facilitates instant messaging, video conferencing, file sharing, and workspace collaboration.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Microsoft Teams» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Facilitates instant messaging, video conferencing, file sharing, and workspace collaboration. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxclipchamp_clipchamp",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Clipchamp",
+                        "desc":  "Provides a user-friendly video editor with built-in templates, effects, and timeline editing tools.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Clipchamp» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides a user-friendly video editor with built-in templates, effects, and timeline editing tools. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_microsoftofficehub",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Microsoft 365",
+                        "desc":  "Serves as a centralized launcher and dashboard for accessing cloud-based Microsoft 365 apps and recent documents.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Microsoft 365» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Serves as a centralized launcher and dashboard for accessing cloud-based Microsoft 365 apps and recent documents. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_zunemusic",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Media Player",
+                        "desc":  "Plays local audio and video files with modern playlist management and casting capabilities.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Media Player» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Plays local audio and video files with modern playlist management and casting capabilities. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_bingsearch",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Bing Search",
+                        "desc":  "Integrates Microsoft Bing search capabilities and web services directly into the operating system.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Bing Search» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Integrates Microsoft Bing search capabilities and web services directly into the operating system. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoftcorporationii_quickassist",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Quick Assist",
+                        "desc":  "Enables secure remote technical support and screen sharing over an internet connection.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Quick Assist» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Enables secure remote technical support and screen sharing over an internet connection. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowsdevhome",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Dev Home",
+                        "desc":  "Provides a specialized dashboard for software developer environment setups, repository syncing, and hardware widgets.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Dev Home» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides a specialized dashboard for software developer environment setups, repository syncing, and hardware widgets. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowscrossdevice",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Mobile Devices",
+                        "desc":  "Manages system-level background connectivity with paired mobile devices. Removing this may disable cross-device features such as phone screen mirroring, file transfer, and mobile hotspot handoff integrated into Windows Settings.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Mobile Devices» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Manages system-level background connectivity with paired mobile devices. Removing this may disable cross-device features such as phone screen mirroring, file transfer, and mobile hotspot handoff integrated into Windows Settings. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_todos",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "To Do",
+                        "desc":  "Creates, tracks, and synchronizes personal tasks, smart lists, and daily reminders.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «To Do» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Creates, tracks, and synchronizes personal tasks, smart lists, and daily reminders. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_powerautomatedesktop",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Power Automate",
+                        "desc":  "Automates repetitive workflows and desktop tasks using low-code visual scripting.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Power Automate» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Automates repetitive workflows and desktop tasks using low-code visual scripting. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_yourphone",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Phone Link",
+                        "desc":  "Synchronizes text messages, phone notifications, photos, and calls from a mobile device to the desktop.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Phone Link» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Synchronizes text messages, phone notifications, photos, and calls from a mobile device to the desktop. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_microsoftstickynotes",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Sticky Notes",
+                        "desc":  "Creates quick, floating text notes on the desktop that automatically sync across devices.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Sticky Notes» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Creates quick, floating text notes on the desktop that automatically sync across devices. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowssoundrecorder",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Sound Recorder",
+                        "desc":  "Records and trims live audio inputs with simple microphone adjustment controls.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Sound Recorder» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Records and trims live audio inputs with simple microphone adjustment controls. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowsalarms",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Clock",
+                        "desc":  "Features world clocks, alarms, countdown timers, stopwatches, and dedicated focus session tracking.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Clock» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Features world clocks, alarms, countdown timers, stopwatches, and dedicated focus session tracking. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_paint",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Paint",
+                        "desc":  "Provides built-in digital sketching, basic image editing, and pixel-level graphic manipulation tools.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Paint» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides built-in digital sketching, basic image editing, and pixel-level graphic manipulation tools. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowsnotepad",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Notepad",
+                        "desc":  "Provides a lightweight text editor with multi-tab support for plain text files and code snippets.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Notepad» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides a lightweight text editor with multi-tab support for plain text files and code snippets. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_screensketch",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Snipping Tool",
+                        "desc":  "Captures screenshots or screen recordings with built-in markup, image cropping, and optical character recognition (OCR).",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Snipping Tool» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Captures screenshots or screen recordings with built-in markup, image cropping, and optical character recognition (OCR). Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_copilot",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Copilot",
+                        "desc":  "Launches the Microsoft AI companion for contextual answers, creative writing assistance, and intelligent web search.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Copilot» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Launches the Microsoft AI companion for contextual answers, creative writing assistance, and intelligent web search. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowscalculator",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Calculator",
+                        "desc":  "Performs standard arithmetic, scientific operations, programming calculations, and unit conversions.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Calculator» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Performs standard arithmetic, scientific operations, programming calculations, and unit conversions. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowscamera",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Camera",
+                        "desc":  "Captures photographs and records video files via connected webcams or imaging hardware.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Camera» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Captures photographs and records video files via connected webcams or imaging hardware. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_windowsphotos",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Photos",
+                        "desc":  "Organizes, views, and crops local images with basic color adjustment and album creation tools.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Photos» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Organizes, views, and crops local images with basic color adjustment and album creation tools. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_bingnews",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "News",
+                        "desc":  "Aggregates breaking news headlines, personalized article feeds, and world current events.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «News» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Aggregates breaking news headlines, personalized article feeds, and world current events. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_bingweather",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Weather",
+                        "desc":  "Displays local real-time weather tracking, radar maps, and historical meteorological forecasts.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Weather» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Displays local real-time weather tracking, radar maps, and historical meteorological forecasts. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_gamingapp",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Xbox App",
+                        "desc":  "Serves as the primary gaming library manager, social community interface, and PC Game Pass dashboard.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Xbox App» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Serves as the primary gaming library manager, social community interface, and PC Game Pass dashboard. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_xboxgamingoverlay",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Xbox Game Bar",
+                        "desc":  "Provides customizable in-game status widgets, audio balancing sliders, system monitoring tools, and gameplay recording.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Xbox Game Bar» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides customizable in-game status widgets, audio balancing sliders, system monitoring tools, and gameplay recording. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_xboxidentityprovider",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Xbox Identity Provider",
+                        "desc":  "Manages Xbox network user authentication and background account validation for connected titles. Warning: removing this may break Microsoft account sign-in for non-Xbox games and apps that rely on this authentication pipeline.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Xbox Identity Provider» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Manages Xbox network user authentication and background account validation for connected titles. Warning: removing this may break Microsoft account sign-in for non-Xbox games and apps that rely on this authentication pipeline. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_xboxspeechtotextoverlay",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Xbox Speech To Text Overlay",
+                        "desc":  "Provides system-level live accessibility captions and voice-to-text translation for gaming chat networks.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Xbox Speech To Text Overlay» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides system-level live accessibility captions and voice-to-text translation for gaming chat networks. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_xbox_tcui",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Xbox TCUI",
+                        "desc":  "Provides core account connection UI modules for single sign-on flows within game titles. Warning: removing this may break Microsoft account authentication in games and apps that do not otherwise require the Xbox app.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Xbox TCUI» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Provides core account connection UI modules for single sign-on flows within game titles. Warning: removing this may break Microsoft account authentication in games and apps that do not otherwise require the Xbox app. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_startexperiencesapp",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Start Experiences App",
+                        "desc":  "Powers the Windows Widgets board, delivering a personalized feed of news, weather, sports, and finance content.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Start Experiences App» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Powers the Windows Widgets board, delivering a personalized feed of news, weather, sports, and finance content. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_microsoftsolitairecollection",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Solitaire Collection",
+                        "desc":  "Bundles built-in card game modes including Klondike, Spider, FreeCell, Pyramid, and TriPeaks alongside daily challenges.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Solitaire Collection» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: Bundles built-in card game modes including Klondike, Spider, FreeCell, Pyramid, and TriPeaks alongside daily challenges. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    },
+                    {
+                        "id":  "wpfappxmicrosoft_zunevideo",
+                        "source":  "WinUtil",
+                        "card":  "sakura",
+                        "group":  "Quitar apps de Microsoft",
+                        "name":  "Movies \u0026 TV",
+                        "desc":  "The default video player and storefront for purchasing or renting media.",
+                        "warn":  "Se puede reinstalar desde Microsoft Store.",
+                        "button":  "Quitar",
+                        "help":  "Desinstala «Movies \u0026 TV» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: The default video player and storefront for purchasing or renting media. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+                    }
+                ],
+    "games":  [
+                  {
+                      "id":  "fivem",
+                      "name":  "FiveM",
+                      "tagline":  "PC check y rendimiento · GTA V Legacy en DirectX 11",
+                      "cautions":  [
+
+                                   ],
+                      "guide":  [
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Screen Type",
+                                        "value":  "Fullscreen",
+                                        "why":  "La pantalla completa real llega antes a tu monitor que el modo ventana."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "VSync",
+                                        "value":  "Off",
+                                        "why":  "VSync espera a la pantalla antes de mostrar cada imagen y eso agrega retraso."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "DirectX Version",
+                                        "value":  "DirectX 11",
+                                        "why":  "Es la versión con la que mejor rinde GTA V Legacy dentro de FiveM."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "MSAA y Reflection MSAA",
+                                        "value":  "Off",
+                                        "why":  "El antialiasing MSAA es de lo más pesado del juego."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Grass Quality",
+                                        "value":  "Normal",
+                                        "why":  "El pasto en calidades altas es uno de los mayores consumos de FPS."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Extended Distance Scaling",
+                                        "value":  "Mínimo",
+                                        "why":  "Dibuja menos detalle lejano: sube los FPS en ciudad."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Population Density / Variety",
+                                        "value":  "Bajo",
+                                        "why":  "Menos gente y autos generados por el juego, si el servidor lo permite."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Ambient Occlusion",
+                                        "value":  "Off",
+                                        "why":  "Sombras de contacto caras y con poco valor para jugar."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "High Detail Streaming While Flying",
+                                        "value":  "Off",
+                                        "why":  "Evita tirones al volar o ir muy rápido."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Texture Quality",
+                                        "value":  "High (Normal con poca VRAM)",
+                                        "why":  "Las texturas casi no cuestan FPS si tu tarjeta tiene memoria suficiente."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Motion Blur Strength",
+                                        "value":  "0",
+                                        "why":  "Sin desenfoque al moverte: ves mejor a los demás."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Anisotropic Filtering",
+                                        "value":  "x8",
+                                        "why":  "Suelos nítidos a distancia por muy poco costo."
+                                    },
+                                    {
+                                        "group":  "Red",
+                                        "name":  "Consola F8: cl_drawperf true",
+                                        "value":  "Activar",
+                                        "why":  "Muestra FPS, ping y pérdida de paquetes mientras juegas. Ten en cuenta que muchos servidores limitan los FPS con sus scripts."
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "r6",
+                      "name":  "Rainbow Six Siege",
+                      "tagline":  "Siege X · DirectX 12 · BattlEye",
+                      "cautions":  [
+                                       "Legend Division pide Secure Boot y TPM. Desde octubre de 2026 esa lista exige Secure Boot y TPM activos; Ranked normal y Casual todavía no. No los apagues en la BIOS.",
+                                       "No uses macros. Ubisoft detecta macros y manipulación de entradas desde el Año 11: SmoothTwk no incluye nada de eso.",
+                                       "Prioridad del proceso: déjala como está. BattlEye protege el proceso y no hay garantía sobre cambiarla."
+                                   ],
+                      "guide":  [
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Display Mode",
+                                        "value":  "Fullscreen",
+                                        "why":  "El camino más directo hasta tu pantalla."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "V-Sync",
+                                        "value":  "Off",
+                                        "why":  "Sincronizar con el monitor agrega retraso."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "NVIDIA Reflex Low Latency",
+                                        "value":  "On + Boost (si aparece)",
+                                        "why":  "Reduce la cola de imágenes de la GPU. No está confirmado que exista en Siege X: actívalo solo si lo ves en el menú."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Frame Rate Limit",
+                                        "value":  "Sin límite (o 3 bajo tu Hz con G-Sync)",
+                                        "why":  "Mantiene corta la cola de la GPU; con G-Sync/FreeSync evita salir del rango."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Render Scaling",
+                                        "value":  "100",
+                                        "why":  "Imagen estable y nítida."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Adaptive Render Scaling",
+                                        "value":  "Off",
+                                        "why":  "Evita que la resolución cambie sola en medio de una pelea."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Shading Quality",
+                                        "value":  "Low",
+                                        "why":  "Gran subida de FPS con poco cambio visual."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Shadow Quality",
+                                        "value":  "Low (Medium para ver sombras enemigas)",
+                                        "why":  "Algunos pros usan Medium porque las sombras delatan a los rivales."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Reflection Quality / Ambient Occlusion",
+                                        "value":  "Low / Off",
+                                        "why":  "Caros y sin valor competitivo."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Texture Quality",
+                                        "value":  "Medium o Low",
+                                        "why":  "Según la memoria de tu tarjeta."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "LOD Quality",
+                                        "value":  "High",
+                                        "why":  "Los objetos lejanos se ven igual que de cerca."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Lens Effects / Zoom-In Depth of Field",
+                                        "value":  "Off",
+                                        "why":  "Menos destellos y desenfoque al apuntar."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Anti-Aliasing",
+                                        "value":  "T-AA, nitidez 50",
+                                        "why":  "Bordes limpios sin perder detalle; DLAA o FSR Native si aparecen."
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "valorant",
+                      "name":  "VALORANT",
+                      "tagline":  "Unreal Engine 5 · DirectX 11 · Riot Vanguard",
+                      "cautions":  [
+                                       "Vanguard exige TPM 2.0 y Secure Boot. Sin ellos aparecen los errores VAN 9001 o VAN 9003. No apagues la seguridad basada en virtualización. El ajuste «Apagar VBS e integridad de memoria» de Seguridad avanzada puede dejarte sin poder jugar o fuera de torneos en este juego.",
+                                       "Vanguard puede pedir la integridad de memoria (HVCI) e IOMMU. Si ves VAN:RESTRICTION, vuelve a encender lo que pida.",
+                                       "Prioridad del proceso: déjala como está. No hay confirmación de que sea segura con Vanguard."
+                                   ],
+                      "guide":  [
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Display Mode",
+                                        "value":  "Fullscreen",
+                                        "why":  "La menor latencia en un juego DirectX 11."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "NVIDIA Reflex Low Latency",
+                                        "value":  "On + Boost",
+                                        "why":  "Reduce la cola de imágenes de la GPU. Usa On si bajan tus mínimos de FPS."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "VSync",
+                                        "value":  "Off",
+                                        "why":  "Sincronizar con el monitor agrega retraso."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Limit FPS Always",
+                                        "value":  "Off",
+                                        "why":  "Deja que el juego vaya tan rápido como pueda; ponlo un poco sobre tu Hz si tu CPU no da abasto."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Raw Input Buffer",
+                                        "value":  "On",
+                                        "why":  "En General \u003e Mouse: menos retraso del mouse, sobre todo a 1000 Hz o más."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Multithreaded Rendering",
+                                        "value":  "On",
+                                        "why":  "Usa varios núcleos; pruébalo si tienes 4 o más."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Material / Texture / Detail / UI Quality",
+                                        "value":  "Low",
+                                        "why":  "Más FPS con muy poco cambio para competir."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Vignette / Cast Shadows",
+                                        "value":  "Off",
+                                        "why":  "Efectos que cuestan FPS y no ayudan a ver."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Anti-Aliasing",
+                                        "value":  "MSAA 2x (o None)",
+                                        "why":  "Bordes limpios a bajo costo."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Anisotropic Filtering",
+                                        "value":  "4x",
+                                        "why":  "Suelos y paredes nítidos en ángulo."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Improve Clarity",
+                                        "value":  "Off (On si te sobran FPS)",
+                                        "why":  "Ayuda a ver, pero cuesta FPS."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Bloom / Distortion",
+                                        "value":  "Off",
+                                        "why":  "Menos ruido visual en las peleas."
+                                    },
+                                    {
+                                        "group":  "Red",
+                                        "name":  "Network Buffering",
+                                        "value":  "Minimum",
+                                        "why":  "Lo que pasa en la partida te llega antes."
+                                    },
+                                    {
+                                        "group":  "Red",
+                                        "name":  "Client FPS / Network RTT (Stats)",
+                                        "value":  "Mostrar",
+                                        "why":  "Para vigilar FPS y ping mientras juegas."
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "fortnite",
+                      "name":  "Fortnite",
+                      "tagline":  "Unreal Engine 5 · DirectX 12 / Modo Rendimiento",
+                      "cautions":  [
+                                       "Los torneos piden TPM 2.0 y Secure Boot. Para torneos con nivel 350 o más desde 2025, y según reportes para todos los torneos (más IOMMU) desde febrero de 2026. Partidas normales no. No apagues la seguridad basada en virtualización. El ajuste «Apagar VBS e integridad de memoria» de Seguridad avanzada puede dejarte sin poder jugar o fuera de torneos en este juego.",
+                                       "No pongas GameUserSettings.ini en solo lectura. Epic avisa que así no se guardan los cambios de gráficos ni del Modo Rendimiento."
+                                   ],
+                      "guide":  [
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Window Mode",
+                                        "value":  "Fullscreen",
+                                        "why":  "La pantalla completa real responde antes."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "NVIDIA Reflex Low Latency",
+                                        "value":  "On + Boost",
+                                        "why":  "Reduce la cola de imágenes de la GPU."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "V-Sync",
+                                        "value":  "Off",
+                                        "why":  "Sincronizar con el monitor agrega retraso."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Frame Rate Limit",
+                                        "value":  "Unlimited (o tu Hz - 3 con G-Sync)",
+                                        "why":  "Epic recomienda igualar tu Hz solo si ves cortes en la imagen."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Rendering Mode",
+                                        "value":  "Performance",
+                                        "why":  "El modo de Epic para competir: apaga casi todos los efectos."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Shadows",
+                                        "value":  "Off",
+                                        "why":  "Las sombras son de lo más caro."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Effects / Post Processing",
+                                        "value":  "Low",
+                                        "why":  "Menos efectos encima de la acción."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Textures / Meshes",
+                                        "value":  "Low (Medium con VRAM de sobra)",
+                                        "why":  "Según la memoria de tu tarjeta."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Pre-download Streamed Assets",
+                                        "value":  "On",
+                                        "why":  "Descarga texturas antes de la partida: menos tirones."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "3D Resolution",
+                                        "value":  "100 %",
+                                        "why":  "Imagen nítida a tu resolución real."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "View Distance",
+                                        "value":  "Medium a Far",
+                                        "why":  "Ves edificios y jugadores a distancia."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Motion Blur",
+                                        "value":  "Off",
+                                        "why":  "Sin desenfoque al girar."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Anti-Aliasing \u0026 Super Resolution",
+                                        "value":  "Off en Performance",
+                                        "why":  "Usa TSR o DLSS solo si tu GPU no llega a los FPS que quieres."
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "warzone",
+                      "name":  "Call of Duty: Warzone",
+                      "tagline":  "Dentro de Call of Duty HQ · DirectX 12 · Ricochet",
+                      "cautions":  [
+                                       "TPM 2.0 y Secure Boot son obligatorios. Warzone los exige desde diciembre de 2025, con BIOS UEFI y disco GPT; sirven Intel PTT o AMD fTPM. No apagues la seguridad basada en virtualización. El ajuste «Apagar VBS e integridad de memoria» de Seguridad avanzada puede dejarte sin poder jugar o fuera de torneos en este juego.",
+                                       "Hay una verificación extra del equipo. Desde junio de 2026, si fallas la verificación quedas limitado a modos casuales.",
+                                       "Prioridad del proceso: déjala como está. Ricochet funciona a nivel de kernel y no hay confirmación sobre ese cambio."
+                                   ],
+                      "guide":  [
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Display Mode",
+                                        "value":  "Fullscreen Exclusive",
+                                        "why":  "La pantalla completa exclusiva es la más rápida."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "NVIDIA Reflex Low Latency",
+                                        "value":  "On + Boost",
+                                        "why":  "O AMD Anti-Lag 2 si aparece. Reduce la cola de la GPU."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "V-Sync (Gameplay y Menus)",
+                                        "value":  "Off",
+                                        "why":  "Sincronizar con el monitor agrega retraso."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Custom Frame Rate Limit",
+                                        "value":  "Tu Hz (o Hz - 3 con VRR)",
+                                        "why":  "Ritmo estable sin salir del rango de G-Sync/FreeSync."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Frame Generation",
+                                        "value":  "Off",
+                                        "why":  "Inventa fotogramas intermedios y agrega retraso."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Render Resolution / Dynamic Resolution",
+                                        "value":  "100 / Off",
+                                        "why":  "Resolución fija y nítida."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Upscaling / Sharpening",
+                                        "value":  "FidelityFX CAS (DLSS/FSR Quality si falta GPU)",
+                                        "why":  "Nitidez casi gratis; el escalado solo si necesitas más FPS."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "VRAM Scale Target",
+                                        "value":  "70 a 80",
+                                        "why":  "Evita tirones por quedarse sin memoria de video."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Shader / Shadow Quality",
+                                        "value":  "Low",
+                                        "why":  "Lo más pesado del juego."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Screen-Space Shadows / Ambient Occlusion / Reflections",
+                                        "value":  "Off",
+                                        "why":  "Efectos caros sin valor competitivo."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "On-Demand Texture Streaming",
+                                        "value":  "Minimal",
+                                        "why":  "Menos tirones por disco y red."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Depth of Field / Motion Blur",
+                                        "value":  "Off",
+                                        "why":  "Sin desenfoque al apuntar ni al girar."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Film Grain",
+                                        "value":  "0.00",
+                                        "why":  "Quita el grano que ensucia la imagen."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "First-Person Camera Movement",
+                                        "value":  "Least",
+                                        "why":  "La cámara se mueve menos al correr."
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "minecraft",
+                      "name":  "Minecraft",
+                      "tagline":  "Java (OpenGL / Vulkan) y Bedrock",
+                      "cautions":  [
+                                       "Minecraft no tiene anticheat en tu PC. Cada servidor tiene sus propias reglas: revisa si permite mods como Sodium antes de usarlos.",
+                                       "GPU dedicada aplica al Java del launcher. Es el arreglo clásico cuando Minecraft corre con la gráfica integrada en laptops."
+                                   ],
+                      "guide":  [
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Fullscreen",
+                                        "value":  "On",
+                                        "why":  "La pantalla completa responde antes."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "VSync",
+                                        "value":  "Off",
+                                        "why":  "Sincronizar con el monitor agrega retraso."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Max Framerate",
+                                        "value":  "Unlimited (o tu Hz)",
+                                        "why":  "Deja que el juego vaya tan rápido como pueda."
+                                    },
+                                    {
+                                        "group":  "Menos input lag",
+                                        "name":  "Raw Input",
+                                        "value":  "On",
+                                        "why":  "En Mouse Settings: el mouse responde sin el filtro de Windows."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Graphics",
+                                        "value":  "Fast",
+                                        "why":  "El modo rápido quita efectos caros."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Render Distance",
+                                        "value":  "8 a 12",
+                                        "why":  "Es lo que más afecta a los FPS."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Simulation Distance",
+                                        "value":  "5 a 8",
+                                        "why":  "Menos chunks activos: menos carga de CPU."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Clouds / Particles / Entity Shadows",
+                                        "value":  "Off o Fast / Decreased / Off",
+                                        "why":  "Efectos que cuestan FPS y no ayudan a jugar."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Biome Blend",
+                                        "value":  "Off",
+                                        "why":  "Ahorra CPU al cargar terreno."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "RAM del launcher (-Xmx)",
+                                        "value":  "4 GB (6 a 8 GB con modpacks)",
+                                        "why":  "En el perfil \u003e Argumentos JVM. Nunca más de la mitad de tu RAM: demasiado causa pausas."
+                                    },
+                                    {
+                                        "group":  "Más FPS",
+                                        "name":  "Mods de rendimiento (Fabric)",
+                                        "value":  "Sodium + Lithium + FerriteCore",
+                                        "why":  "Reemplazan el motor gráfico y la lógica por versiones más rápidas. Bájalos de Modrinth para tu versión exacta."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "FOV",
+                                        "value":  "80 a 90",
+                                        "why":  "Más visión periférica sin deformar demasiado."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Mipmap Levels",
+                                        "value":  "0 a 4",
+                                        "why":  "Bloques lejanos más definidos."
+                                    },
+                                    {
+                                        "group":  "Claridad visual",
+                                        "name":  "Bedrock: Vibrant Visuals / Fancy Graphics",
+                                        "value":  "Off",
+                                        "why":  "En la versión Bedrock: más FPS con menor distancia de renderizado."
+                                    }
+                                ]
+                  }
+              ]
+}

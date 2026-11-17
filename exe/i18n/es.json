@@ -1,0 +1,646 @@
+{
+  "tweaks": {
+    "wu-activity": {
+      "name": "Desactivar historial de actividad",
+      "desc": "Windows deja de guardar y enviar tu actividad; el portapapeles se conserva.",
+      "help": "Windows guarda un historial de las apps y archivos que usas. Esto deja de guardarlo y de enviarlo a Microsoft. El historial del portapapeles no se toca."
+    },
+    "wu-hiber": {
+      "name": "Desactivar hibernación",
+      "desc": "Apaga la hibernación y libera el espacio que ocupa hiberfil.sys.",
+      "help": "Apaga la hibernación y quita la opción del menú de apagado. Libera el archivo hiberfil.sys (varios GB). En laptops no conviene."
+    },
+    "wu-widget": {
+      "name": "Quitar widgets de la barra de tareas",
+      "desc": "Desinstala el panel de widgets de la esquina de la barra de tareas.",
+      "help": "Desinstala el paquete de Widgets de Windows. No hay forma automática de volver a ponerlo: habría que reinstalarlo desde la Microsoft Store."
+    },
+    "wu-revertstartmenu": {
+      "name": "Usar el menú Inicio anterior",
+      "desc": "Restaura el menú Inicio previo a 25H2; puede no funcionar en versiones nuevas.",
+      "help": "Vuelve al diseño del menú Inicio anterior a la versión nueva de 25H2. En versiones más nuevas de Windows este ajuste puede dejar de funcionar."
+    },
+    "wu-disablestoresearch": {
+      "name": "Quitar apps de la Store en la búsqueda",
+      "desc": "No muestra apps recomendadas de la Microsoft Store al buscar en Inicio.",
+      "help": "Deja de mostrar apps recomendadas de la Microsoft Store cuando buscas en el menú Inicio."
+    },
+    "wu-location": {
+      "name": "Desactivar rastreo de ubicación",
+      "desc": "Apaga el rastreo de ubicación de Windows y su servicio.",
+      "help": "Apaga el rastreo de ubicación y el servicio que lo provee. Mapas, clima y \"Encontrar mi dispositivo\" dejan de saber dónde estás."
+    },
+    "wu-services": {
+      "name": "Poner servicios en inicio manual",
+      "desc": "Cambia varios servicios a inicio manual para que arranquen solo si hacen falta.",
+      "help": "Cambia varios servicios a \"manual\" o \"desactivado\": archivos sin conexión, telemetría, mapas descargados, almacenamiento y conexión compartida a internet. Arrancan solo si algo los necesita."
+    },
+    "wu-svchostsplitting": {
+      "name": "Agrupar procesos svchost.exe",
+      "desc": "Reduce los procesos svchost.exe; puede afectar a Xbox. Requiere reiniciar.",
+      "help": "Windows separa cada servicio en su propio proceso svchost.exe. Esto los agrupa para que aparezcan menos procesos. No mejora el rendimiento de forma medible."
+    },
+    "wu-bravedebloat": {
+      "name": "Quitar extras de Brave",
+      "desc": "Desactiva Rewards, Leo AI, la billetera cripto y la VPN de Brave.",
+      "help": "Quita de Brave las recompensas, la billetera cripto, la VPN y la IA (Leo). Brave queda como navegador simple."
+    },
+    "wu-disablewarningforunsignedrdp": {
+      "name": "Quitar aviso de archivos RDP sin firma",
+      "desc": "No muestra la advertencia al abrir archivos .rdp sin firmar.",
+      "help": "Deja de mostrar el aviso de seguridad al abrir archivos de Escritorio remoto (.rdp) sin firmar. Solo hazlo si confías en los archivos .rdp que abres."
+    },
+    "wu-edgedebloat": {
+      "name": "Quitar extras de Edge",
+      "desc": "Desactiva telemetría, ventanas emergentes y funciones extra de Edge.",
+      "help": "Quita de Edge accesos directos, sugerencias, compras, telemetría y otras funciones extra. Edge mostrará \"Administrado por tu organización\"."
+    },
+    "wu-consumerfeatures": {
+      "name": "Bloquear apps promocionadas",
+      "desc": "Evita que se instalen apps patrocinadas y reduce sugerencias de la Store.",
+      "help": "Evita que Windows instale juegos y apps promocionadas por su cuenta (como Candy Crush) en cuentas nuevas."
+    },
+    "wu-telemetry": {
+      "name": "Desactivar telemetría",
+      "desc": "Desactiva la telemetría y la recopilación de datos de Microsoft.",
+      "help": "Desactiva la telemetría de Windows, los informes de errores, las experiencias personalizadas y el ID de publicidad, y apaga sus servicios."
+    },
+    "wu-deliveryoptimization": {
+      "name": "Desactivar optimización de distribución",
+      "desc": "Evita que Windows use tu internet para subir actualizaciones a otros equipos.",
+      "help": "Windows Update deja de compartir actualizaciones con otros equipos (P2P) y solo descarga directo de Microsoft."
+    },
+    "wu-removeedge": {
+      "name": "Desinstalar Microsoft Edge",
+      "desc": "Desbloquea el desinstalador oficial de Edge y lo quita del sistema.",
+      "help": "Desinstala Microsoft Edge. Algunas funciones de Windows que abren páginas web pueden fallar. Se puede reinstalar descargando Edge desde microsoft.com."
+    },
+    "wu-disablebitlocker": {
+      "name": "Desactivar BitLocker",
+      "desc": "Desactiva el cifrado BitLocker y descifra la unidad.",
+      "help": "Desactiva el cifrado BitLocker y descifra la unidad. Tus archivos quedan sin cifrar: si te roban el PC, se pueden leer sacando el disco. El descifrado tarda."
+    },
+    "wu-utc": {
+      "name": "Usar hora UTC (arranque dual con Linux)",
+      "desc": "Corrige la hora desfasada en equipos con Windows y Linux en arranque dual.",
+      "help": "Hace que Windows guarde la hora del reloj interno en UTC. Solo sirve si usas Linux en el mismo PC y la hora se desajusta al cambiar de sistema."
+    },
+    "wu-removeonedrive": {
+      "name": "Desinstalar OneDrive",
+      "desc": "Quita OneDrive con su propio desinstalador sin borrar tus archivos.",
+      "help": "Desinstala OneDrive. Tus archivos de la nube siguen en tu cuenta, pero dejan de sincronizarse con el PC. Revisa que todo esté en la nube antes."
+    },
+    "wu-removehomeandgallery": {
+      "name": "Quitar Inicio y Galería del Explorador",
+      "desc": "Oculta Inicio y Galería del Explorador y abre en Este equipo.",
+      "help": "Quita las secciones \"Inicio\" y \"Galería\" del panel izquierdo del Explorador de archivos."
+    },
+    "wu-display": {
+      "name": "Efectos visuales en mejor rendimiento",
+      "desc": "Desactiva animaciones y efectos visuales para priorizar el rendimiento.",
+      "help": "Pone los efectos visuales de Windows en \"mejor rendimiento\": sin animaciones, sombras ni transparencias. Ayuda en equipos lentos; en equipos potentes casi no cambia nada."
+    },
+    "wu-reservedstorage": {
+      "name": "Desactivar almacenamiento reservado",
+      "desc": "Libera los 7-10 GB que Windows aparta para actualizaciones.",
+      "help": "Windows reserva unos 7 GB del disco para que las actualizaciones siempre tengan espacio. Esto libera esa reserva. Si el disco se llena, una actualización podría fallar."
+    },
+    "wu-endtaskontaskbar": {
+      "name": "Finalizar tarea con clic derecho",
+      "desc": "Agrega \"Finalizar tarea\" al clic derecho en la barra de tareas.",
+      "help": "Agrega \"Finalizar tarea\" al clic derecho de los programas en la barra de tareas, para cerrar uno colgado sin abrir el Administrador de tareas."
+    },
+    "wu-storage": {
+      "name": "Desactivar Sensor de almacenamiento",
+      "desc": "Evita que Windows borre archivos temporales de forma automática.",
+      "help": "Apaga el Sensor de almacenamiento, que borra solo archivos temporales y de la Papelera cuando falta espacio."
+    },
+    "wu-windowsai": {
+      "name": "Desactivar y quitar la IA de Windows",
+      "desc": "Desactiva y elimina Copilot, Recall y otras funciones de IA.",
+      "help": "Desactiva y quita funciones de IA de Windows (Copilot, Recall, IA del Bloc de notas y de Paint). La parte que quita paquetes no se puede deshacer automáticamente."
+    },
+    "wu-wpbt": {
+      "name": "Desactivar WPBT",
+      "desc": "Impide que el fabricante ejecute programas desde la BIOS al iniciar.",
+      "help": "Impide que el fabricante del PC ejecute programas guardados en la BIOS al iniciar Windows (por ejemplo, instaladores de software del fabricante)."
+    },
+    "wu-preventdevicemetadatafromnetwork": {
+      "name": "Bloquear apps acompañantes de dispositivos",
+      "desc": "Evita que se instale software extra al conectar dispositivos, como monitores.",
+      "help": "Evita que Windows descargue apps acompañantes y metadatos de fabricantes cuando conectas un dispositivo."
+    },
+    "wu-razerblock": {
+      "name": "Bloquear instalación automática de Razer",
+      "desc": "Impide que Windows instale software de Razer; el hardware funciona sin él.",
+      "help": "Evita que Windows instale solo el software de Razer al conectar un periférico Razer."
+    },
+    "wu-logiblock": {
+      "name": "Bloquear asistente de descargas de Logitech",
+      "desc": "Evita que Windows Update reinstale el asistente de Logitech.",
+      "help": "Evita que se instale solo el asistente de descargas de Logitech."
+    },
+    "wu-disablenotifications": {
+      "name": "Desactivar notificaciones y calendario",
+      "desc": "Apaga todas las notificaciones y el calendario de la barra de tareas.",
+      "help": "Apaga el centro de notificaciones y el calendario de la barra de tareas. Dejarás de ver notificaciones de apps."
+    },
+    "wu-blockadobenet": {
+      "name": "Bloquear servidores de Adobe",
+      "desc": "Bloquea conexiones a los servidores de activación y telemetría de Adobe.",
+      "help": "Agrega al archivo hosts una lista que bloquea direcciones de Adobe (verificación de licencias y telemetría). Descarga la lista de internet."
+    },
+    "wu-rightclickmenu": {
+      "name": "Usar el menú contextual clásico",
+      "desc": "Restaura el menú de clic derecho completo en lugar del de Windows 11.",
+      "help": "Vuelve al menú de clic derecho completo de Windows 10."
+    },
+    "wu-diskcleanup": {
+      "name": "Ejecutar Liberador de espacio",
+      "desc": "Limpia la unidad C: y elimina actualizaciones viejas de Windows.",
+      "help": "Ejecuta el Liberador de espacio de Windows y limpia componentes viejos de actualizaciones. No se puede deshacer."
+    },
+    "wu-deletetempfiles": {
+      "name": "Borrar archivos temporales",
+      "desc": "Vacía las carpetas TEMP del usuario y de Windows.",
+      "help": "Borra los archivos temporales del usuario y de Windows. No se puede deshacer."
+    },
+    "wu-ipv46": {
+      "name": "Preferir IPv4 sobre IPv6",
+      "desc": "Da prioridad a IPv4 en redes donde IPv6 no está configurado.",
+      "help": "Hace que Windows prefiera IPv4 sobre IPv6 al conectarse. Útil si tu red tiene problemas con IPv6."
+    },
+    "wu-teredo": {
+      "name": "Desactivar Teredo",
+      "desc": "Apaga el túnel IPv6 Teredo; puede bajar la latencia, pero afecta algunos juegos.",
+      "help": "Apaga Teredo, un túnel para usar IPv6 sobre IPv4. Algunos juegos de Xbox y el chat de grupo de Xbox lo usan."
+    },
+    "wu-disableipv6": {
+      "name": "Desactivar IPv6",
+      "desc": "Desactiva IPv6 en los adaptadores de red.",
+      "help": "Desactiva IPv6 por completo. Algunas funciones de Windows y ciertas redes lo necesitan; solo hazlo si sabes que no lo usas."
+    },
+    "wu-disablebgapps": {
+      "name": "Desactivar apps en segundo plano",
+      "desc": "Impide que las apps de la Microsoft Store se ejecuten en segundo plano.",
+      "help": "Impide que las apps de la Microsoft Store funcionen en segundo plano. Ahorra recursos, pero pierdes sus notificaciones."
+    },
+    "wu-disableexplorerautodiscovery": {
+      "name": "Desactivar detección de tipo de carpeta",
+      "desc": "Evita que el Explorador adivine el tipo de carpeta; también quita la agrupación.",
+      "help": "Evita que el Explorador cambie solo la vista de las carpetas según su contenido (fotos, música). Las carpetas abren más rápido."
+    },
+    "wu-detailedbsod": {
+      "name": "Pantallazo azul detallado",
+      "desc": "Muestra más información técnica cuando ocurre un pantallazo azul.",
+      "help": "Encendido: el pantallazo azul muestra información técnica del error en lugar de la carita triste. Útil para buscar la causa."
+    },
+    "wu-batterypercentage": {
+      "name": "Porcentaje de batería en la barra",
+      "desc": "Muestra el porcentaje de batería junto al icono de la bandeja del sistema.",
+      "help": "Encendido: muestra el porcentaje de batería junto al icono en la barra de tareas."
+    },
+    "wu-darkmode": {
+      "name": "Tema oscuro de Windows",
+      "desc": "Usa el modo oscuro en el sistema y en las aplicaciones.",
+      "help": "Encendido: Windows y las apps usan el tema oscuro. Apagado: vuelve al tema claro."
+    },
+    "wu-showext": {
+      "name": "Mostrar extensiones de archivo",
+      "desc": "Muestra las extensiones (.exe, .png, etc.) en el Explorador.",
+      "help": "Encendido: el Explorador muestra la extensión de los archivos (.exe, .pdf)."
+    },
+    "wu-hiddenfiles": {
+      "name": "Mostrar archivos ocultos",
+      "desc": "Muestra archivos y carpetas ocultos en el Explorador.",
+      "help": "Encendido: el Explorador muestra archivos y carpetas ocultos."
+    },
+    "wu-verboselogon": {
+      "name": "Mensajes detallados al iniciar y apagar",
+      "desc": "Muestra qué hace Windows en cada paso al iniciar o apagar.",
+      "help": "Encendido: al iniciar y apagar, Windows muestra qué está haciendo en cada paso en lugar de \"Espere\". Útil si se queda trabado."
+    },
+    "wu-newoutlook": {
+      "name": "Usar el nuevo Outlook",
+      "desc": "Hace que se use la versión nueva de la app de Outlook.",
+      "help": "Encendido: usa la versión nueva de Outlook. Apagado: vuelve al Outlook clásico."
+    },
+    "wu-scrollbars": {
+      "name": "Barras de desplazamiento siempre visibles",
+      "desc": "Evita que Windows oculte las barras de desplazamiento cuando no las usas.",
+      "help": "Encendido: las barras de desplazamiento se ven siempre, en lugar de esconderse cuando no mueves el mouse."
+    },
+    "wu-multiplaneoverlay": {
+      "name": "Desactivar Multiplane Overlay (MPO)",
+      "desc": "Desactiva MPO (OverlayTestMode=5). Solo para parpadeos o tirones.",
+      "help": "Desactiva el \"Multiplane Overlay\" de Windows. Solo sirve si tienes parpadeos, pantallas negras o tirones con varios monitores o al mirar videos. Si no tienes esos problemas, mejor no tocarlo."
+    },
+    "wu-mouseacceleration": {
+      "name": "Aceleración del mouse",
+      "desc": "El puntero avanza más cuanto más rápido mueves el mouse.",
+      "help": "Encendido: el puntero se mueve más lejos cuanto más rápido mueves el mouse (aceleración). Apagado: la distancia depende solo de cuánto lo mueves, lo que prefieren muchos jugadores."
+    },
+    "wu-numlock": {
+      "name": "Bloq Num activado al iniciar",
+      "desc": "Define si Bloq Num queda activado al encender el equipo.",
+      "help": "Encendido: el teclado numérico queda activado al encender el PC."
+    },
+    "wu-windowsnapping": {
+      "name": "Acomodar ventanas en los bordes",
+      "desc": "Acomoda las ventanas al arrastrarlas a los bordes de la pantalla.",
+      "help": "Encendido: al arrastrar una ventana a un borde de la pantalla se acomoda sola a la mitad o en una esquina."
+    },
+    "wu-standbyfix": {
+      "name": "Red durante la suspensión S0",
+      "desc": "Mantiene o corta la red durante la suspensión moderna de bajo consumo.",
+      "help": "Encendido: el PC mantiene la red conectada mientras está suspendido (enchufado), para recibir correos y actualizaciones. Apagado: corta la red al suspender."
+    },
+    "wu-s3sleep": {
+      "name": "Suspensión clásica S3",
+      "desc": "Cambia entre la suspensión moderna y S3, que apaga el procesador y mantiene la RAM.",
+      "help": "Encendido: usa la suspensión clásica S3 en lugar de la suspensión moderna. Puede evitar que la laptop se caliente o gaste batería dentro de la mochila. Solo funciona si tu equipo admite S3."
+    },
+    "wu-hidesettingshome": {
+      "name": "Página de Inicio en Configuración",
+      "desc": "Muestra u oculta la página de Inicio de la app Configuración.",
+      "help": "Encendido: Configuración muestra su página de Inicio con recomendaciones. Apagado: la oculta."
+    },
+    "wu-bingsearch": {
+      "name": "Búsqueda de Bing en el menú Inicio",
+      "desc": "Muestra u oculta resultados web de Bing en la búsqueda de Windows.",
+      "help": "Encendido: el menú Inicio también busca en internet con Bing. Apagado: solo busca en tu PC."
+    },
+    "wu-loginblur": {
+      "name": "Desenfoque en el inicio de sesión",
+      "desc": "Activa o quita el desenfoque del fondo en la pantalla de inicio de sesión.",
+      "help": "Encendido: la pantalla de inicio de sesión muestra el fondo desenfocado. Apagado: lo muestra nítido."
+    },
+    "wu-disablelockscreen": {
+      "name": "Desactivar pantalla de bloqueo",
+      "desc": "Salta la pantalla de bloqueo y va directo al inicio de sesión.",
+      "help": "Encendido: quita la pantalla de bloqueo con la imagen y va directo a pedir la contraseña."
+    },
+    "wu-startmenurecommendations": {
+      "name": "Recomendaciones del menú Inicio",
+      "desc": "Muestra u oculta \"Recomendado\"; apagarlo también quita Spotlight.",
+      "help": "Encendido: el menú Inicio muestra la sección \"Recomendado\" con archivos y apps recientes. Apagado: la oculta."
+    },
+    "wu-stickykeys": {
+      "name": "Atajo de Teclas especiales",
+      "desc": "Controla el atajo que abre Teclas especiales al presionar Shift varias veces.",
+      "help": "Encendido: desactiva el atajo que abre Teclas especiales al presionar Shift 5 veces."
+    },
+    "wu-taskbaralignment": {
+      "name": "Iconos centrados en la barra de tareas",
+      "desc": "Alinea los iconos de la barra de tareas al centro o a la izquierda.",
+      "help": "Encendido: los iconos de la barra de tareas van al centro (estilo Windows 11). Apagado: van a la izquierda."
+    },
+    "wu-taskbarsearch": {
+      "name": "Icono de búsqueda en la barra de tareas",
+      "desc": "Muestra u oculta el botón de búsqueda en la barra de tareas.",
+      "help": "Encendido: muestra el icono de búsqueda en la barra de tareas."
+    },
+    "wu-taskview": {
+      "name": "Botón Vista de tareas en la barra",
+      "desc": "Muestra u oculta el botón Vista de tareas en la barra de tareas.",
+      "help": "Encendido: muestra el botón de Vista de tareas (escritorios virtuales) en la barra de tareas."
+    },
+    "wu-gamemode": {
+      "name": "Modo juego",
+      "desc": "Windows prioriza los recursos del sistema para el juego abierto.",
+      "help": "Encendido: activa el Modo juego de Windows, que prioriza el juego abierto."
+    },
+    "wu-longpaths": {
+      "name": "Activar rutas largas",
+      "desc": "Permite rutas de archivo de más de 260 caracteres.",
+      "help": "Encendido: permite rutas de archivos de más de 260 caracteres."
+    }
+  },
+  "actions": {
+    "wpffeaturesdotnet": {
+      "name": "Activar .NET Framework 2, 3 y 4",
+      "desc": "Activa .NET Framework, necesario para muchos programas y juegos.",
+      "help": "Activa .NET Framework 3.5 (incluye 2.0 y 3.0) y 4.x. Algunos programas y juegos viejos no abren sin esto."
+    },
+    "wpffeatureshyperv": {
+      "name": "Activar Hyper-V",
+      "desc": "Activa Hyper-V para crear y administrar máquinas virtuales.",
+      "help": "Activa Hyper-V, el sistema de máquinas virtuales de Windows. Solo en Windows Pro o superior. Puede bajar un poco el rendimiento en juegos y chocar con otros programas de virtualización."
+    },
+    "wpffeatureslegacymedia": {
+      "name": "Activar componentes multimedia antiguos",
+      "desc": "Activa Windows Media Player clásico y DirectPlay para programas viejos.",
+      "help": "Activa el Reproductor de Windows Media clásico y DirectPlay, que necesitan algunos juegos antiguos."
+    },
+    "wpffeaturewsl": {
+      "name": "Activar WSL (Linux en Windows)",
+      "desc": "Permite ejecutar programas de Linux en Windows sin una máquina virtual aparte.",
+      "help": "Activa el Subsistema de Windows para Linux, para usar Linux dentro de Windows. Necesita reiniciar."
+    },
+    "wpffeaturenfs": {
+      "name": "Activar cliente NFS",
+      "desc": "Permite conectarte a carpetas compartidas en red mediante NFS.",
+      "help": "Activa el cliente NFS para conectarte a carpetas compartidas de servidores Linux o NAS."
+    },
+    "wpffeaturessandbox": {
+      "name": "Activar Windows Sandbox",
+      "desc": "Activa un escritorio temporal y aislado para probar programas con seguridad.",
+      "help": "Activa Windows Sandbox: un Windows desechable para probar programas sospechosos sin riesgo. Solo en Windows Pro o superior."
+    },
+    "wpfpanelcomputer": {
+      "name": "Administración de equipos",
+      "desc": "Abre la consola de Administración de equipos.",
+      "help": "Abre el panel clásico «Administración de equipos» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelcontrol": {
+      "name": "Panel de control",
+      "desc": "Abre el Panel de control clásico.",
+      "help": "Abre el panel clásico «Panel de control» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelmouse": {
+      "name": "Propiedades del mouse",
+      "desc": "Abre la configuración clásica del mouse.",
+      "help": "Abre el panel clásico «Propiedades del mouse» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelnetwork": {
+      "name": "Conexiones de red",
+      "desc": "Abre la lista de adaptadores y conexiones de red.",
+      "help": "Abre el panel clásico «Conexiones de red» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelpower": {
+      "name": "Opciones de energía",
+      "desc": "Abre los planes y opciones de energía.",
+      "help": "Abre el panel clásico «Opciones de energía» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelprinter": {
+      "name": "Dispositivos e impresoras",
+      "desc": "Abre el panel de impresoras y dispositivos.",
+      "help": "Abre el panel clásico «Dispositivos e impresoras» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelprograms": {
+      "name": "Programas y características",
+      "desc": "Abre la lista clásica de programas instalados.",
+      "help": "Abre el panel clásico «Programas y características» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelregion": {
+      "name": "Región",
+      "desc": "Abre la configuración de región, formato de fecha y moneda.",
+      "help": "Abre el panel clásico «Región» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelsecurity": {
+      "name": "Seguridad y mantenimiento",
+      "desc": "Abre el panel de Seguridad y mantenimiento.",
+      "help": "Abre el panel clásico «Seguridad y mantenimiento» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelsound": {
+      "name": "Sonido",
+      "desc": "Abre la configuración clásica de dispositivos de sonido.",
+      "help": "Abre el panel clásico «Sonido» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelsystem": {
+      "name": "Propiedades del sistema",
+      "desc": "Abre Propiedades del sistema (nombre del equipo, rendimiento, etc.).",
+      "help": "Abre el panel clásico «Propiedades del sistema» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpaneltimedate": {
+      "name": "Fecha y hora",
+      "desc": "Abre la configuración clásica de fecha y hora.",
+      "help": "Abre el panel clásico «Fecha y hora» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelfirewall": {
+      "name": "Firewall de Windows Defender",
+      "desc": "Abre la configuración del firewall de Windows.",
+      "help": "Abre el panel clásico «Firewall de Windows Defender» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "wpfpanelrestore": {
+      "name": "Restaurar sistema",
+      "desc": "Abre Restaurar sistema para volver a un punto anterior.",
+      "help": "Abre el panel clásico «Restaurar sistema» de Windows. No cambia nada por sí solo: es un atajo para llegar más rápido."
+    },
+    "feat-ssh": {
+      "name": "Activar servidor OpenSSH",
+      "desc": "Instala el servidor SSH, lo inicia y abre el puerto 22 en el firewall.",
+      "help": "Instala el servidor SSH de Windows para que otro equipo pueda conectarse a esta PC por consola. Abre el puerto 22 en el firewall. Solo actívalo si sabes que lo vas a usar."
+    },
+    "oosu": {
+      "name": "O&O ShutUp10++",
+      "desc": "Descarga y abre la herramienta de privacidad de O&O Software.",
+      "help": "Descarga y abre O&O ShutUp10++, un programa gratuito con muchos ajustes de privacidad. SmoothTwk solo lo abre; los cambios los decides dentro de ese programa."
+    },
+    "autologon": {
+      "name": "AutoLogon de Sysinternals",
+      "desc": "Descarga y abre la herramienta de Microsoft para iniciar sesión sin contraseña.",
+      "help": "Descarga y abre Autologon de Microsoft (Sysinternals), que permite iniciar sesión sin escribir la contraseña. Cualquiera que encienda el PC entrará a tu cuenta."
+    },
+    "dns-google": {
+      "name": "Google",
+      "desc": "Usa el DNS de Google: 8.8.8.8 · 8.8.4.4.",
+      "help": "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Google (8.8.8.8 y 8.8.4.4). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+    },
+    "dns-cloudflare": {
+      "name": "Cloudflare",
+      "desc": "Usa el DNS de Cloudflare: 1.1.1.1 · 1.0.0.1.",
+      "help": "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Cloudflare (1.1.1.1 y 1.0.0.1). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+    },
+    "dns-cloudflare_malware": {
+      "name": "Cloudflare (bloquea malware)",
+      "desc": "DNS de Cloudflare que bloquea malware: 1.1.1.2 · 1.0.0.2.",
+      "help": "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Cloudflare Malware (1.1.1.2 y 1.0.0.2). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+    },
+    "dns-cloudflare_malware_adult": {
+      "name": "Cloudflare (malware y adultos)",
+      "desc": "DNS de Cloudflare que bloquea malware y contenido adulto: 1.1.1.3 · 1.0.0.3.",
+      "help": "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Cloudflare Malware Adult (1.1.1.3 y 1.0.0.3). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+    },
+    "dns-open_dns": {
+      "name": "OpenDNS",
+      "desc": "Usa el DNS de OpenDNS: 208.67.222.222 · 208.67.220.220.",
+      "help": "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Open DNS (208.67.222.222 y 208.67.220.220). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+    },
+    "dns-quad9": {
+      "name": "Quad9",
+      "desc": "Usa el DNS de Quad9: 9.9.9.9 · 149.112.112.112.",
+      "help": "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a Quad9 (9.9.9.9 y 149.112.112.112). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+    },
+    "dns-adguard_ads_trackers": {
+      "name": "AdGuard (anuncios y rastreadores)",
+      "desc": "DNS de AdGuard que bloquea anuncios y rastreadores: 94.140.14.14 · 94.140.15.15.",
+      "help": "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a AdGuard Ads Trackers (94.140.14.14 y 94.140.15.15). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+    },
+    "dns-adguard_ads_trackers_malware_adult": {
+      "name": "AdGuard (anuncios, malware y adultos)",
+      "desc": "DNS de AdGuard con bloqueo amplio: 94.140.14.15 · 94.140.15.16.",
+      "help": "El DNS es la «guía telefónica» de internet: traduce nombres como google.com a direcciones. Esto cambia el DNS de tus adaptadores conectados a AdGuard Ads Trackers Malware Adult (94.140.14.15 y 94.140.15.16). Según el servicio, las páginas pueden abrir algo más rápido o se bloquean anuncios, malware o contenido adulto. Para volver al de tu router usa «Automático»."
+    },
+    "wpfappxmicrosoft_windowsfeedbackhub": {
+      "name": "Centro de opiniones",
+      "desc": "Sirve para enviar reportes de errores y sugerencias a Microsoft.",
+      "help": "Desinstala «Centro de opiniones» para todos los usuarios y evita que se reinstale en cuentas nuevas. Sirve para enviar reportes de errores y sugerencias a Microsoft. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_gethelp": {
+      "name": "Obtener ayuda",
+      "desc": "Da acceso a guías de solución de problemas y al soporte de Microsoft.",
+      "help": "Desinstala «Obtener ayuda» para todos los usuarios y evita que se reinstale en cuentas nuevas. Da acceso a guías de solución de problemas y al soporte de Microsoft. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_outlookforwindows": {
+      "name": "Outlook para Windows",
+      "desc": "Gestiona correo, calendario y contactos.",
+      "help": "Desinstala «Outlook para Windows» para todos los usuarios y evita que se reinstale en cuentas nuevas. Gestiona correo, calendario y contactos. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmsteams": {
+      "name": "Microsoft Teams",
+      "desc": "Chat, videollamadas y archivos compartidos para trabajo en equipo.",
+      "help": "Desinstala «Microsoft Teams» para todos los usuarios y evita que se reinstale en cuentas nuevas. Chat, videollamadas y archivos compartidos para trabajo en equipo. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxclipchamp_clipchamp": {
+      "name": "Clipchamp",
+      "desc": "Editor de video sencillo con plantillas y efectos.",
+      "help": "Desinstala «Clipchamp» para todos los usuarios y evita que se reinstale en cuentas nuevas. Editor de video sencillo con plantillas y efectos. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_microsoftofficehub": {
+      "name": "Microsoft 365",
+      "desc": "Lanzador de las apps de Microsoft 365 y tus documentos recientes.",
+      "help": "Desinstala «Microsoft 365» para todos los usuarios y evita que se reinstale en cuentas nuevas. Lanzador de las apps de Microsoft 365 y tus documentos recientes. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_zunemusic": {
+      "name": "Reproductor multimedia",
+      "desc": "Reproduce música y videos guardados en el equipo.",
+      "help": "Desinstala «Reproductor multimedia» para todos los usuarios y evita que se reinstale en cuentas nuevas. Reproduce música y videos guardados en el equipo. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_bingsearch": {
+      "name": "Búsqueda de Bing",
+      "desc": "Integra la búsqueda web de Bing en Windows.",
+      "help": "Desinstala «Búsqueda de Bing» para todos los usuarios y evita que se reinstale en cuentas nuevas. Integra la búsqueda web de Bing en Windows. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoftcorporationii_quickassist": {
+      "name": "Asistencia rápida",
+      "desc": "Permite dar o recibir soporte remoto compartiendo la pantalla.",
+      "help": "Desinstala «Asistencia rápida» para todos los usuarios y evita que se reinstale en cuentas nuevas. Permite dar o recibir soporte remoto compartiendo la pantalla. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_windowsdevhome": {
+      "name": "Dev Home",
+      "desc": "Panel para configurar entornos y repositorios de desarrollo.",
+      "help": "Desinstala «Dev Home» para todos los usuarios y evita que se reinstale en cuentas nuevas. Panel para configurar entornos y repositorios de desarrollo. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_windowscrossdevice": {
+      "name": "Dispositivos móviles",
+      "desc": "Conecta Windows con tu celular emparejado.",
+      "help": "Desinstala «Dispositivos móviles» para todos los usuarios y evita que se reinstale en cuentas nuevas. Conecta Windows con tu celular emparejado. Quitarla puede desactivar la duplicación de pantalla y el envío de archivos con el celular. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_todos": {
+      "name": "Microsoft To Do",
+      "desc": "Crea y sincroniza listas de tareas y recordatorios.",
+      "help": "Desinstala «Microsoft To Do» para todos los usuarios y evita que se reinstale en cuentas nuevas. Crea y sincroniza listas de tareas y recordatorios. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_powerautomatedesktop": {
+      "name": "Power Automate",
+      "desc": "Automatiza tareas repetitivas del escritorio.",
+      "help": "Desinstala «Power Automate» para todos los usuarios y evita que se reinstale en cuentas nuevas. Automatiza tareas repetitivas del escritorio. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_yourphone": {
+      "name": "Vínculo móvil",
+      "desc": "Muestra en el PC los mensajes, notificaciones, fotos y llamadas del celular.",
+      "help": "Desinstala «Vínculo móvil» para todos los usuarios y evita que se reinstale en cuentas nuevas. Muestra en el PC los mensajes, notificaciones, fotos y llamadas del celular. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_microsoftstickynotes": {
+      "name": "Notas rápidas",
+      "desc": "Notas adhesivas en el escritorio que se sincronizan entre dispositivos.",
+      "help": "Desinstala «Notas rápidas» para todos los usuarios y evita que se reinstale en cuentas nuevas. Notas adhesivas en el escritorio que se sincronizan entre dispositivos. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_windowssoundrecorder": {
+      "name": "Grabadora de sonido",
+      "desc": "Graba y recorta audio desde el micrófono.",
+      "help": "Desinstala «Grabadora de sonido» para todos los usuarios y evita que se reinstale en cuentas nuevas. Graba y recorta audio desde el micrófono. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_windowsalarms": {
+      "name": "Reloj",
+      "desc": "Alarmas, temporizador, cronómetro y relojes mundiales.",
+      "help": "Desinstala «Reloj» para todos los usuarios y evita que se reinstale en cuentas nuevas. Alarmas, temporizador, cronómetro y relojes mundiales. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_paint": {
+      "name": "Paint",
+      "desc": "Dibujo y edición básica de imágenes.",
+      "help": "Desinstala «Paint» para todos los usuarios y evita que se reinstale en cuentas nuevas. Dibujo y edición básica de imágenes. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_windowsnotepad": {
+      "name": "Bloc de notas",
+      "desc": "Editor de texto sencillo con pestañas.",
+      "help": "Desinstala «Bloc de notas» para todos los usuarios y evita que se reinstale en cuentas nuevas. Editor de texto sencillo con pestañas. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_screensketch": {
+      "name": "Recortes",
+      "desc": "Captura y graba la pantalla, con anotaciones y reconocimiento de texto.",
+      "help": "Desinstala «Recortes» para todos los usuarios y evita que se reinstale en cuentas nuevas. Captura y graba la pantalla, con anotaciones y reconocimiento de texto. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_copilot": {
+      "name": "Copilot",
+      "desc": "Asistente de IA de Microsoft para preguntas, textos y búsquedas.",
+      "help": "Desinstala «Copilot» para todos los usuarios y evita que se reinstale en cuentas nuevas. Asistente de IA de Microsoft para preguntas, textos y búsquedas. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_windowscalculator": {
+      "name": "Calculadora",
+      "desc": "Calculadora estándar, científica, de programador y conversor de unidades.",
+      "help": "Desinstala «Calculadora» para todos los usuarios y evita que se reinstale en cuentas nuevas. Calculadora estándar, científica, de programador y conversor de unidades. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_windowscamera": {
+      "name": "Cámara",
+      "desc": "Toma fotos y graba video con la webcam.",
+      "help": "Desinstala «Cámara» para todos los usuarios y evita que se reinstale en cuentas nuevas. Toma fotos y graba video con la webcam. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_windowsphotos": {
+      "name": "Fotos",
+      "desc": "Visor y editor básico de imágenes y álbumes.",
+      "help": "Desinstala «Fotos» para todos los usuarios y evita que se reinstale en cuentas nuevas. Visor y editor básico de imágenes y álbumes. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_bingnews": {
+      "name": "Noticias",
+      "desc": "Titulares y noticias personalizadas.",
+      "help": "Desinstala «Noticias» para todos los usuarios y evita que se reinstale en cuentas nuevas. Titulares y noticias personalizadas. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_bingweather": {
+      "name": "Clima",
+      "desc": "Pronóstico del clima local y mapas de radar.",
+      "help": "Desinstala «Clima» para todos los usuarios y evita que se reinstale en cuentas nuevas. Pronóstico del clima local y mapas de radar. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_gamingapp": {
+      "name": "App de Xbox",
+      "desc": "Biblioteca de juegos, amigos y PC Game Pass.",
+      "help": "Desinstala «App de Xbox» para todos los usuarios y evita que se reinstale en cuentas nuevas. Biblioteca de juegos, amigos y PC Game Pass. Sin ella no podrás instalar ni abrir juegos de Game Pass. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_xboxgamingoverlay": {
+      "name": "Xbox Game Bar",
+      "desc": "Superposición en juego con widgets, audio, rendimiento y grabación (Win+G).",
+      "help": "Desinstala «Xbox Game Bar» para todos los usuarios y evita que se reinstale en cuentas nuevas. Superposición en juego con widgets, audio, rendimiento y grabación (Win+G). Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_xboxidentityprovider": {
+      "name": "Xbox Identity Provider",
+      "desc": "Gestiona el inicio de sesión de Xbox en juegos y apps.",
+      "help": "Desinstala «Xbox Identity Provider» para todos los usuarios y evita que se reinstale en cuentas nuevas. Gestiona el inicio de sesión de Xbox en juegos y apps. Quitarla puede impedir iniciar sesión con tu cuenta Microsoft en algunos juegos y apps. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_xboxspeechtotextoverlay": {
+      "name": "Xbox: voz a texto",
+      "desc": "Subtítulos en vivo y conversión de voz a texto en el chat de juego.",
+      "help": "Desinstala «Xbox: voz a texto» para todos los usuarios y evita que se reinstale en cuentas nuevas. Subtítulos en vivo y conversión de voz a texto en el chat de juego. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_xbox_tcui": {
+      "name": "Xbox TCUI",
+      "desc": "Ventanas de inicio de sesión de Xbox dentro de los juegos.",
+      "help": "Desinstala «Xbox TCUI» para todos los usuarios y evita que se reinstale en cuentas nuevas. Ventanas de inicio de sesión de Xbox dentro de los juegos. Quitarla puede impedir iniciar sesión con tu cuenta Microsoft en algunos juegos y apps. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_startexperiencesapp": {
+      "name": "Panel de widgets",
+      "desc": "Alimenta el panel de widgets con noticias, clima, deportes y finanzas.",
+      "help": "Desinstala «Panel de widgets» para todos los usuarios y evita que se reinstale en cuentas nuevas. Alimenta el panel de widgets con noticias, clima, deportes y finanzas. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_microsoftsolitairecollection": {
+      "name": "Microsoft Solitaire Collection",
+      "desc": "Solitario, Spider, FreeCell y otros juegos de cartas con retos diarios.",
+      "help": "Desinstala «Microsoft Solitaire Collection» para todos los usuarios y evita que se reinstale en cuentas nuevas. Solitario, Spider, FreeCell y otros juegos de cartas con retos diarios. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    },
+    "wpfappxmicrosoft_zunevideo": {
+      "name": "Películas y TV",
+      "desc": "Reproductor de video y tienda para comprar o rentar películas.",
+      "help": "Desinstala «Películas y TV» para todos los usuarios y evita que se reinstale en cuentas nuevas. Reproductor de video y tienda para comprar o rentar películas. Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+    }
+  }
+}

@@ -51,7 +51,7 @@ foreach ($t in $script:Tweaks) {
     $h.tasks = @($t.Tasks)
     switch ($t.Id) {
         'hibernar' { $h.special = 'hibernate-off'; $h.device = 'desktop' }
-        'plan' { $h.special = 'plan-high'; $h.device = 'desktop' }
+        'plan' { $h.special = 'plan-high'; $h.device = 'desktop'; $h.rec = $false }
         'puntos' { $h.oneshot = $true; $h.apply = 'vssadmin delete shadows /for=c: /all /quiet'; $h.warn = 'No se puede deshacer. Ni SmoothTwk ni Windows podrán volver a esos puntos.' }
         'xbox' { $h.desc = 'Libera recursos. Rompe Game Pass y la app Xbox. En Ryzen X3D puede bajar FPS.' }
         'sysmain' { $h.desc = 'Útil en discos HDD. En SSD no hay mejora medida.' }
@@ -63,8 +63,9 @@ foreach ($t in $script:Tweaks) {
 $SUBP = '54533251-82be-4824-96c1-47b60b740d00'
 $BOOST = 'be337238-0d82-4146-a960-4f3749d470c7'
 $POLM = 'HKLM\SOFTWARE\Policies\Microsoft'
+New-Tweak @{ id = 'smoothplan'; card = 'kiku'; group = 'Planes de energía'; name = 'Plan de energía SmoothTwk'; desc = 'Plan propio de SmoothTwk: prioriza rendimiento y baja latencia para jugar.'; rec = $true; special = 'plan-smoothtwk' }
 New-Tweak @{ id = 'ultimate'; card = 'kiku'; group = 'Planes de energía'; name = 'Plan Máximo rendimiento'; desc = 'Activa el plan oculto Ultimate Performance. Pensado para escritorio enchufado.'; device = 'desktop'; special = 'plan-ultimate' }
-New-Tweak @{ id = 'overlay'; card = 'kiku'; group = 'Planes de energía'; name = 'Modo Mejor rendimiento'; desc = 'Pone el control de energía de Windows al máximo. Requiere el plan Equilibrado.'; device = 'laptop'; rec = $true; special = 'overlay-best' }
+New-Tweak @{ id = 'overlay'; card = 'kiku'; group = 'Planes de energía'; name = 'Modo Mejor rendimiento'; desc = 'Pone el control de energía de Windows al máximo. Requiere el plan Equilibrado.'; device = 'laptop'; special = 'overlay-best' }
 New-Tweak @{ id = 'boost'; card = 'kiku'; group = 'Procesador'; name = 'Turbo agresivo enchufado'; desc = 'El CPU sube de frecuencia antes. Más calor y consumo.'; device = 'desktop'; rec = $true; power = @([ordered]@{ sub = $SUBP; setting = $BOOST; ac = 2; dc = $null }) }
 New-Tweak @{ id = 'parking'; card = 'kiku'; group = 'Procesador'; name = 'Sin estacionamiento de núcleos'; desc = 'Mantiene todos los núcleos despiertos. Bloqueado en Ryzen X3D porque baja FPS.'; device = 'desktop'; guard = 'x3d'; power = @([ordered]@{ sub = $SUBP; setting = '0cc5b647-c1df-4637-891a-dec35c318583'; ac = 100; dc = $null }) }
 New-Tweak @{ id = 'throttleoff'; card = 'kiku'; group = 'Procesador'; name = 'Sin freno a apps en segundo plano'; desc = 'Windows deja de bajar la potencia de apps en segundo plano. Más calor.'; device = 'desktop'; reboot = $true; registry = @(Reg 'HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling|PowerThrottlingOff|DWord|1') }
@@ -83,7 +84,7 @@ New-Tweak @{ id = 'dxwindowed'; card = 'fuji'; group = 'Juegos'; name = 'Optimiz
 
 # ---------------------------------------------------------------- WinUtil
 $wu = Get-Content (Join-Path $WinUtilConfig 'tweaks.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-$wuGroups = @{ 'Essential Tweaks' = 'WinUtil · Esenciales'; 'z__Advanced Tweaks - CAUTION' = 'WinUtil · Avanzados'; 'Customize Preferences' = 'WinUtil · Preferencias' }
+$wuGroups = @{ 'Essential Tweaks' = 'Esenciales'; 'z__Advanced Tweaks - CAUTION' = 'Avanzados'; 'Customize Preferences' = 'Preferencias' }
 $starts = @{ Disabled = 'Disabled'; Manual = 'Manual'; Automatic = 'Automatic'; AutomaticDelayedStart = 'AutomaticDelayedStart' }
 function Convert-WuPath([string]$Path) {
     $p = $Path -replace '^(HKLM|HKCU|HKU):\\', '$1\'
@@ -95,7 +96,7 @@ foreach ($p in $wu.PSObject.Properties) {
     if ($skip -contains $p.Name) { continue }
     $id = 'wu-' + ($p.Name -replace '^WPF(Tweaks|Toggle)?', '').ToLowerInvariant()
     if ($p.Name -eq 'WPFMultiplaneOverlay') {
-        New-Tweak @{ id = $id; card = 'kiri'; group = 'WinUtil · Preferencias'; name = 'Multiplane Overlay - Disable'; desc = 'Desactiva MPO (OverlayTestMode=5). Solo para parpadeos o tirones.'; source = 'WinUtil'; reboot = $true; registry = @([ordered]@{ path = 'HKLM\SOFTWARE\Microsoft\Windows\Dwm'; name = 'OverlayTestMode'; type = 'DWord'; value = '5' }) }
+        New-Tweak @{ id = $id; card = 'kiri'; group = 'Preferencias'; name = 'Multiplane Overlay - Disable'; desc = 'Desactiva MPO (OverlayTestMode=5). Solo para parpadeos o tirones.'; source = 'WinUtil'; reboot = $true; registry = @([ordered]@{ path = 'HKLM\SOFTWARE\Microsoft\Windows\Dwm'; name = 'OverlayTestMode'; type = 'DWord'; value = '5' }) }
         continue
     }
     $registry = @($v.registry | Where-Object { $_ -and $_.Path } | ForEach-Object {
@@ -108,8 +109,8 @@ foreach ($p in $wu.PSObject.Properties) {
     $undo = (@($v.UndoScript) -join "`r`n").Trim()
     $oneshot = (-not $registry.Count -and -not $services.Count -and $apply -and -not $undo)
     $warn = ''
-    if ($v.category -like 'z__Advanced*') { $warn = 'Ajuste avanzado de WinUtil. Lee la descripción antes de aplicarlo.' }
-    if ($oneshot) { $warn = 'Esta acción de WinUtil no tiene forma de deshacerse.' }
+    if ($v.category -like 'z__Advanced*') { $warn = 'Ajuste avanzado. Lee la explicación (?) antes de aplicarlo.' }
+    if ($oneshot) { $warn = 'Esta acción no se puede deshacer.' }
     New-Tweak @{
         id = $id; card = 'kiri'; group = $wuGroups[[string]$v.category]; name = [string]$v.Content; desc = [string]$v.Description
         source = 'WinUtil'; warn = $warn; oneshot = $oneshot; registry = $registry; services = $services; apply = $apply; undo = $undo
@@ -271,7 +272,7 @@ foreach ($p in $appx.PSObject.Properties) {
     $v = $p.Value
     New-Action @{ id = $p.Name.ToLowerInvariant(); card = 'sakura'; group = 'Quitar apps de Microsoft'; name = [string]$v.Content; desc = [string]$v.Description; button = 'Quitar'; source = 'WinUtil'
         warn = 'Se puede reinstalar desde Microsoft Store.'
-        help = "Desinstala «$($v.Content)» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es (descripción de WinUtil): $($v.Description) Si la necesitas otra vez, se instala gratis desde Microsoft Store."
+        help = "Desinstala «$($v.Content)» para todos los usuarios y evita que se reinstale en cuentas nuevas. Qué es: $($v.Description) Si la necesitas otra vez, se instala gratis desde Microsoft Store."
         script = "Get-AppxPackage -AllUsers -Name '*$($v.PackageId)*' | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue`r`nGet-AppxProvisionedPackage -Online | Where-Object DisplayName -like '*$($v.PackageId)*' | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue | Out-Null`r`nWrite-Output 'Quitado: $($v.Content)'" }
 }
 

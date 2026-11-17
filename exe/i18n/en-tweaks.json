@@ -1,0 +1,928 @@
+{
+  "tweaks": {
+    "respuesta": {
+      "name": "Faster shutdown of hung apps",
+      "desc": "Windows waits less for unresponsive programs and shuts down faster.",
+      "group": "System",
+      "warn": "",
+      "help": "When a program freezes, Windows waits several seconds before letting you close it, and at shutdown it waits for each program to finish. With this on, it waits 1 or 2 seconds instead of 5 to 20. Shutdown is faster, but a hung program is closed automatically at shutdown and you could lose anything unsaved in it."
+    },
+    "menus": {
+      "name": "Instant menus",
+      "desc": "Removes the delay when opening menus and hovering.",
+      "group": "System",
+      "warn": "",
+      "help": "Windows waits 400 milliseconds before opening a submenu or showing a tooltip on hover. This removes that wait so everything feels more immediate. It doesn't change the PC's actual speed, only how it feels to use."
+    },
+    "lastaccess": {
+      "name": "NTFS without last-access timestamps",
+      "desc": "The disk stops writing a timestamp every time a file is read.",
+      "group": "System",
+      "warn": "",
+      "help": "Every time you open or read a file, Windows records the date on the disk. With this on it stops doing that, so the disk writes less. You lose nothing: the \"last accessed\" date simply stops being saved in the file's properties."
+    },
+    "longpaths": {
+      "name": "Long paths",
+      "desc": "Allows paths longer than 260 characters.",
+      "group": "System",
+      "warn": "",
+      "help": "Windows limits file paths to 260 characters. Some development tools and games with very deep folders fail because of this. This removes the limit. It has no known negative effects."
+    },
+    "sysmain": {
+      "name": "Disable SysMain (Superfetch)",
+      "desc": "Useful on HDDs. No measured improvement on SSDs.",
+      "group": "System",
+      "warn": "",
+      "help": "SysMain (formerly Superfetch) loads the programs you use most into memory so they open sooner. On HDDs it sometimes keeps the disk at 100%. On an SSD there's almost no difference. Turning it off frees up disk and some RAM."
+    },
+    "wsearch": {
+      "name": "Disable search indexer",
+      "desc": "Frees CPU and disk, but file search becomes slow.",
+      "group": "System",
+      "warn": "",
+      "help": "The indexer scans your files so Windows search is instant. Turning it off frees CPU and disk, but searching for files from Start or File Explorer becomes much slower."
+    },
+    "hibernar": {
+      "name": "Disable hibernation",
+      "desc": "Frees several GB on C:. Also disables Fast Startup; not advised on laptops.",
+      "group": "System",
+      "warn": "",
+      "help": "Hibernation saves memory to a hidden file (hiberfil.sys) several GB in size. Turning it off frees that space on C:. It also disables \"Fast Startup\". Not advised on laptops: it's what keeps the battery from draining if you leave it asleep for a long time."
+    },
+    "plan": {
+      "name": "High performance plan",
+      "desc": "CPU without power saving. More power draw and heat; not for battery use.",
+      "group": "System",
+      "warn": "",
+      "help": "Activates the \"High performance\" power plan: the processor doesn't lower its speed to save power. It responds faster, but uses more electricity and runs hotter. Meant for a plugged-in desktop."
+    },
+    "modojuego": {
+      "name": "Game Mode",
+      "desc": "Windows prioritizes the open game.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "Windows Game Mode gives priority to the open game and holds back updates and background tasks while you play. It comes from Microsoft and is safe to leave on."
+    },
+    "mmcss": {
+      "name": "Multimedia priority for games",
+      "desc": "Raises CPU and GPU priority for game tasks.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "Windows has a \"multimedia scheduler\" that splits the CPU between audio, video and games. This raises the CPU and GPU priority of games and reduces the share reserved for background tasks. It helps reduce stutter in some games."
+    },
+    "throttling": {
+      "name": "No multimedia network throttling",
+      "desc": "Removes the network limit Windows applies during audio and video playback.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "While audio or video is playing, Windows limits other network traffic so the sound doesn't cut out. This removes that limit. It can help downloads and online games. Requires a restart."
+    },
+    "gamedvr": {
+      "name": "Disable GameDVR recording",
+      "desc": "Removes background capture. Win+G stops recording.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "Game DVR records the last few minutes of gameplay in the background in case you want to save a clip. That uses GPU and disk all the time. Turning it off frees those resources; Win+G stops recording clips."
+    },
+    "sticky": {
+      "name": "Disable Sticky Keys prompt",
+      "desc": "Stops Shift x5 from interrupting your game.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "If you press Shift 5 times, Windows opens a \"Sticky Keys\" prompt that pulls you out of the game. This disables that shortcut and the ones for Filter Keys and Toggle Keys. Sticky Keys remain available from Settings."
+    },
+    "hags": {
+      "name": "Hardware-accelerated GPU scheduling",
+      "desc": "Lower latency on modern GPUs. Unstable on some setups.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "Hardware-accelerated GPU scheduling lets the graphics card organize its own work instead of Windows. On modern GPUs it lowers latency and is required for NVIDIA Frame Generation. On some setups it causes instability: if you notice problems, turn it off. Requires a restart."
+    },
+    "fse": {
+      "name": "Disable fullscreen optimizations",
+      "desc": "True fullscreen in older games.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "Windows turns fullscreen games into a special window so it can show notifications on top. This goes back to true fullscreen, which can give less lag in older games."
+    },
+    "xbox": {
+      "name": "Disable Xbox services",
+      "desc": "Frees resources. Breaks Game Pass and the Xbox app. May lower FPS on Ryzen X3D.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "Turns off the Xbox Live, Xbox cloud save and Xbox wireless controller (via adapter) services. Frees some memory. If you use Game Pass or the Xbox app, or have a Ryzen X3D, don't enable it: on X3D these services help place the game on the right cores."
+    },
+    "telemetria": {
+      "name": "Disable Windows telemetry",
+      "desc": "Shuts down DiagTrack and diagnostic data uploads.",
+      "group": "Privacy",
+      "warn": "",
+      "help": "Windows constantly sends usage and diagnostic data to Microsoft. This reduces it to the minimum and turns off the services that collect it (DiagTrack). On Windows Home the minimum allowed level still sends some data, but much less."
+    },
+    "tareas": {
+      "name": "Disable telemetry tasks",
+      "desc": "Disables the scheduled tasks that collect data.",
+      "group": "Privacy",
+      "warn": "",
+      "help": "Windows has scheduled tasks that check your PC and send reports (improvement program, compatibility, disk diagnostics). This disables them. It doesn't affect updates."
+    },
+    "publicidad": {
+      "name": "Disable advertising ID",
+      "desc": "Apps stop receiving your advertising identifier.",
+      "group": "Privacy",
+      "warn": "",
+      "help": "Windows gives each user an identifier so apps can show personalized ads. This turns it off. You'll still see ads, but not based on what you do."
+    },
+    "actividad": {
+      "name": "Disable activity history",
+      "desc": "Doesn't save or upload what you open.",
+      "group": "Privacy",
+      "warn": "",
+      "help": "Windows keeps a history of the apps and files you open and can upload it to your Microsoft account. This stops saving and uploading it."
+    },
+    "escritura": {
+      "name": "Disable typing data collection",
+      "desc": "Windows stops learning from what you type and handwrite.",
+      "group": "Privacy",
+      "warn": "",
+      "help": "Windows learns from what you type on the keyboard and write by hand to improve suggestions, and may send it to Microsoft. This disables it. Text suggestions may be less accurate."
+    },
+    "errores": {
+      "name": "Disable error reporting",
+      "desc": "Crashes are no longer sent to Microsoft.",
+      "group": "Privacy",
+      "warn": "",
+      "help": "When a program closes due to an error, Windows sends a report to Microsoft. This stops sending them and turns off the service that processes them. It doesn't affect stability."
+    },
+    "ubicacion": {
+      "name": "Disable location",
+      "desc": "Weather, maps and Find my device no longer know where you are.",
+      "group": "Privacy",
+      "warn": "",
+      "help": "Turns off location system-wide. Weather, maps, automatic time zone and \"Find my device\" no longer know where you are."
+    },
+    "navegadores": {
+      "name": "Chrome, Edge and Firefox telemetry",
+      "desc": "Browsers will show \"managed by your organization\".",
+      "group": "Privacy",
+      "warn": "",
+      "help": "Disables usage statistics reporting in Chrome, Edge and Firefox, and the agent Firefox uses to ask to be the default browser. Browsers will show \"Managed by your organization\": this is normal and comes from these policies."
+    },
+    "anuncios": {
+      "name": "Remove ads and suggestions",
+      "desc": "No auto-installed apps or ads in Start and Settings.",
+      "group": "Interface",
+      "warn": "",
+      "help": "Windows installs suggested apps on its own and shows \"tips\" and ads in Start, on the lock screen and in Settings. This turns that off. Apps that were already installed aren't removed automatically: use \"Remove Microsoft apps\"."
+    },
+    "bing": {
+      "name": "Remove Bing from the Start menu",
+      "desc": "Start menu search stays local only.",
+      "group": "Interface",
+      "warn": "",
+      "help": "When you search in the Start menu, Windows also searches the web with Bing. This limits search to your PC: faster and without web results."
+    },
+    "copilot": {
+      "name": "Remove Copilot and Recall",
+      "desc": "Turns off the AI assistant and AI snapshots.",
+      "group": "Interface",
+      "warn": "",
+      "help": "Turns off Copilot (the Windows AI assistant) and Recall (automatic screenshots so the AI can \"remember\" what you did). It also removes the Copilot button from the taskbar."
+    },
+    "widgets": {
+      "name": "Remove Widgets and news",
+      "desc": "No news panel on the taskbar.",
+      "group": "Interface",
+      "warn": "",
+      "help": "Removes the Widgets and news panel that opens from the corner of the taskbar. It stops loading news and weather in the background."
+    },
+    "extensiones": {
+      "name": "Show file extensions",
+      "desc": "See .exe, .pdf, etc. Helps spot fake files.",
+      "group": "Interface",
+      "warn": "",
+      "help": "Shows each file's extension (.exe, .pdf, .jpg). Helps you see whether a file is what it claims: \"photo.jpg.exe\" is a program, not a photo."
+    },
+    "ocultos": {
+      "name": "Show hidden files",
+      "desc": "File Explorer shows hidden folders like AppData.",
+      "group": "Interface",
+      "warn": "",
+      "help": "Shows hidden files and folders in File Explorer, such as AppData. Useful for finding game files or settings. Be careful when deleting things you don't recognize."
+    },
+    "clasico": {
+      "name": "Classic context menu",
+      "desc": "Full right-click menu, without \"Show more options\".",
+      "group": "Interface",
+      "warn": "",
+      "help": "Windows 11 shows a short right-click menu and hides the rest under \"Show more options\". This brings back the full Windows 10 menu. Requires restarting File Explorer or the PC."
+    },
+    "barra": {
+      "name": "Left-aligned taskbar",
+      "desc": "Start goes back to the corner.",
+      "group": "Interface",
+      "warn": "",
+      "help": "Moves the Start button and taskbar icons to the left, like in Windows 10."
+    },
+    "edge": {
+      "name": "Edge without sidebar",
+      "desc": "Removes the sidebar and widget. Edge will show \"managed\".",
+      "group": "Interface",
+      "warn": "",
+      "help": "Removes the Edge sidebar (Copilot, shopping, tools) and the floating search widget. Edge will show \"Managed by your organization\"."
+    },
+    "smartscreen": {
+      "name": "Disable SmartScreen",
+      "desc": "Windows and Edge stop checking downloads and dangerous sites.",
+      "group": "Risky",
+      "warn": "Downloads and phishing pages no longer show a warning.",
+      "help": "SmartScreen checks the programs you download and the pages you visit, and warns you if they're dangerous. Turning it off removes those warnings: it's more convenient, but a scam file or page will no longer warn you."
+    },
+    "vbs": {
+      "name": "Disable VBS and memory integrity",
+      "desc": "May raise FPS. Some anti-cheats require it to be on.",
+      "group": "Risky",
+      "warn": "You lose kernel protection against malicious drivers.",
+      "help": "Virtualization-based security and memory integrity protect the Windows kernel against malicious drivers. Turning them off can raise FPS a little (between 0 and 10% depending on the game). But it breaks games with modern anti-cheat: VALORANT (Vanguard) may not let you play, Fortnite locks you out of tournaments, and Call of Duty: Warzone may fail its security check. If you play any of those, don't enable it."
+    },
+    "updates": {
+      "name": "Disable automatic updates",
+      "desc": "Windows only updates when you ask in Settings.",
+      "group": "Risky",
+      "warn": "You stop getting security patches automatically. You'll have to check for them manually.",
+      "help": "Windows stops downloading and installing updates on its own and doesn't restart by itself. You can update manually from Settings > Windows Update. Risk: if you forget, you go without security patches."
+    },
+    "tpm": {
+      "name": "Bypass Windows 11 requirements",
+      "desc": "Install or upgrade without TPM, Secure Boot or a supported CPU.",
+      "group": "Risky",
+      "warn": "Microsoft doesn't support PCs installed this way, and an update may fail.",
+      "help": "Lets you install or upgrade Windows 11 on PCs without TPM 2.0, without Secure Boot, or with an unsupported processor. Microsoft doesn't support these PCs and a major update could fail."
+    },
+    "puntos": {
+      "name": "Delete C: restore points",
+      "desc": "Frees space, but deletes all your restore points.",
+      "group": "Risky",
+      "warn": "This can't be undone. Neither SmoothTwk nor Windows will be able to go back to those points.",
+      "help": "Deletes all restore points on drive C:. Frees space, but you'll no longer be able to roll the system back to an earlier state with them. This can't be undone."
+    },
+    "smoothplan": {
+      "name": "SmoothTwk power plan",
+      "desc": "SmoothTwk's own plan: prioritizes performance and low latency for gaming.",
+      "group": "Power plans",
+      "warn": "",
+      "help": "Installs and activates SmoothTwk's own power plan, built for gaming: the processor and devices stop saving power so they respond faster and with less latency. It appears in Control Panel > Power Options as \"SmoothTwk Power Plan\". On a laptop it uses more battery and runs hotter. Undoing it restores your previous plan and deletes the SmoothTwk plan."
+    },
+    "ultimate": {
+      "name": "Ultimate Performance plan",
+      "desc": "Enables the hidden Ultimate Performance plan. Meant for plugged-in desktops.",
+      "group": "Power plans",
+      "warn": "",
+      "help": "Creates and activates Microsoft's hidden \"Ultimate Performance\" plan: it removes almost all power saving from the processor and devices. The gain over \"High performance\" is small and it uses more electricity. Meant for a plugged-in desktop."
+    },
+    "overlay": {
+      "name": "Best performance mode",
+      "desc": "Sets the Windows power mode to maximum. Requires the Balanced plan.",
+      "group": "Power plans",
+      "warn": "",
+      "help": "It's the same as moving the Windows power mode setting (Settings > System > Power) to \"Best performance\": the processor ramps up sooner and apps aren't held back. On a laptop it's Microsoft's recommended way to get more power. Only works with the Balanced plan."
+    },
+    "boost": {
+      "name": "Aggressive boost when plugged in",
+      "desc": "The CPU ramps up its clock sooner. More heat and power draw.",
+      "group": "Processor",
+      "warn": "",
+      "help": "Sets the processor boost mode to \"aggressive\" when plugged in: it reaches its maximum frequency sooner and holds it longer. More burst performance, more heat and fan noise."
+    },
+    "parking": {
+      "name": "No core parking",
+      "desc": "Keeps all cores awake. Blocked on Ryzen X3D because it lowers FPS.",
+      "group": "Processor",
+      "warn": "",
+      "help": "Windows \"parks\" (puts to sleep) processor cores when there isn't much work. This keeps all cores awake to respond instantly. Uses more power. On Ryzen X3D it's blocked because it lowers FPS."
+    },
+    "throttleoff": {
+      "name": "No throttling of background apps",
+      "desc": "Windows stops lowering power for background apps. More heat.",
+      "group": "Processor",
+      "warn": "",
+      "help": "Windows reduces the power of apps running in the background to save energy. This disables that: all apps run at full power. More heat and power draw. Requires a restart."
+    },
+    "timerres": {
+      "name": "Global high-resolution timer",
+      "desc": "Only helps games that request a fine timer. Increases power draw.",
+      "group": "Processor",
+      "warn": "",
+      "help": "Some games ask Windows for a more precise internal clock. Since Windows 11 that request only affects the app that made it. This restores the previous global behavior. It can improve smoothness in some games, but the PC sleeps less and uses more power. Requires a restart."
+    },
+    "coolbat": {
+      "name": "Cool mode on battery",
+      "desc": "No boost when unplugged: less heat and longer battery life.",
+      "group": "Processor",
+      "warn": "",
+      "help": "When the laptop is unplugged, turns off processor boost. It's a bit slower in bursts, but runs much cooler and the battery lasts quite a bit longer. Nothing changes when plugged in."
+    },
+    "pcie": {
+      "name": "PCIe without power saving when plugged in",
+      "desc": "Less delay waking the GPU and NVMe drives.",
+      "group": "Devices",
+      "warn": "",
+      "help": "PCIe slots (graphics card, NVMe drives) enter power saving when idle and take a moment to wake up. This disables it when plugged in. Fewer delays; slightly higher idle power draw."
+    },
+    "usbsuspend": {
+      "name": "No USB suspend when plugged in",
+      "desc": "Prevents dropouts on USB mouse, keyboard and audio.",
+      "group": "Devices",
+      "warn": "",
+      "help": "Windows turns off USB ports it thinks aren't in use. Sometimes that cuts out the mouse, keyboard or USB audio for a moment. This disables it when plugged in."
+    },
+    "wifiperf": {
+      "name": "Wi-Fi without power saving when plugged in",
+      "desc": "May reduce ping spikes on some adapters.",
+      "group": "Devices",
+      "warn": "",
+      "help": "The Wi-Fi adapter saves power between packets, which causes ping spikes on some PCs. This sets it to maximum performance when plugged in."
+    },
+    "nicpower": {
+      "name": "Wired network without power saving",
+      "desc": "Prevents link drops. Disables Wake-on-LAN.",
+      "group": "Devices",
+      "warn": "",
+      "help": "Windows can turn off the wired network card to save power, which sometimes drops the connection. This disables that. \"Wake-on-LAN\" (turning on the PC over the network) also stops working."
+    },
+    "memcomp": {
+      "name": "No memory compression",
+      "desc": "Only available with 32 GB or more. Worse with less RAM.",
+      "group": "Memory",
+      "warn": "",
+      "help": "Windows compresses part of the RAM to fit more in. With 32 GB or more it's rarely needed and turning it off saves a bit of CPU. With less RAM performance gets worse, which is why it's only enabled with 32 GB or more. Requires a restart."
+    },
+    "startupdelay": {
+      "name": "No startup app delay",
+      "desc": "Startup apps launch as soon as you sign in to Windows.",
+      "group": "Startup",
+      "warn": "",
+      "help": "Windows waits about 10 seconds after you sign in before opening startup programs. This removes the wait. Programs appear sooner, although they compete with the desktop while it loads."
+    },
+    "edgeboost": {
+      "name": "Edge without preloading or background mode",
+      "desc": "Frees RAM. Edge will show \"managed by your organization\".",
+      "group": "Startup",
+      "warn": "",
+      "help": "Edge stays open in the background (even when you close it) and preloads when the PC starts so it opens faster. This turns that off and frees RAM. Edge will show \"Managed by your organization\"."
+    },
+    "bgapps": {
+      "name": "Block Store apps in the background",
+      "desc": "Saves RAM and battery. Breaks notifications from Store apps.",
+      "group": "Startup",
+      "warn": "",
+      "help": "Stops Microsoft Store apps from running when they're closed. Saves RAM and battery. Those apps stop showing notifications and syncing in the background."
+    },
+    "dohttp": {
+      "name": "Windows Update without P2P sharing",
+      "desc": "Your PC stops uploading updates to other computers.",
+      "group": "Network",
+      "warn": "",
+      "help": "Windows Update shares pieces of updates with other computers on the internet or your network (P2P), using your upload bandwidth. This limits it to downloading directly from Microsoft."
+    },
+    "dxwindowed": {
+      "name": "Optimizations for windowed games",
+      "desc": "Lower latency in DirectX 10/11 games in borderless windowed mode.",
+      "group": "Gaming",
+      "warn": "",
+      "help": "Turns on Windows' \"Optimizations for windowed games\": DirectX 10 and 11 games in borderless windowed mode use the same fast mode as fullscreen. It lowers latency and enables Auto HDR. It's an official option in Settings > Display > Graphics."
+    },
+    "wu-activity": {
+      "name": "Disable activity history",
+      "desc": "Stops publishing and uploading user activity; clipboard history is kept.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Windows keeps a history of the apps and files you use. This stops saving it and sending it to Microsoft. Clipboard history isn't touched."
+    },
+    "wu-hiber": {
+      "name": "Disable hibernation",
+      "desc": "Hibernation is meant for laptops: it saves memory to disk before powering off.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Turns off hibernation and removes the option from the power menu. Frees the hiberfil.sys file (several GB). Not advised on laptops."
+    },
+    "wu-widget": {
+      "name": "Remove Widgets",
+      "desc": "Removes the widgets at the bottom left of the taskbar.",
+      "group": "Essentials",
+      "warn": "This action can't be undone.",
+      "help": "Uninstalls the Windows Widgets package. There's no automatic way to put it back: you'd have to reinstall it from the Microsoft Store."
+    },
+    "wu-revertstartmenu": {
+      "name": "Previous Start menu layout",
+      "desc": "Restores the Start menu layout from before 25H2. Doesn't work on newer builds.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Goes back to the Start menu design from before the new 25H2 version. On newer versions of Windows this tweak may stop working."
+    },
+    "wu-disablestoresearch": {
+      "name": "Disable Store results in Start search",
+      "desc": "Doesn't show recommended Microsoft Store apps when searching in Start.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Stops showing recommended Microsoft Store apps when you search in the Start menu."
+    },
+    "wu-location": {
+      "name": "Disable location tracking",
+      "desc": "Disables location tracking.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Turns off location tracking and the service that provides it. Maps, weather and \"Find my device\" no longer know where you are."
+    },
+    "wu-services": {
+      "name": "Set services to manual",
+      "desc": "Sets some services to manual startup.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Switches several services to \"manual\" or \"disabled\": offline files, telemetry, downloaded maps, storage and internet connection sharing. They start only if something needs them."
+    },
+    "wu-svchostsplitting": {
+      "name": "Disable svchost.exe splitting",
+      "desc": "Fewer svchost.exe processes, slightly less memory; for PCs with 12 GB RAM or less.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Windows splits each service into its own svchost.exe process. This groups them so fewer processes appear. It doesn't measurably improve performance."
+    },
+    "wu-bravedebloat": {
+      "name": "Debloat Brave browser",
+      "desc": "Disables Brave Rewards, Leo AI, the crypto wallet and VPN.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Removes rewards, the crypto wallet, the VPN and the AI (Leo) from Brave. Brave becomes a plain browser."
+    },
+    "wu-disablewarningforunsignedrdp": {
+      "name": "Disable unsigned RDP file warnings",
+      "desc": "Hides the warning shown when opening unsigned RDP files.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Stops showing the security warning when opening unsigned Remote Desktop (.rdp) files. Only do this if you trust the .rdp files you open."
+    },
+    "wu-edgedebloat": {
+      "name": "Debloat Microsoft Edge",
+      "desc": "Disables telemetry, pop-ups and other annoyances in Edge.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Removes shortcuts, suggestions, shopping, telemetry and other extra features from Edge. Edge will show \"Managed by your organization\"."
+    },
+    "wu-consumerfeatures": {
+      "name": "Disable consumer features",
+      "desc": "Stops promoted app installs and cuts Microsoft Store app suggestions.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Prevents Windows from installing promoted games and apps on its own (such as Candy Crush) on new accounts."
+    },
+    "wu-telemetry": {
+      "name": "Disable telemetry",
+      "desc": "Disables Microsoft telemetry.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Disables Windows telemetry, error reporting, tailored experiences and the advertising ID, and turns off their services."
+    },
+    "wu-deliveryoptimization": {
+      "name": "Disable Delivery Optimization",
+      "desc": "Stops Windows from using your bandwidth to upload updates to other PCs.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Windows Update stops sharing updates with other computers (P2P) and only downloads directly from Microsoft."
+    },
+    "wu-removeedge": {
+      "name": "Remove Microsoft Edge",
+      "desc": "Unlocks Edge's official uninstaller and removes Edge at the system level.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Uninstalls Microsoft Edge. Some Windows features that open web pages may fail. It can be reinstalled by downloading Edge from microsoft.com."
+    },
+    "wu-disablebitlocker": {
+      "name": "Disable BitLocker",
+      "desc": "Disables BitLocker.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Turns off BitLocker encryption and decrypts the drive. Your files are left unencrypted: if your PC is stolen, they can be read by removing the drive. Decryption takes a while."
+    },
+    "wu-utc": {
+      "name": "Set hardware clock to UTC",
+      "desc": "For dual-boot PCs: fixes time sync with Linux.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Makes Windows store the internal clock time in UTC. Only useful if you run Linux on the same PC and the time gets out of sync when switching systems."
+    },
+    "wu-removeonedrive": {
+      "name": "Remove Microsoft OneDrive",
+      "desc": "Uninstalls OneDrive with its own uninstaller without deleting your files.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Uninstalls OneDrive. Your cloud files stay in your account, but stop syncing with the PC. Make sure everything is in the cloud first."
+    },
+    "wu-removehomeandgallery": {
+      "name": "Remove Home and Gallery from Explorer",
+      "desc": "Removes Home and Gallery from File Explorer and opens This PC by default.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Removes the \"Home\" and \"Gallery\" sections from File Explorer's left pane."
+    },
+    "wu-display": {
+      "name": "Visual effects for best performance",
+      "desc": "Sets visual effects to best performance (also available in sysdm.cpl).",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Sets Windows visual effects to \"best performance\": no animations, shadows or transparency. Helps on slow PCs; on powerful PCs it barely changes anything."
+    },
+    "wu-reservedstorage": {
+      "name": "Disable reserved storage",
+      "desc": "Frees the 7-10 GB Windows holds for updates. Recommended only on small drives.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Windows reserves about 7 GB of disk so updates always have room. This frees that reservation. If the disk fills up, an update could fail."
+    },
+    "wu-endtaskontaskbar": {
+      "name": "End task from taskbar right-click",
+      "desc": "Adds End task when right-clicking a program on the taskbar.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Adds \"End task\" to the right-click menu of programs on the taskbar, so you can close a hung program without opening Task Manager."
+    },
+    "wu-storage": {
+      "name": "Disable Storage Sense",
+      "desc": "Stops Storage Sense from deleting temp files automatically.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Turns off Storage Sense, which automatically deletes temporary files and Recycle Bin items when space runs low."
+    },
+    "wu-windowsai": {
+      "name": "Disable and remove Windows AI",
+      "desc": "Removes and disables all AI features and packages.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Disables and removes Windows AI features (Copilot, Recall, AI in Notepad and Paint). The part that removes packages can't be undone automatically."
+    },
+    "wu-wpbt": {
+      "name": "Disable Windows Platform Binary Table (WPBT)",
+      "desc": "Stops the PC vendor from running programs at boot without your consent.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Prevents the PC manufacturer from running programs stored in the BIOS when Windows starts (for example, manufacturer software installers)."
+    },
+    "wu-preventdevicemetadatafromnetwork": {
+      "name": "Prevent device companion apps",
+      "desc": "Stops extra software from installing when you plug in devices.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Prevents Windows from downloading companion apps and manufacturer metadata when you connect a device."
+    },
+    "wu-razerblock": {
+      "name": "Block Razer software auto-install",
+      "desc": "Blocks all Razer software installs; the hardware works fine without it.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Prevents Windows from automatically installing Razer software when you connect a Razer peripheral."
+    },
+    "wu-logiblock": {
+      "name": "Block Logitech Download Assistant",
+      "desc": "Stops Windows Update from reinstalling Logi Download Assistant.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Prevents the Logitech download assistant from installing on its own."
+    },
+    "wu-disablenotifications": {
+      "name": "Disable notifications and calendar",
+      "desc": "Disables all notifications, including the taskbar calendar.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Turns off the notification center and the taskbar calendar. You'll stop seeing app notifications."
+    },
+    "wu-blockadobenet": {
+      "name": "Block Adobe URLs",
+      "desc": "Blocks connections to Adobe activation and telemetry servers.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Adds a list to the hosts file that blocks Adobe addresses (license checks and telemetry). Downloads the list from the internet."
+    },
+    "wu-rightclickmenu": {
+      "name": "Classic right-click menu",
+      "desc": "Restores the classic File Explorer context menu instead of the Windows 11 one.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Goes back to the full Windows 10 right-click menu."
+    },
+    "wu-diskcleanup": {
+      "name": "Run Disk Cleanup",
+      "desc": "Runs Disk Cleanup on drive C: and removes old Windows updates.",
+      "group": "Essentials",
+      "warn": "This action can't be undone.",
+      "help": "Runs Windows Disk Cleanup and cleans up old update components. This can't be undone."
+    },
+    "wu-deletetempfiles": {
+      "name": "Delete temporary files",
+      "desc": "Erases the TEMP folders.",
+      "group": "Essentials",
+      "warn": "This action can't be undone.",
+      "help": "Deletes user and Windows temporary files. This can't be undone."
+    },
+    "wu-ipv46": {
+      "name": "Prefer IPv4 over IPv6",
+      "desc": "Can help latency and security on private networks without IPv6.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Makes Windows prefer IPv4 over IPv6 when connecting. Useful if your network has IPv6 problems."
+    },
+    "wu-teredo": {
+      "name": "Disable Teredo",
+      "desc": "Turns off Teredo tunneling, which can add latency; some games may have issues.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Turns off Teredo, a tunnel for using IPv6 over IPv4. Some Xbox games and Xbox party chat use it."
+    },
+    "wu-disableipv6": {
+      "name": "Disable IPv6",
+      "desc": "Disables IPv6.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Disables IPv6 completely. Some Windows features and certain networks need it; only do this if you know you don't use it."
+    },
+    "wu-disablebgapps": {
+      "name": "Disable background apps",
+      "desc": "Stops all Microsoft Store apps from running in the background.",
+      "group": "Advanced",
+      "warn": "Advanced tweak. Read the explanation (?) before applying it.",
+      "help": "Prevents Microsoft Store apps from running in the background. Saves resources, but you lose their notifications."
+    },
+    "wu-disableexplorerautodiscovery": {
+      "name": "Disable folder type auto-discovery",
+      "desc": "Stops Explorer guessing folder types; also disables Explorer grouping.",
+      "group": "Essentials",
+      "warn": "",
+      "help": "Prevents File Explorer from changing a folder's view on its own based on its contents (photos, music). Folders open faster."
+    },
+    "wu-detailedbsod": {
+      "name": "Verbose blue screen",
+      "desc": "Shows more information when you get a blue screen.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: the blue screen shows technical details about the error instead of the sad face. Useful for finding the cause."
+    },
+    "wu-batterypercentage": {
+      "name": "Battery percentage in system tray",
+      "desc": "Shows the battery percentage next to the tray battery icon.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: shows the battery percentage next to the icon on the taskbar."
+    },
+    "wu-darkmode": {
+      "name": "Dark theme for Windows",
+      "desc": "Dark mode for the system and apps.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: Windows and apps use the dark theme. Off: goes back to the light theme."
+    },
+    "wu-showext": {
+      "name": "Show file extensions in Explorer",
+      "desc": "Shows file extensions in Explorer (.exe, .png, etc.).",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: File Explorer shows file extensions (.exe, .pdf)."
+    },
+    "wu-hiddenfiles": {
+      "name": "Show hidden files in Explorer",
+      "desc": "Reveals hidden files in Explorer.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: File Explorer shows hidden files and folders."
+    },
+    "wu-verboselogon": {
+      "name": "Verbose sign-in messages",
+      "desc": "Shows detailed messages during startup and shutdown.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: when starting up and shutting down, Windows shows what it's doing at each step instead of \"Please wait\". Useful if it gets stuck."
+    },
+    "wu-newoutlook": {
+      "name": "New Microsoft Outlook",
+      "desc": "Makes sure the new Outlook app is used.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: uses the new version of Outlook. Off: goes back to classic Outlook."
+    },
+    "wu-scrollbars": {
+      "name": "Always show scrollbars",
+      "desc": "Keeps scrollbars visible instead of hiding them when not in use.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: scrollbars are always visible, instead of hiding when you're not moving the mouse."
+    },
+    "wu-multiplaneoverlay": {
+      "name": "Disable Multiplane Overlay",
+      "desc": "Disables MPO (OverlayTestMode=5). Only for flickering or stutter.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "Disables Windows \"Multiplane Overlay\". It only helps if you have flickering, black screens or stutter with multiple monitors or when watching videos. If you don't have those problems, better leave it alone."
+    },
+    "wu-mouseacceleration": {
+      "name": "Mouse acceleration",
+      "desc": "Cursor movement depends on how fast you move the mouse.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: the pointer moves farther the faster you move the mouse (acceleration). Off: the distance depends only on how far you move it, which many gamers prefer."
+    },
+    "wu-numlock": {
+      "name": "Num Lock on startup",
+      "desc": "Sets the Num Lock state when your PC starts.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: the numeric keypad stays on when you turn on the PC."
+    },
+    "wu-windowsnapping": {
+      "name": "Window snapping",
+      "desc": "Toggles window snapping when dragging windows.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: dragging a window to the edge of the screen snaps it to half the screen or a corner."
+    },
+    "wu-standbyfix": {
+      "name": "Network during S0 sleep",
+      "desc": "Toggles network connectivity during S0 low-power idle on modern laptops.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: the PC keeps the network connected while asleep (plugged in), to receive mail and updates. Off: cuts the network when it goes to sleep."
+    },
+    "wu-s3sleep": {
+      "name": "S3 sleep",
+      "desc": "Switches from Modern Standby to classic S3 sleep.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: uses classic S3 sleep instead of Modern Standby. It can stop the laptop from heating up or draining the battery inside your backpack. Only works if your PC supports S3."
+    },
+    "wu-hidesettingshome": {
+      "name": "Settings home page",
+      "desc": "Toggles the Home page in the Windows Settings app.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: Settings shows its Home page with recommendations. Off: hides it."
+    },
+    "wu-bingsearch": {
+      "name": "Bing search in Start menu",
+      "desc": "Toggles Bing web results in Windows Search.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: the Start menu also searches the web with Bing. Off: it only searches your PC."
+    },
+    "wu-loginblur": {
+      "name": "Sign-in screen acrylic blur",
+      "desc": "Toggles the blur effect on the sign-in screen background.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: the sign-in screen shows the background blurred. Off: shows it sharp."
+    },
+    "wu-disablelockscreen": {
+      "name": "Disable lock screen",
+      "desc": "Skips the lock screen and goes straight to sign-in on boot and wake.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: removes the lock screen with the picture and goes straight to asking for your password."
+    },
+    "wu-startmenurecommendations": {
+      "name": "Start menu recommendations",
+      "desc": "Toggles Recommended in Start; disabling it also turns off lock screen Spotlight.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: the Start menu shows the \"Recommended\" section with recent files and apps. Off: hides it."
+    },
+    "wu-stickykeys": {
+      "name": "Sticky Keys",
+      "desc": "Toggles Sticky Keys, which activate when you press Shift rapidly.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: disables the shortcut that opens Sticky Keys when you press Shift 5 times."
+    },
+    "wu-taskbaralignment": {
+      "name": "Centered taskbar icons",
+      "desc": "Aligns taskbar icons to the center or left.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: taskbar icons are centered (Windows 11 style). Off: they're on the left."
+    },
+    "wu-taskbarsearch": {
+      "name": "Taskbar search icon",
+      "desc": "Toggles the Search button on the taskbar.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: shows the search icon on the taskbar."
+    },
+    "wu-taskview": {
+      "name": "Taskbar Task View icon",
+      "desc": "Toggles the Task View button on the taskbar.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: shows the Task View button (virtual desktops) on the taskbar."
+    },
+    "wu-gamemode": {
+      "name": "Game Mode",
+      "desc": "Windows prioritizes gaming by giving system resources to games.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: turns on Windows Game Mode, which prioritizes the open game."
+    },
+    "wu-longpaths": {
+      "name": "Enable long paths",
+      "desc": "Supports file paths longer than 260 characters in Explorer.",
+      "group": "Preferences",
+      "warn": "",
+      "help": "On: allows file paths longer than 260 characters."
+    },
+    "game-gpu-fivem": {
+      "name": "Dedicated GPU for FiveM",
+      "desc": "Always uses the powerful graphics card for this game.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "On PCs with two GPUs (the processor's integrated one and a dedicated NVIDIA or AMD card), Windows sometimes launches FiveM on the integrated one and it performs much worse. This marks the game's executables as \"High performance\", the same as doing it manually in Settings > System > Display > Graphics. It only changes a Windows preference: it doesn't touch the game or its anti-cheat. If the game updates and changes its executable, turn the switch off and on again."
+    },
+    "game-fso-fivem": {
+      "name": "No fullscreen optimizations",
+      "desc": "Possible small gain in GTA V Legacy (DirectX 11); no effect in Enhanced.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "Checks \"Disable fullscreen optimizations\" in the compatibility properties of FiveM's executables, the same as right-click > Properties > Compatibility. Windows stops turning fullscreen into a special window. In GTA V Legacy (DirectX 11) the flag applies, but there are no measurements showing a clear improvement. In the Enhanced version (DirectX 12) it has no effect. It doesn't touch the game or its anti-cheat."
+    },
+    "game-gpu-r6": {
+      "name": "Dedicated GPU for Rainbow Six Siege",
+      "desc": "Always uses the powerful graphics card for this game.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "On PCs with two GPUs (the processor's integrated one and a dedicated NVIDIA or AMD card), Windows sometimes launches Rainbow Six Siege on the integrated one and it performs much worse. This marks the game's executables as \"High performance\", the same as doing it manually in Settings > System > Display > Graphics. It only changes a Windows preference: it doesn't touch the game or its anti-cheat. If the game updates and changes its executable, turn the switch off and on again."
+    },
+    "game-fso-r6": {
+      "name": "No fullscreen optimizations",
+      "desc": "No effect: Siege X only uses DirectX 12.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "Checks \"Disable fullscreen optimizations\" in the compatibility properties of Rainbow Six Siege's executables, the same as right-click > Properties > Compatibility. Windows stops turning fullscreen into a special window. The game uses DirectX 12, OpenGL or Vulkan: this Windows flag doesn't change its performance. It remains available, but isn't recommended. It doesn't touch the game or its anti-cheat."
+    },
+    "game-gpu-valorant": {
+      "name": "Dedicated GPU for VALORANT",
+      "desc": "Always uses the powerful graphics card for this game.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "On PCs with two GPUs (the processor's integrated one and a dedicated NVIDIA or AMD card), Windows sometimes launches VALORANT on the integrated one and it performs much worse. This marks the game's executables as \"High performance\", the same as doing it manually in Settings > System > Display > Graphics. It only changes a Windows preference: it doesn't touch the game or its anti-cheat. If the game updates and changes its executable, turn the switch off and on again."
+    },
+    "game-fso-valorant": {
+      "name": "No fullscreen optimizations",
+      "desc": "Applies on DirectX 11; helps alt-tab and stutter on some PCs.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "Checks \"Disable fullscreen optimizations\" in the compatibility properties of VALORANT's executables, the same as right-click > Properties > Compatibility. Windows stops turning fullscreen into a special window. VALORANT uses DirectX 11, so the flag applies. There are no measurements showing lower latency, but on some PCs it improves alt-tab and stutter. It doesn't touch the game or its anti-cheat."
+    },
+    "game-gpu-fortnite": {
+      "name": "Dedicated GPU for Fortnite",
+      "desc": "Always uses the powerful graphics card for this game.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "On PCs with two GPUs (the processor's integrated one and a dedicated NVIDIA or AMD card), Windows sometimes launches Fortnite on the integrated one and it performs much worse. This marks the game's executables as \"High performance\", the same as doing it manually in Settings > System > Display > Graphics. It only changes a Windows preference: it doesn't touch the game or its anti-cheat. If the game updates and changes its executable, turn the switch off and on again."
+    },
+    "game-fso-fortnite": {
+      "name": "No fullscreen optimizations",
+      "desc": "No performance effect; Epic suggests it only if the game won't launch.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "Checks \"Disable fullscreen optimizations\" in the compatibility properties of Fortnite's executables, the same as right-click > Properties > Compatibility. Windows stops turning fullscreen into a special window. Fortnite no longer has DirectX 11: it runs on DirectX 12 or in Performance Mode (also DirectX 12), so it doesn't improve FPS. Epic recommends it only as a fix when the game won't launch. It doesn't touch the game or its anti-cheat."
+    },
+    "game-gpu-warzone": {
+      "name": "Dedicated GPU for Call of Duty: Warzone",
+      "desc": "Always uses the powerful graphics card for this game.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "On PCs with two GPUs (the processor's integrated one and a dedicated NVIDIA or AMD card), Windows sometimes launches Call of Duty: Warzone on the integrated one and it performs much worse. This marks the game's executables as \"High performance\", the same as doing it manually in Settings > System > Display > Graphics. It only changes a Windows preference: it doesn't touch the game or its anti-cheat. If the game updates and changes its executable, turn the switch off and on again."
+    },
+    "game-fso-warzone": {
+      "name": "No fullscreen optimizations",
+      "desc": "No effect: Warzone only uses DirectX 12.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "Checks \"Disable fullscreen optimizations\" in the compatibility properties of Call of Duty: Warzone's executables, the same as right-click > Properties > Compatibility. Windows stops turning fullscreen into a special window. The game uses DirectX 12, OpenGL or Vulkan: this Windows flag doesn't change its performance. It remains available, but isn't recommended. It doesn't touch the game or its anti-cheat."
+    },
+    "game-gpu-minecraft": {
+      "name": "Dedicated GPU for Minecraft",
+      "desc": "Always uses the powerful graphics card for this game.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "On PCs with two GPUs (the processor's integrated one and a dedicated NVIDIA or AMD card), Windows sometimes launches Minecraft on the integrated one and it performs much worse. This marks the game's executables as \"High performance\", the same as doing it manually in Settings > System > Display > Graphics. It only changes a Windows preference: it doesn't touch the game or its anti-cheat. If the game updates and changes its executable, turn the switch off and on again."
+    },
+    "game-fso-minecraft": {
+      "name": "No fullscreen optimizations",
+      "desc": "No effect: Minecraft uses OpenGL, Vulkan or DirectX 12.",
+      "group": "FiveM optimizations",
+      "warn": "",
+      "help": "Checks \"Disable fullscreen optimizations\" in the compatibility properties of Minecraft's executables, the same as right-click > Properties > Compatibility. Windows stops turning fullscreen into a special window. The game uses DirectX 12, OpenGL or Vulkan: this Windows flag doesn't change its performance. It remains available, but isn't recommended. It doesn't touch the game or its anti-cheat."
+    },
+    "fivem-remoteregistry": {
+      "name": "Remote Registry on",
+      "desc": "Only if server staff ask for it. Off by default in Windows.",
+      "group": "Restore",
+      "warn": "Remote Registry lets another PC on the network read and change your Windows registry. Turn it on only if staff ask, and turn it off afterward with this same switch.",
+      "help": "Turns on the Remote Registry service (RemoteRegistry), as the Servicios.rar file does. It's disabled by default in Windows because it lets another computer on your network read and modify your registry if it has credentials. You don't need it to play; some staff ask for it during a check. Turn it off with this same switch when you're done: it goes back to how it was."
+    }
+  }
+}

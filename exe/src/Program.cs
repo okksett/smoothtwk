@@ -43,7 +43,7 @@ namespace SmoothTwk
         static void Fatal(Exception ex)
         {
             Trace("ERROR: " + ex);
-            try { MessageBox.Show("SmoothTwk tuvo un error y se va a cerrar:\n\n" + ex.Message + "\n\nDetalle en %TEMP%\\smoothtwk.log", "SmoothTwk", MessageBoxButtons.OK, MessageBoxIcon.Error); } catch { }
+            try { MessageBox.Show(L.T("SmoothTwk tuvo un error y se va a cerrar:", "SmoothTwk hit an error and will close:") + "\n\n" + ex.Message + "\n\n%TEMP%\\smoothtwk.log", "SmoothTwk", MessageBoxButtons.OK, MessageBoxIcon.Error); } catch { }
         }
 
         [STAThread]
@@ -54,6 +54,9 @@ namespace SmoothTwk
             var self = Arg(args, "--selftest");
             var shot = Arg(args, "--shot");
             if (self != null) return SelfTest.Run(self);
+            L.Init();
+            var lang = Arg(args, "--lang");
+            if (lang == "es" || lang == "en") L.Lang = lang;
             Trace("inicio " + Application.ExecutablePath + " " + string.Join(" ", argv));
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += (s, e) => Fatal(e.Exception);
@@ -95,8 +98,8 @@ namespace SmoothTwk
             catch (Win32Exception ex)
             {
                 LastElevationError = ex.NativeErrorCode == 1223
-                    ? "Windows canceló el permiso (código 1223): se pulsó No o el aviso se cerró sin respuesta."
-                    : "Windows no pudo elevar (código " + ex.NativeErrorCode + "): " + ex.Message;
+                    ? L.T("Windows canceló el permiso (código 1223): se pulsó No o el aviso se cerró sin respuesta.", "Windows cancelled the permission (code 1223): No was pressed or the prompt was closed.")
+                    : L.T("Windows no pudo elevar (código ", "Windows could not elevate (code ") + ex.NativeErrorCode + "): " + ex.Message;
                 return false;
             }
         }
@@ -127,7 +130,24 @@ namespace SmoothTwk
 
         static void Body(string key)
         {
-            Catalog.Load();
+            // Idiomas: cada traducción cubre todos los ids y ningún texto visible nombra a WinUtil ni a Chris Titus.
+            foreach (var lang in new[] { "en", "es" })
+            {
+                L.Lang = lang;
+                Catalog.Load();
+                var visible = Catalog.Tweaks.Select(t => t.Name + t.Desc + t.Group + t.Warn + t.Help).Concat(Catalog.Actions.Select(a => a.Name + a.Desc + a.Group + a.Warn + a.Help + a.Button)).ToList();
+                var named = visible.Count(v => v.IndexOf("WinUtil", StringComparison.OrdinalIgnoreCase) >= 0 || v.IndexOf("Chris Titus", StringComparison.OrdinalIgnoreCase) >= 0);
+                Check(lang + ": sin menciones a WinUtil ni Chris Titus (" + named + ")", named == 0);
+                var res = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(n => n == lang + ".json" || n.StartsWith(lang + "-")).ToList();
+                var text = string.Join("\n", res.Select(Catalog.Resource));
+                var need = lang == "en" ? Catalog.Tweaks.Select(t => t.Id).Concat(Catalog.Actions.Select(a => a.Id)).Concat(Catalog.Games.Select(g => g.Id))
+                                        : Catalog.Tweaks.Where(t => t.Source == "WinUtil").Select(t => t.Id).Concat(Catalog.Actions.Where(a => a.Source == "WinUtil").Select(a => a.Id));
+                var missing = need.Where(id => text.IndexOf("\"" + id + "\"", StringComparison.Ordinal) < 0).ToList();
+                foreach (var m in missing.Take(6)) Out.AppendLine("  sin traducir (" + lang + "): " + m);
+                Check(lang + ": traducción completa (" + res.Count + " archivos)", res.Count > 0 && missing.Count == 0);
+            }
+            Check("plan de energía SmoothTwk embebido", System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("SmoothTwk.pow") != null && Catalog.Tweaks.Any(t => t.Id == "smoothplan" && t.Rec && t.Special == "plan-smoothtwk"));
+            Check("recomendados sin planes que choquen", !Catalog.Tweaks.Any(t => t.Rec && (t.Special == "plan-high" || t.Special == "overlay-best" || t.Special == "plan-ultimate")));
             Check("catálogo: " + Catalog.Tweaks.Count + " ajustes, " + Catalog.Actions.Count + " acciones, " + Catalog.Apps.Count + " apps", Catalog.Tweaks.Count > 80 && Catalog.Actions.Count > 40 && Catalog.Apps.Count > 200);
             var ids = Catalog.Tweaks.Select(t => t.Id).Concat(Catalog.Actions.Select(a => a.Id)).ToList();
             Check("ids únicos", ids.Distinct().Count() == ids.Count);

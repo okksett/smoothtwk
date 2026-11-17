@@ -89,18 +89,18 @@ namespace SmoothTwk
             var firefox = new List<string>();
             var ff = la + "\\Mozilla\\Firefox\\Profiles";
             if (Directory.Exists(ff)) foreach (var p in Directory.GetDirectories(ff)) { firefox.Add(Path.Combine(p, "cache2")); firefox.Add(Path.Combine(p, "shader-cache")); }
-            const string cacheDesc = "Solo caché. No toca contraseñas, cookies ni historial.";
+            string cacheDesc = L.T("Solo caché. No toca contraseñas, cookies ni historial.", "Cache only. Passwords, cookies and history are untouched.");
             var list = new List<CleanTarget>
             {
-                new CleanTarget { Name = "Temporales del usuario", Desc = "Archivos que los programas dejaron en %TEMP%.", Paths = { Path.GetTempPath() } },
-                new CleanTarget { Name = "Temporales de Windows", Desc = "Contenido de C:\\Windows\\Temp.", Paths = { win + "\\Temp" } },
-                new CleanTarget { Name = "Volcados de errores", Desc = "Minidumps de pantallazos azules.", Paths = { win + "\\Minidump" } },
-                new CleanTarget { Name = "Informes de errores", Desc = "Reportes de fallos ya generados.", Paths = wer },
-                new CleanTarget { Name = "Caché de Chrome", Desc = cacheDesc, Paths = Chromium(la + "\\Google\\Chrome\\User Data").ToList() },
-                new CleanTarget { Name = "Caché de Edge", Desc = cacheDesc, Paths = Chromium(la + "\\Microsoft\\Edge\\User Data").ToList() },
-                new CleanTarget { Name = "Caché de Brave", Desc = cacheDesc, Paths = Chromium(la + "\\BraveSoftware\\Brave-Browser\\User Data").ToList() },
-                new CleanTarget { Name = "Caché de Firefox", Desc = cacheDesc, Paths = firefox },
-                new CleanTarget { Name = "Papelera de reciclaje", Desc = "Borra definitivamente lo que hay en la Papelera.", On = false, Recycle = true }
+                new CleanTarget { Name = L.T("Temporales del usuario", "User temp files"), Desc = L.T("Archivos que los programas dejaron en %TEMP%.", "Files programs left in %TEMP%."), Paths = { Path.GetTempPath() } },
+                new CleanTarget { Name = L.T("Temporales de Windows", "Windows temp files"), Desc = L.T("Contenido de C:\\Windows\\Temp.", "Contents of C:\\Windows\\Temp."), Paths = { win + "\\Temp" } },
+                new CleanTarget { Name = L.T("Volcados de errores", "Crash dumps"), Desc = L.T("Minidumps de pantallazos azules.", "Blue screen minidumps."), Paths = { win + "\\Minidump" } },
+                new CleanTarget { Name = L.T("Informes de errores", "Error reports"), Desc = L.T("Reportes de fallos ya generados.", "Crash reports already created."), Paths = wer },
+                new CleanTarget { Name = L.T("Caché de Chrome", "Chrome cache"), Desc = cacheDesc, Paths = Chromium(la + "\\Google\\Chrome\\User Data").ToList() },
+                new CleanTarget { Name = L.T("Caché de Edge", "Edge cache"), Desc = cacheDesc, Paths = Chromium(la + "\\Microsoft\\Edge\\User Data").ToList() },
+                new CleanTarget { Name = L.T("Caché de Brave", "Brave cache"), Desc = cacheDesc, Paths = Chromium(la + "\\BraveSoftware\\Brave-Browser\\User Data").ToList() },
+                new CleanTarget { Name = L.T("Caché de Firefox", "Firefox cache"), Desc = cacheDesc, Paths = firefox },
+                new CleanTarget { Name = L.T("Papelera de reciclaje", "Recycle Bin"), Desc = L.T("Borra definitivamente lo que hay en la Papelera.", "Permanently deletes what is in the Recycle Bin."), On = false, Recycle = true }
             };
             return list;
         }

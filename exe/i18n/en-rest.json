@@ -1,0 +1,1170 @@
+{
+ "actions": {
+  "fivem-restore": {
+   "name": "Restore default services and registry",
+   "desc": "Puts everything back to Windows defaults to pass the PC check. Recommended for FiveM.",
+   "group": "Restore",
+   "warn": "",
+   "button": "Restore",
+   "help": "Many optimizers turn off services that FiveM servers inspect during the PC check, and that can look like you are hiding something. This: (1) undoes the SmoothTwk tweaks that turned those services off, if you applied them; (2) sets PcaSvc, DPS, DiagTrack, SysMain, EventLog, BFE, CDPSvc, DusmSvc to automatic and Appinfo, SSDPSRV, UmRdpService to manual, which is how they ship in Windows, and starts them; (3) sets BAM, Prefetch and the Program Compatibility Assistant to their default values. Some changes finish applying after a restart. It is the same as the \"Activar servicios\" (Enable services) option in the Servicios.rar file, without RemoteRegistry."
+  },
+  "fivem-cache": {
+   "name": "Clear FiveM cache",
+   "desc": "Only if you get slow loading, broken textures or join errors. It won't raise FPS.",
+   "group": "FiveM cache",
+   "warn": "Close FiveM first. The next time you join a server, FiveM downloads its files again.",
+   "button": "Clear",
+   "help": "FiveM stores each server's files in its cache folder. Over time it grows a lot and can cause slow loading, missing textures or errors when joining. This deletes the cache, server-cache and server-cache-priv folders inside FiveM.app\\data. It does not delete your settings, your keybinds or your account. FiveM recreates them on its own."
+  },
+  "restore-point": {
+   "name": "Create restore point",
+   "desc": "The safest option: saves a copy of the system so you can roll back if something breaks.",
+   "group": "Safety first",
+   "warn": "",
+   "button": "Create",
+   "help": "Saves a \"snapshot\" of your Windows configuration: registry, drivers, installed programs and system files. If something stops working after a tweak, you can go back to how it was from Start > \"Create a restore point\" > System Restore, or from Maintenance > Classic panels > Windows Restore. Your documents, photos and games are not touched. It's the first thing worth doing before optimizing. If System Protection was off on C:, SmoothTwk turns it on (it uses a bit of disk space). Windows normally allows one point every 24 hours; SmoothTwk lifts that limit only while it creates the point and then puts it back as it was."
+  },
+  "fix-wu": {
+   "name": "Reset Windows Update",
+   "desc": "Stops the services, clears the download cache and starts them again.",
+   "group": "Repairs",
+   "warn": "",
+   "button": "Run",
+   "help": "If Windows Update gets stuck or throws errors, this stops its services, renames the update download folder and starts them again. Windows downloads whatever it needs again. Restart your PC afterwards."
+  },
+  "fix-net": {
+   "name": "Reset network",
+   "desc": "Resets Winsock and TCP/IP and flushes the DNS cache. Requires a restart.",
+   "group": "Repairs",
+   "warn": "",
+   "button": "Run",
+   "help": "If the internet works badly or won't connect, this resets Windows' network configuration (Winsock and TCP/IP) and clears the DNS cache. Your saved Wi-Fi networks are not deleted. Restart your PC afterwards."
+  },
+  "fix-ntp": {
+   "name": "Sync time with pool.ntp.org",
+   "desc": "Syncs your clock with more accurate public time servers.",
+   "group": "Repairs",
+   "warn": "",
+   "button": "Run",
+   "help": "Switches the Windows time server (time.windows.com) to pool.ntp.org, which is usually more accurate, and syncs the clock now."
+  },
+  "fix-winget": {
+   "name": "Repair WinGet",
+   "desc": "Reinstalls the package manager used by the Apps section.",
+   "group": "Repairs",
+   "warn": "",
+   "button": "Run",
+   "help": "WinGet is the installer used by the Apps section. If it fails, this reinstalls it by downloading it from Microsoft."
+  },
+  "fix-sfc": {
+   "name": "System file scan",
+   "desc": "DISM and SFC repair damaged files. Takes 10 to 30 minutes.",
+   "group": "Repairs",
+   "warn": "",
+   "button": "Run",
+   "help": "Checks Windows files and repairs any that are damaged. First DISM repairs the Windows image (it downloads files from Windows Update), then SFC checks the system. Takes 10 to 30 minutes; don't turn off the PC while it runs."
+  },
+  "fix-trim": {
+   "name": "Optimize SSD (TRIM)",
+   "desc": "Sends TRIM to the system drive. Safe and fast.",
+   "group": "Repairs",
+   "warn": "",
+   "button": "Run",
+   "help": "TRIM tells the SSD which space is now free so it stays fast. Windows does this on its own once a week; this does it now. It's safe and takes seconds."
+  },
+  "wu-default": {
+   "name": "Default updates",
+   "desc": "Removes update policies and leaves Windows as it ships.",
+   "group": "Windows Update",
+   "warn": "",
+   "button": "Apply",
+   "help": "Removes any Windows Update policy set by SmoothTwk or other programs, and leaves updates as they come out of the box."
+  },
+  "wu-security": {
+   "name": "Security only",
+   "desc": "Security patches after 4 days, new versions a year later, and no drivers.",
+   "group": "Windows Update",
+   "warn": "",
+   "button": "Apply",
+   "help": "Windows installs security patches 4 days after they come out, delays big versions (like 24H2 or 25H2) by one year and doesn't update drivers on its own. It's a middle ground between stability and security."
+  },
+  "wpffeaturesdotnet": {
+   "name": ".NET Framework (2, 3, 4)",
+   "desc": "Developer platform that many apps and older games need in order to run.",
+   "group": "Windows features",
+   "warn": "",
+   "button": "Enable",
+   "help": "Enables .NET Framework 3.5 (includes 2.0 and 3.0) and 4.x. Some older programs and games won't open without it."
+  },
+  "wpffeatureshyperv": {
+   "name": "Hyper-V",
+   "desc": "Microsoft's hardware virtualization for creating and running virtual machines.",
+   "group": "Windows features",
+   "warn": "",
+   "button": "Enable",
+   "help": "Enables Hyper-V, Windows' virtual machine system. Windows Pro or higher only. It can lower gaming performance slightly and conflict with other virtualization software."
+  },
+  "wpffeatureslegacymedia": {
+   "name": "Legacy Media Components (WMP, DirectPlay)",
+   "desc": "Enables legacy components from previous versions of Windows.",
+   "group": "Windows features",
+   "warn": "",
+   "button": "Enable",
+   "help": "Enables the classic Windows Media Player and DirectPlay, which some older games need."
+  },
+  "wpffeaturewsl": {
+   "name": "Windows Subsystem for Linux (WSL)",
+   "desc": "Run Linux programs natively on Windows, without a VM or dual boot.",
+   "group": "Windows features",
+   "warn": "",
+   "button": "Enable",
+   "help": "Enables the Windows Subsystem for Linux, so you can use Linux inside Windows. Requires a restart."
+  },
+  "wpffeaturenfs": {
+   "name": "Network File System (NFS)",
+   "desc": "Client for accessing files stored on a network via NFS.",
+   "group": "Windows features",
+   "warn": "",
+   "button": "Enable",
+   "help": "Enables the NFS client so you can connect to shared folders on Linux servers or a NAS."
+  },
+  "wpffeaturessandbox": {
+   "name": "Windows Sandbox",
+   "desc": "Lightweight, disposable desktop for running apps safely in isolation.",
+   "group": "Windows features",
+   "warn": "",
+   "button": "Enable",
+   "help": "Enables Windows Sandbox: a throwaway Windows for testing suspicious programs without risk. Windows Pro or higher only."
+  },
+  "wpfpanelcomputer": {
+   "name": "Computer Management",
+   "desc": "Opens the classic Computer Management window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Computer Management\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelcontrol": {
+   "name": "Control Panel",
+   "desc": "Opens the classic Control Panel window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Control Panel\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelmouse": {
+   "name": "Mouse Properties",
+   "desc": "Opens the classic Mouse Properties window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Mouse Properties\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelnetwork": {
+   "name": "Network Connections",
+   "desc": "Opens the classic Network Connections window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Network Connections\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelpower": {
+   "name": "Power Panel",
+   "desc": "Opens the classic Power Panel window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Power Panel\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelprinter": {
+   "name": "Printer Panel",
+   "desc": "Opens the classic Printer Panel window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Printer Panel\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelprograms": {
+   "name": "Programs and Features",
+   "desc": "Opens the classic Programs and Features window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Programs and Features\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelregion": {
+   "name": "Region",
+   "desc": "Opens the classic Region window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Region\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelsecurity": {
+   "name": "Security and Maintenance",
+   "desc": "Opens the classic Security and Maintenance window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Security and Maintenance\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelsound": {
+   "name": "Sound Settings",
+   "desc": "Opens the classic Sound Settings window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Sound Settings\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelsystem": {
+   "name": "System Properties",
+   "desc": "Opens the classic System Properties window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"System Properties\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpaneltimedate": {
+   "name": "Time and Date",
+   "desc": "Opens the classic Time and Date window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Time and Date\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelfirewall": {
+   "name": "Windows Defender Firewall",
+   "desc": "Opens the classic Windows Defender Firewall window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Windows Defender Firewall\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "wpfpanelrestore": {
+   "name": "Windows Restore",
+   "desc": "Opens the classic Windows Restore window.",
+   "group": "Classic panels",
+   "warn": "",
+   "button": "Open",
+   "help": "Opens the classic Windows \"Windows Restore\" panel. It doesn't change anything on its own: it's just a shortcut to get there faster."
+  },
+  "feat-ssh": {
+   "name": "OpenSSH Server",
+   "desc": "Installs the SSH server, starts it and opens port 22 in the firewall.",
+   "group": "Windows features",
+   "warn": "",
+   "button": "Enable",
+   "help": "Installs the Windows SSH server so another computer can connect to this PC from a console. Opens port 22 in the firewall. Only enable it if you know you'll use it."
+  },
+  "oosu": {
+   "name": "O&O ShutUp10++",
+   "desc": "Downloads and opens the privacy tool from O&O Software.",
+   "group": "External tools",
+   "warn": "",
+   "button": "Open",
+   "help": "Downloads and opens O&O ShutUp10++, a free program with lots of privacy settings. SmoothTwk only opens it; you decide the changes inside that program."
+  },
+  "autologon": {
+   "name": "Sysinternals AutoLogon",
+   "desc": "Downloads and opens Microsoft's tool for signing in without a password.",
+   "group": "External tools",
+   "warn": "",
+   "button": "Open",
+   "help": "Downloads and opens Microsoft's Autologon (Sysinternals), which lets you sign in without typing your password. Anyone who turns on the PC will get into your account."
+  },
+  "dns-google": {
+   "name": "Google",
+   "desc": "8.8.8.8 · 8.8.4.4",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "DNS is the internet's \"phone book\": it turns names like google.com into addresses. This switches the DNS of your connected adapters to Google (8.8.8.8 and 8.8.4.4). Depending on the service, pages may open a bit faster, or ads, malware or adult content get blocked. To go back to your router's DNS, use \"Automatic\"."
+  },
+  "dns-cloudflare": {
+   "name": "Cloudflare",
+   "desc": "1.1.1.1 · 1.0.0.1",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "DNS is the internet's \"phone book\": it turns names like google.com into addresses. This switches the DNS of your connected adapters to Cloudflare (1.1.1.1 and 1.0.0.1). Depending on the service, pages may open a bit faster, or ads, malware or adult content get blocked. To go back to your router's DNS, use \"Automatic\"."
+  },
+  "dns-cloudflare_malware": {
+   "name": "Cloudflare Malware",
+   "desc": "1.1.1.2 · 1.0.0.2",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "DNS is the internet's \"phone book\": it turns names like google.com into addresses. This switches the DNS of your connected adapters to Cloudflare Malware (1.1.1.2 and 1.0.0.2). Depending on the service, pages may open a bit faster, or ads, malware or adult content get blocked. To go back to your router's DNS, use \"Automatic\"."
+  },
+  "dns-cloudflare_malware_adult": {
+   "name": "Cloudflare Malware Adult",
+   "desc": "1.1.1.3 · 1.0.0.3",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "DNS is the internet's \"phone book\": it turns names like google.com into addresses. This switches the DNS of your connected adapters to Cloudflare Malware Adult (1.1.1.3 and 1.0.0.3). Depending on the service, pages may open a bit faster, or ads, malware or adult content get blocked. To go back to your router's DNS, use \"Automatic\"."
+  },
+  "dns-open_dns": {
+   "name": "Open DNS",
+   "desc": "208.67.222.222 · 208.67.220.220",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "DNS is the internet's \"phone book\": it turns names like google.com into addresses. This switches the DNS of your connected adapters to Open DNS (208.67.222.222 and 208.67.220.220). Depending on the service, pages may open a bit faster, or ads, malware or adult content get blocked. To go back to your router's DNS, use \"Automatic\"."
+  },
+  "dns-quad9": {
+   "name": "Quad9",
+   "desc": "9.9.9.9 · 149.112.112.112",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "DNS is the internet's \"phone book\": it turns names like google.com into addresses. This switches the DNS of your connected adapters to Quad9 (9.9.9.9 and 149.112.112.112). Depending on the service, pages may open a bit faster, or ads, malware or adult content get blocked. To go back to your router's DNS, use \"Automatic\"."
+  },
+  "dns-adguard_ads_trackers": {
+   "name": "AdGuard Ads Trackers",
+   "desc": "94.140.14.14 · 94.140.15.15",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "DNS is the internet's \"phone book\": it turns names like google.com into addresses. This switches the DNS of your connected adapters to AdGuard Ads Trackers (94.140.14.14 and 94.140.15.15). Depending on the service, pages may open a bit faster, or ads, malware or adult content get blocked. To go back to your router's DNS, use \"Automatic\"."
+  },
+  "dns-adguard_ads_trackers_malware_adult": {
+   "name": "AdGuard Ads Trackers Malware Adult",
+   "desc": "94.140.14.15 · 94.140.15.16",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "DNS is the internet's \"phone book\": it turns names like google.com into addresses. This switches the DNS of your connected adapters to AdGuard Ads Trackers Malware Adult (94.140.14.15 and 94.140.15.16). Depending on the service, pages may open a bit faster, or ads, malware or adult content get blocked. To go back to your router's DNS, use \"Automatic\"."
+  },
+  "dns-auto": {
+   "name": "Automatic",
+   "desc": "Goes back to your router's DNS.",
+   "group": "DNS",
+   "warn": "",
+   "button": "Use",
+   "help": "Goes back to using the DNS provided by your router or your internet provider."
+  },
+  "dns-flush": {
+   "name": "Flush DNS cache",
+   "desc": "Clears saved DNS responses.",
+   "group": "DNS",
+   "warn": "",
+   "button": "Flush",
+   "help": "Clears the list of addresses Windows remembers. Useful if a page won't load after changing DNS or network."
+  },
+  "wpfappxmicrosoft_windowsfeedbackhub": {
+   "name": "Feedback Hub",
+   "desc": "Sends bug reports, suggestions and diagnostic data to Microsoft.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Feedback Hub\" for all users and keeps it from reinstalling on new accounts. What it is: Allows users to submit bug reports, feature suggestions, and diagnostic data directly to Microsoft. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_gethelp": {
+   "name": "Get Help",
+   "desc": "Microsoft troubleshooting guides, support docs and customer assistance.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Get Help\" for all users and keeps it from reinstalling on new accounts. What it is: Provides access to automated troubleshooting guides, support documentation, and direct Microsoft customer assistance. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_outlookforwindows": {
+   "name": "Outlook for Windows",
+   "desc": "Email, calendar and contacts app.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Outlook for Windows\" for all users and keeps it from reinstalling on new accounts. What it is: Provides modern email management, calendar scheduling, and contact organization features. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmsteams": {
+   "name": "Microsoft Teams",
+   "desc": "Chat, video calls, file sharing and team collaboration.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Microsoft Teams\" for all users and keeps it from reinstalling on new accounts. What it is: Facilitates instant messaging, video conferencing, file sharing, and workspace collaboration. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxclipchamp_clipchamp": {
+   "name": "Clipchamp",
+   "desc": "Simple video editor with templates, effects and a timeline.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Clipchamp\" for all users and keeps it from reinstalling on new accounts. What it is: Provides a user-friendly video editor with built-in templates, effects, and timeline editing tools. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_microsoftofficehub": {
+   "name": "Microsoft 365",
+   "desc": "Launcher for Microsoft 365 cloud apps and recent documents.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Microsoft 365\" for all users and keeps it from reinstalling on new accounts. What it is: Serves as a centralized launcher and dashboard for accessing cloud-based Microsoft 365 apps and recent documents. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_zunemusic": {
+   "name": "Media Player",
+   "desc": "Plays local audio and video files, with playlists and casting.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Media Player\" for all users and keeps it from reinstalling on new accounts. What it is: Plays local audio and video files with modern playlist management and casting capabilities. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_bingsearch": {
+   "name": "Bing Search",
+   "desc": "Builds Bing search and web services into Windows.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Bing Search\" for all users and keeps it from reinstalling on new accounts. What it is: Integrates Microsoft Bing search capabilities and web services directly into the operating system. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoftcorporationii_quickassist": {
+   "name": "Quick Assist",
+   "desc": "Remote tech support and screen sharing over the internet.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Quick Assist\" for all users and keeps it from reinstalling on new accounts. What it is: Enables secure remote technical support and screen sharing over an internet connection. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_windowsdevhome": {
+   "name": "Dev Home",
+   "desc": "Dashboard for developer setups, repo syncing and hardware widgets.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Dev Home\" for all users and keeps it from reinstalling on new accounts. What it is: Provides a specialized dashboard for software developer environment setups, repository syncing, and hardware widgets. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_windowscrossdevice": {
+   "name": "Mobile Devices",
+   "desc": "Background link to paired phones; removing it may break cross-device features.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Mobile Devices\" for all users and keeps it from reinstalling on new accounts. What it is: Manages system-level background connectivity with paired mobile devices. Removing this may disable cross-device features such as phone screen mirroring, file transfer, and mobile hotspot handoff integrated into Windows Settings. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_todos": {
+   "name": "To Do",
+   "desc": "Personal tasks, smart lists and daily reminders, synced across devices.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"To Do\" for all users and keeps it from reinstalling on new accounts. What it is: Creates, tracks, and synchronizes personal tasks, smart lists, and daily reminders. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_powerautomatedesktop": {
+   "name": "Power Automate",
+   "desc": "Automates repetitive desktop tasks with low-code visual scripting.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Power Automate\" for all users and keeps it from reinstalling on new accounts. What it is: Automates repetitive workflows and desktop tasks using low-code visual scripting. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_yourphone": {
+   "name": "Phone Link",
+   "desc": "Syncs texts, notifications, photos and calls from your phone to the PC.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Phone Link\" for all users and keeps it from reinstalling on new accounts. What it is: Synchronizes text messages, phone notifications, photos, and calls from a mobile device to the desktop. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_microsoftstickynotes": {
+   "name": "Sticky Notes",
+   "desc": "Quick floating notes on the desktop that sync across devices.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Sticky Notes\" for all users and keeps it from reinstalling on new accounts. What it is: Creates quick, floating text notes on the desktop that automatically sync across devices. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_windowssoundrecorder": {
+   "name": "Sound Recorder",
+   "desc": "Records and trims audio from your microphone.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Sound Recorder\" for all users and keeps it from reinstalling on new accounts. What it is: Records and trims live audio inputs with simple microphone adjustment controls. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_windowsalarms": {
+   "name": "Clock",
+   "desc": "World clocks, alarms, timers, stopwatch and focus sessions.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Clock\" for all users and keeps it from reinstalling on new accounts. What it is: Features world clocks, alarms, countdown timers, stopwatches, and dedicated focus session tracking. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_paint": {
+   "name": "Paint",
+   "desc": "Built-in drawing and basic image editing tool.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Paint\" for all users and keeps it from reinstalling on new accounts. What it is: Provides built-in digital sketching, basic image editing, and pixel-level graphic manipulation tools. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_windowsnotepad": {
+   "name": "Notepad",
+   "desc": "Lightweight text editor with tabs for plain text and code.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Notepad\" for all users and keeps it from reinstalling on new accounts. What it is: Provides a lightweight text editor with multi-tab support for plain text files and code snippets. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_screensketch": {
+   "name": "Snipping Tool",
+   "desc": "Screenshots and screen recordings with markup, cropping and OCR.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Snipping Tool\" for all users and keeps it from reinstalling on new accounts. What it is: Captures screenshots or screen recordings with built-in markup, image cropping, and optical character recognition (OCR). If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_copilot": {
+   "name": "Copilot",
+   "desc": "Microsoft's AI assistant for answers, writing help and web search.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Copilot\" for all users and keeps it from reinstalling on new accounts. What it is: Launches the Microsoft AI companion for contextual answers, creative writing assistance, and intelligent web search. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_windowscalculator": {
+   "name": "Calculator",
+   "desc": "Standard, scientific and programmer calculator with unit conversion.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Calculator\" for all users and keeps it from reinstalling on new accounts. What it is: Performs standard arithmetic, scientific operations, programming calculations, and unit conversions. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_windowscamera": {
+   "name": "Camera",
+   "desc": "Takes photos and records video with your webcam.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Camera\" for all users and keeps it from reinstalling on new accounts. What it is: Captures photographs and records video files via connected webcams or imaging hardware. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_windowsphotos": {
+   "name": "Photos",
+   "desc": "View, organize and crop images, with basic edits and albums.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Photos\" for all users and keeps it from reinstalling on new accounts. What it is: Organizes, views, and crops local images with basic color adjustment and album creation tools. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_bingnews": {
+   "name": "News",
+   "desc": "Headlines and a personalized news feed.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"News\" for all users and keeps it from reinstalling on new accounts. What it is: Aggregates breaking news headlines, personalized article feeds, and world current events. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_bingweather": {
+   "name": "Weather",
+   "desc": "Local weather, radar maps and forecasts.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Weather\" for all users and keeps it from reinstalling on new accounts. What it is: Displays local real-time weather tracking, radar maps, and historical meteorological forecasts. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_gamingapp": {
+   "name": "Xbox App",
+   "desc": "Game library, social features and PC Game Pass hub.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Xbox App\" for all users and keeps it from reinstalling on new accounts. What it is: Serves as the primary gaming library manager, social community interface, and PC Game Pass dashboard. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_xboxgamingoverlay": {
+   "name": "Xbox Game Bar",
+   "desc": "In-game widgets, audio controls, performance monitor and recording.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Xbox Game Bar\" for all users and keeps it from reinstalling on new accounts. What it is: Provides customizable in-game status widgets, audio balancing sliders, system monitoring tools, and gameplay recording. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_xboxidentityprovider": {
+   "name": "Xbox Identity Provider",
+   "desc": "Xbox sign-in; removing it may break Microsoft account login in games.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Xbox Identity Provider\" for all users and keeps it from reinstalling on new accounts. What it is: Manages Xbox network user authentication and background account validation for connected titles. Warning: removing this may break Microsoft account sign-in for non-Xbox games and apps that rely on this authentication pipeline. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_xboxspeechtotextoverlay": {
+   "name": "Xbox Speech To Text Overlay",
+   "desc": "Live captions and voice-to-text for game chat.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Xbox Speech To Text Overlay\" for all users and keeps it from reinstalling on new accounts. What it is: Provides system-level live accessibility captions and voice-to-text translation for gaming chat networks. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_xbox_tcui": {
+   "name": "Xbox TCUI",
+   "desc": "Sign-in screens used by games; removing it may break Microsoft account login.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Xbox TCUI\" for all users and keeps it from reinstalling on new accounts. What it is: Provides core account connection UI modules for single sign-on flows within game titles. Warning: removing this may break Microsoft account authentication in games and apps that do not otherwise require the Xbox app. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_startexperiencesapp": {
+   "name": "Start Experiences App",
+   "desc": "Powers the Widgets board: news, weather, sports and finance feed.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Start Experiences App\" for all users and keeps it from reinstalling on new accounts. What it is: Powers the Windows Widgets board, delivering a personalized feed of news, weather, sports, and finance content. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_microsoftsolitairecollection": {
+   "name": "Solitaire Collection",
+   "desc": "Klondike, Spider, FreeCell, Pyramid and TriPeaks with daily challenges.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Solitaire Collection\" for all users and keeps it from reinstalling on new accounts. What it is: Bundles built-in card game modes including Klondike, Spider, FreeCell, Pyramid, and TriPeaks alongside daily challenges. If you need it again, you can install it for free from Microsoft Store."
+  },
+  "wpfappxmicrosoft_zunevideo": {
+   "name": "Movies & TV",
+   "desc": "Default video player and store for buying or renting movies and shows.",
+   "group": "Remove Microsoft apps",
+   "warn": "Can be reinstalled from Microsoft Store.",
+   "button": "Remove",
+   "help": "Uninstalls \"Movies & TV\" for all users and keeps it from reinstalling on new accounts. What it is: The default video player and storefront for purchasing or renting media. If you need it again, you can install it for free from Microsoft Store."
+  }
+ },
+ "games": {
+  "fivem": {
+   "tagline": "PC check and performance · GTA V Legacy on DirectX 11",
+   "cautions": [],
+   "guide": [
+    {
+     "group": "Lower input lag",
+     "name": "Screen Type",
+     "value": "Fullscreen",
+     "why": "True fullscreen reaches your monitor faster than windowed mode."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "VSync",
+     "value": "Off",
+     "why": "VSync waits for the display before showing each frame, and that adds delay."
+    },
+    {
+     "group": "More FPS",
+     "name": "DirectX Version",
+     "value": "DirectX 11",
+     "why": "It's the version GTA V Legacy runs best on inside FiveM."
+    },
+    {
+     "group": "More FPS",
+     "name": "MSAA and Reflection MSAA",
+     "value": "Off",
+     "why": "MSAA anti-aliasing is among the heaviest settings in the game."
+    },
+    {
+     "group": "More FPS",
+     "name": "Grass Quality",
+     "value": "Normal",
+     "why": "High grass quality is one of the biggest FPS drains."
+    },
+    {
+     "group": "More FPS",
+     "name": "Extended Distance Scaling",
+     "value": "Minimum",
+     "why": "Draws less distant detail: raises FPS in the city."
+    },
+    {
+     "group": "More FPS",
+     "name": "Population Density / Variety",
+     "value": "Low",
+     "why": "Fewer people and cars spawned by the game, if the server allows it."
+    },
+    {
+     "group": "More FPS",
+     "name": "Ambient Occlusion",
+     "value": "Off",
+     "why": "Expensive contact shadows with little value for gameplay."
+    },
+    {
+     "group": "More FPS",
+     "name": "High Detail Streaming While Flying",
+     "value": "Off",
+     "why": "Prevents stutters when flying or going very fast."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Texture Quality",
+     "value": "High (Normal with low VRAM)",
+     "why": "Textures cost almost no FPS if your card has enough memory."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Motion Blur Strength",
+     "value": "0",
+     "why": "No blur when moving: you see other players better."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Anisotropic Filtering",
+     "value": "x8",
+     "why": "Sharp ground at a distance for very little cost."
+    },
+    {
+     "group": "Network",
+     "name": "F8 console: cl_drawperf true",
+     "value": "Enable",
+     "why": "Shows FPS, ping and packet loss while you play. Keep in mind many servers cap FPS with their scripts."
+    }
+   ]
+  },
+  "r6": {
+   "tagline": "Siege X · DirectX 12 · BattlEye",
+   "cautions": [
+    "Legend Division requires Secure Boot and TPM. Since October 2026 that playlist requires Secure Boot and TPM enabled; regular Ranked and Casual don't yet. Don't turn them off in the BIOS.",
+    "Don't use macros. Ubisoft has detected macros and input manipulation since Year 11: SmoothTwk includes nothing of the sort.",
+    "Process priority: leave it as is. BattlEye protects the process and there's no guarantee about changing it."
+   ],
+   "guide": [
+    {
+     "group": "Lower input lag",
+     "name": "Display Mode",
+     "value": "Fullscreen",
+     "why": "The most direct path to your screen."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "V-Sync",
+     "value": "Off",
+     "why": "Syncing to the monitor adds delay."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "NVIDIA Reflex Low Latency",
+     "value": "On + Boost (if available)",
+     "why": "Shortens the GPU frame queue. It's not confirmed to exist in Siege X: only enable it if you see it in the menu."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "Frame Rate Limit",
+     "value": "Unlimited (or 3 below your Hz with G-Sync)",
+     "why": "Keeps the GPU queue short; with G-Sync/FreeSync it keeps you inside the range."
+    },
+    {
+     "group": "More FPS",
+     "name": "Render Scaling",
+     "value": "100",
+     "why": "Stable, sharp image."
+    },
+    {
+     "group": "More FPS",
+     "name": "Adaptive Render Scaling",
+     "value": "Off",
+     "why": "Stops the resolution from changing on its own mid-fight."
+    },
+    {
+     "group": "More FPS",
+     "name": "Shading Quality",
+     "value": "Low",
+     "why": "Big FPS gain with little visual change."
+    },
+    {
+     "group": "More FPS",
+     "name": "Shadow Quality",
+     "value": "Low (Medium to see enemy shadows)",
+     "why": "Some pros use Medium because shadows give away opponents."
+    },
+    {
+     "group": "More FPS",
+     "name": "Reflection Quality / Ambient Occlusion",
+     "value": "Low / Off",
+     "why": "Expensive and no competitive value."
+    },
+    {
+     "group": "More FPS",
+     "name": "Texture Quality",
+     "value": "Medium or Low",
+     "why": "Depends on your card's memory."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "LOD Quality",
+     "value": "High",
+     "why": "Distant objects look the same as up close."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Lens Effects / Zoom-In Depth of Field",
+     "value": "Off",
+     "why": "Less glare and blur when aiming."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Anti-Aliasing",
+     "value": "T-AA, sharpness 50",
+     "why": "Clean edges without losing detail; DLAA or FSR Native if available."
+    }
+   ]
+  },
+  "valorant": {
+   "tagline": "Unreal Engine 5 · DirectX 11 · Riot Vanguard",
+   "cautions": [
+    "Vanguard requires TPM 2.0 and Secure Boot. Without them you get the VAN 9001 or VAN 9003 errors. Don't turn off virtualization-based security. The \"Turn off VBS and memory integrity\" tweak in Advanced security can lock you out of this game or out of its tournaments.",
+    "Vanguard may require memory integrity (HVCI) and IOMMU. If you see VAN:RESTRICTION, turn back on whatever it asks for.",
+    "Process priority: leave it as is. There's no confirmation that changing it is safe with Vanguard."
+   ],
+   "guide": [
+    {
+     "group": "Lower input lag",
+     "name": "Display Mode",
+     "value": "Fullscreen",
+     "why": "The lowest latency in a DirectX 11 game."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "NVIDIA Reflex Low Latency",
+     "value": "On + Boost",
+     "why": "Shortens the GPU frame queue. Use On if your minimum FPS drops."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "VSync",
+     "value": "Off",
+     "why": "Syncing to the monitor adds delay."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "Limit FPS Always",
+     "value": "Off",
+     "why": "Lets the game run as fast as it can; set it a bit above your Hz if your CPU can't keep up."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "Raw Input Buffer",
+     "value": "On",
+     "why": "In General > Mouse: less mouse delay, especially at 1000 Hz or more."
+    },
+    {
+     "group": "More FPS",
+     "name": "Multithreaded Rendering",
+     "value": "On",
+     "why": "Uses multiple cores; try it if you have 4 or more."
+    },
+    {
+     "group": "More FPS",
+     "name": "Material / Texture / Detail / UI Quality",
+     "value": "Low",
+     "why": "More FPS with very little change for competitive play."
+    },
+    {
+     "group": "More FPS",
+     "name": "Vignette / Cast Shadows",
+     "value": "Off",
+     "why": "Effects that cost FPS and don't help you see."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Anti-Aliasing",
+     "value": "MSAA 2x (or None)",
+     "why": "Clean edges at low cost."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Anisotropic Filtering",
+     "value": "4x",
+     "why": "Sharp floors and walls at an angle."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Improve Clarity",
+     "value": "Off (On if you have FPS to spare)",
+     "why": "Helps visibility, but costs FPS."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Bloom / Distortion",
+     "value": "Off",
+     "why": "Less visual noise in fights."
+    },
+    {
+     "group": "Network",
+     "name": "Network Buffering",
+     "value": "Minimum",
+     "why": "What happens in the match reaches you sooner."
+    },
+    {
+     "group": "Network",
+     "name": "Client FPS / Network RTT (Stats)",
+     "value": "Show",
+     "why": "To keep an eye on FPS and ping while you play."
+    }
+   ]
+  },
+  "fortnite": {
+   "tagline": "Unreal Engine 5 · DirectX 12 / Performance Mode",
+   "cautions": [
+    "Tournaments require TPM 2.0 and Secure Boot. For tournaments at level 350 or higher since 2025, and reportedly for all tournaments (plus IOMMU) since February 2026. Regular matches don't. Don't turn off virtualization-based security. The \"Turn off VBS and memory integrity\" tweak in Advanced security can lock you out of this game or out of its tournaments.",
+    "Don't set GameUserSettings.ini to read-only. Epic warns that graphics and Performance Mode changes won't be saved that way."
+   ],
+   "guide": [
+    {
+     "group": "Lower input lag",
+     "name": "Window Mode",
+     "value": "Fullscreen",
+     "why": "True fullscreen responds faster."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "NVIDIA Reflex Low Latency",
+     "value": "On + Boost",
+     "why": "Shortens the GPU frame queue."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "V-Sync",
+     "value": "Off",
+     "why": "Syncing to the monitor adds delay."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "Frame Rate Limit",
+     "value": "Unlimited (or your Hz - 3 with G-Sync)",
+     "why": "Epic recommends matching your Hz only if you see screen tearing."
+    },
+    {
+     "group": "More FPS",
+     "name": "Rendering Mode",
+     "value": "Performance",
+     "why": "Epic's competitive mode: turns off almost all effects."
+    },
+    {
+     "group": "More FPS",
+     "name": "Shadows",
+     "value": "Off",
+     "why": "Shadows are among the most expensive settings."
+    },
+    {
+     "group": "More FPS",
+     "name": "Effects / Post Processing",
+     "value": "Low",
+     "why": "Fewer effects on top of the action."
+    },
+    {
+     "group": "More FPS",
+     "name": "Textures / Meshes",
+     "value": "Low (Medium with VRAM to spare)",
+     "why": "Depends on your card's memory."
+    },
+    {
+     "group": "More FPS",
+     "name": "Pre-download Streamed Assets",
+     "value": "On",
+     "why": "Downloads textures before the match: fewer stutters."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "3D Resolution",
+     "value": "100 %",
+     "why": "Sharp image at your real resolution."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "View Distance",
+     "value": "Medium to Far",
+     "why": "You see buildings and players at a distance."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Motion Blur",
+     "value": "Off",
+     "why": "No blur when turning."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Anti-Aliasing & Super Resolution",
+     "value": "Off in Performance",
+     "why": "Only use TSR or DLSS if your GPU can't reach the FPS you want."
+    }
+   ]
+  },
+  "warzone": {
+   "tagline": "Inside Call of Duty HQ · DirectX 12 · Ricochet",
+   "cautions": [
+    "TPM 2.0 and Secure Boot are mandatory. Warzone has required them since December 2025, with UEFI BIOS and a GPT disk; Intel PTT or AMD fTPM work. Don't turn off virtualization-based security. The \"Turn off VBS and memory integrity\" tweak in Advanced security can lock you out of this game or out of its tournaments.",
+    "There's an extra device verification. Since June 2026, if you fail the verification you're limited to casual modes.",
+    "Process priority: leave it as is. Ricochet runs at kernel level and there's no confirmation about that change."
+   ],
+   "guide": [
+    {
+     "group": "Lower input lag",
+     "name": "Display Mode",
+     "value": "Fullscreen Exclusive",
+     "why": "Exclusive fullscreen is the fastest."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "NVIDIA Reflex Low Latency",
+     "value": "On + Boost",
+     "why": "Or AMD Anti-Lag 2 if available. Shortens the GPU queue."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "V-Sync (Gameplay and Menus)",
+     "value": "Off",
+     "why": "Syncing to the monitor adds delay."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "Custom Frame Rate Limit",
+     "value": "Your Hz (or Hz - 3 with VRR)",
+     "why": "Steady pacing without leaving the G-Sync/FreeSync range."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "Frame Generation",
+     "value": "Off",
+     "why": "Makes up in-between frames and adds delay."
+    },
+    {
+     "group": "More FPS",
+     "name": "Render Resolution / Dynamic Resolution",
+     "value": "100 / Off",
+     "why": "Fixed, sharp resolution."
+    },
+    {
+     "group": "More FPS",
+     "name": "Upscaling / Sharpening",
+     "value": "FidelityFX CAS (DLSS/FSR Quality if GPU falls short)",
+     "why": "Nearly free sharpness; upscaling only if you need more FPS."
+    },
+    {
+     "group": "More FPS",
+     "name": "VRAM Scale Target",
+     "value": "70 to 80",
+     "why": "Prevents stutters from running out of video memory."
+    },
+    {
+     "group": "More FPS",
+     "name": "Shader / Shadow Quality",
+     "value": "Low",
+     "why": "The heaviest settings in the game."
+    },
+    {
+     "group": "More FPS",
+     "name": "Screen-Space Shadows / Ambient Occlusion / Reflections",
+     "value": "Off",
+     "why": "Expensive effects with no competitive value."
+    },
+    {
+     "group": "More FPS",
+     "name": "On-Demand Texture Streaming",
+     "value": "Minimal",
+     "why": "Fewer stutters from disk and network."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Depth of Field / Motion Blur",
+     "value": "Off",
+     "why": "No blur when aiming or turning."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Film Grain",
+     "value": "0.00",
+     "why": "Removes the grain that muddies the image."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "First-Person Camera Movement",
+     "value": "Least",
+     "why": "The camera moves less when running."
+    }
+   ]
+  },
+  "minecraft": {
+   "tagline": "Java (OpenGL / Vulkan) and Bedrock",
+   "cautions": [
+    "Minecraft has no anti-cheat on your PC. Each server has its own rules: check whether it allows mods like Sodium before using them.",
+    "Dedicated GPU applies to the launcher's Java. It's the classic fix when Minecraft runs on the integrated graphics on laptops."
+   ],
+   "guide": [
+    {
+     "group": "Lower input lag",
+     "name": "Fullscreen",
+     "value": "On",
+     "why": "Fullscreen responds faster."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "VSync",
+     "value": "Off",
+     "why": "Syncing to the monitor adds delay."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "Max Framerate",
+     "value": "Unlimited (or your Hz)",
+     "why": "Lets the game run as fast as it can."
+    },
+    {
+     "group": "Lower input lag",
+     "name": "Raw Input",
+     "value": "On",
+     "why": "In Mouse Settings: the mouse responds without the Windows filter."
+    },
+    {
+     "group": "More FPS",
+     "name": "Graphics",
+     "value": "Fast",
+     "why": "Fast mode removes expensive effects."
+    },
+    {
+     "group": "More FPS",
+     "name": "Render Distance",
+     "value": "8 to 12",
+     "why": "It's what affects FPS the most."
+    },
+    {
+     "group": "More FPS",
+     "name": "Simulation Distance",
+     "value": "5 to 8",
+     "why": "Fewer active chunks: less CPU load."
+    },
+    {
+     "group": "More FPS",
+     "name": "Clouds / Particles / Entity Shadows",
+     "value": "Off or Fast / Decreased / Off",
+     "why": "Effects that cost FPS and don't help you play."
+    },
+    {
+     "group": "More FPS",
+     "name": "Biome Blend",
+     "value": "Off",
+     "why": "Saves CPU when loading terrain."
+    },
+    {
+     "group": "More FPS",
+     "name": "Launcher RAM (-Xmx)",
+     "value": "4 GB (6 to 8 GB with modpacks)",
+     "why": "In the profile > JVM arguments. Never more than half your RAM: too much causes pauses."
+    },
+    {
+     "group": "More FPS",
+     "name": "Performance mods (Fabric)",
+     "value": "Sodium + Lithium + FerriteCore",
+     "why": "They replace the rendering engine and game logic with faster versions. Get them from Modrinth for your exact version."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "FOV",
+     "value": "80 to 90",
+     "why": "More peripheral vision without too much distortion."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Mipmap Levels",
+     "value": "0 to 4",
+     "why": "Sharper distant blocks."
+    },
+    {
+     "group": "Visual clarity",
+     "name": "Bedrock: Vibrant Visuals / Fancy Graphics",
+     "value": "Off",
+     "why": "On the Bedrock edition: more FPS with a shorter render distance."
+    }
+   ]
+  }
+ }
+}

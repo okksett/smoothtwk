@@ -51,6 +51,7 @@
     'puntos'       = 'Borra todos los puntos de restauración de la unidad C:. Libera espacio, pero ya no podrás volver a un estado anterior del sistema con ellos. No se puede deshacer.'
 
     # ---------------------------------------------------------------- Energia y CPU
+    'smoothplan'   = 'Instala y activa el plan de energía propio de SmoothTwk, hecho para jugar: el procesador y los dispositivos dejan de ahorrar energía para responder más rápido y con menos latencia. Aparece en Panel de control > Opciones de energía como "SmoothTwk Power Plan". En laptop gasta más batería y se calienta más. Al deshacerlo vuelve tu plan anterior y se borra el plan de SmoothTwk.'
     'ultimate'     = 'Crea y activa el plan oculto "Máximo rendimiento" de Microsoft: quita casi todos los ahorros de energía del procesador y los dispositivos. La mejora sobre "Alto rendimiento" es pequeña y consume más luz. Pensado para escritorio enchufado.'
     'overlay'      = 'Es lo mismo que mover el control de energía de Windows (Configuración > Sistema > Energía) a "Mejor rendimiento": el procesador sube de velocidad antes y las apps no se frenan. En laptop es la forma recomendada por Microsoft de tener más potencia. Solo funciona con el plan Equilibrado.'
     'boost'        = 'Cambia el modo turbo del procesador a "agresivo" cuando está enchufado: sube a su máxima frecuencia antes y la mantiene más tiempo. Más rendimiento en ráfagas, más calor y ventiladores.'

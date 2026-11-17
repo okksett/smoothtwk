@@ -93,6 +93,7 @@ namespace SmoothTwk
 
         public static void Load()
         {
+            Tweaks = new List<Tweak>(); Actions = new List<ActionItem>(); Apps = new List<AppItem>(); Games = new List<GameContent>(); Presets = new Dictionary<string, List<string>>();
             Lib = Resource("lib.ps1");
             var root = (Dictionary<string, object>)Json.Serializer.DeserializeObject(Resource("catalog.json"));
             foreach (var t in Json.D(root, "tweaks"))
@@ -139,6 +140,7 @@ namespace SmoothTwk
             if (root.TryGetValue("presets", out pre) && pre is Dictionary<string, object>)
                 foreach (var kv in (Dictionary<string, object>)pre)
                     Presets[kv.Key] = Json.A((Dictionary<string, object>)pre, kv.Key).Select(x => Convert.ToString(x)).ToList();
+            L.ApplyToCatalog();
         }
     }
 
@@ -206,6 +208,7 @@ namespace SmoothTwk
         public const string Balanced = "381b4222-f694-41f0-9685-ff5bb260df2e";
         public const string Ultimate = "e9a42b02-d5df-448d-aa00-03f14749eb61";
         public const string OverlayBest = "ded574b5-45a0-4f42-8737-46345c09c238";
+        public const string SmoothPlan = "8070b076-188f-428d-a9d6-e1a2f99fad5d";   // GUID que trae SmoothTwk.pow
         const string Guid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 
         // ------------------------------------------------------------ equipo
@@ -281,7 +284,7 @@ namespace SmoothTwk
             {
                 int v = ToDword(start.Value);
                 info.Disabled = v == 4;
-                info.Start = v == 0 ? "Arranque" : v == 1 ? "Sistema" : v == 2 ? (delayed.Exists && delayed.Value == "1" ? "Automático (retrasado)" : "Automático") : v == 3 ? "Manual" : "Desactivado";
+                info.Start = v == 0 ? L.T("Arranque", "Boot") : v == 1 ? L.T("Sistema", "System") : v == 2 ? (delayed.Exists && delayed.Value == "1" ? L.T("Automático (retrasado)", "Automatic (delayed)") : L.T("Automático", "Automatic")) : v == 3 ? "Manual" : L.T("Desactivado", "Disabled");
             }
             try
             {
@@ -291,10 +294,10 @@ namespace SmoothTwk
                     var st = sc.Status;
                     info.Exists = true;
                     info.Running = st == System.ServiceProcess.ServiceControllerStatus.Running;
-                    info.Status = info.Running ? "En ejecución" : st == System.ServiceProcess.ServiceControllerStatus.Stopped ? "Detenido" : st.ToString();
+                    info.Status = info.Running ? L.T("En ejecución", "Running") : st == System.ServiceProcess.ServiceControllerStatus.Stopped ? L.T("Detenido", "Stopped") : st.ToString();
                 }
             }
-            catch (InvalidOperationException) { info.Exists = start.Exists; info.Status = start.Exists ? "Sin acceso" : "No existe"; }
+            catch (InvalidOperationException) { info.Exists = start.Exists; info.Status = start.Exists ? L.T("Sin acceso", "No access") : L.T("No existe", "Missing"); }
             return info;
         }
 
@@ -303,11 +306,12 @@ namespace SmoothTwk
             if (t.Game.Length > 0 && !GameLibrary.Find(t.Game).Installed)
             {
                 var def = GameLibrary.Def(t.Game);
-                return "No encontré " + (def != null ? def.Name : t.Game) + " instalado en esta PC.";
+                return L.T("No encontré " + (def != null ? def.Name : t.Game) + " instalado en esta PC.", (def != null ? def.Name : t.Game) + " is not installed on this PC.");
             }
-            if (t.FiveMConflict && FiveMGuard) return "Bloqueado por la protección de FiveM: este ajuste apaga algo que los servidores revisan en el PC check. Apaga la protección en el apartado FiveM si no juegas FiveM.";
-            if (t.Guard == "x3d" && CpuName.IndexOf("X3D", StringComparison.OrdinalIgnoreCase) >= 0) return "Bloqueado en Ryzen X3D: baja FPS en esos procesadores.";
-            if (t.Guard == "ram32" && RamGB < 31) return "Necesita 32 GB de RAM o más.";
+            if (t.FiveMConflict && FiveMGuard) return L.T("Bloqueado por la protección de FiveM: este ajuste apaga algo que los servidores revisan en el PC check. Apaga la protección en el apartado FiveM si no juegas FiveM.",
+                "Blocked by FiveM protection: this tweak turns off something servers check in the PC check. Turn the protection off in the FiveM page if you don't play FiveM.");
+            if (t.Guard == "x3d" && CpuName.IndexOf("X3D", StringComparison.OrdinalIgnoreCase) >= 0) return L.T("Bloqueado en Ryzen X3D: baja FPS en esos procesadores.", "Blocked on Ryzen X3D: it lowers FPS on those CPUs.");
+            if (t.Guard == "ram32" && RamGB < 31) return L.T("Necesita 32 GB de RAM o más.", "Needs 32 GB of RAM or more.");
             return null;
         }
 
@@ -570,6 +574,7 @@ namespace SmoothTwk
                 switch (t.Special)
                 {
                     case "plan-high": return ActivePlan() == HighPerf ? "on" : "off";
+                    case "plan-smoothtwk": return ActivePlan() == SmoothPlan ? "on" : "off";
                     case "hibernate-off":
                         var h = ReadReg("HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power", "HibernateEnabled");
                         return h.Exists && h.Value == "0" ? "on" : "off";
@@ -611,7 +616,7 @@ namespace SmoothTwk
             }
             catch (Exception ex)
             {
-                Log("No se pudo leer " + t.Name + ": " + ex.Message);
+                Log(L.T("No se pudo leer ", "Could not read ") + t.Name + ": " + ex.Message);
                 return "off";
             }
         }
@@ -623,7 +628,7 @@ namespace SmoothTwk
             if (t.OneShot)
             {
                 int code = RunScript(t.ApplyScript, log);
-                return code == 0 ? "Hecho: " + t.Name : "Terminó con error (" + code + "): " + t.Name;
+                return code == 0 ? L.T("Hecho: ", "Done: ") + t.Name : L.T("Terminó con error (", "Finished with error (") + code + "): " + t.Name;
             }
             int fails = 0;
             var entries = Entries(t);
@@ -645,7 +650,7 @@ namespace SmoothTwk
                     if (QueryPower(p, out ac, out dc)) power.Add(new Dictionary<string, object> { { "sub", p.Sub }, { "setting", p.Setting }, { "ac", ac }, { "dc", dc } });
                 }
                 string custom = "";
-                if (t.Special == "plan-high" || t.Special == "plan-ultimate") custom = ActivePlan();
+                if (t.Special == "plan-high" || t.Special == "plan-ultimate" || t.Special == "plan-smoothtwk") custom = ActivePlan();
                 if (t.Special == "overlay-best")
                 {
                     var ov = ReadReg("HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\User\\PowerSchemes", "ActiveOverlayAcPowerScheme");
@@ -673,7 +678,7 @@ namespace SmoothTwk
             catch (Exception ex) { fails++; log("! " + ex.Message); }
             if (!string.IsNullOrEmpty(t.ApplyScript) && RunScript(t.ApplyScript, log) != 0) fails++;
             if (t.Reboot) RebootPending = true;
-            return Result("Aplicado", t, fails);
+            return Result(L.T("Aplicado", "Applied"), t, fails);
         }
 
         static void ApplySpecial(Tweak t, Action<string> log)
@@ -681,10 +686,24 @@ namespace SmoothTwk
             switch (t.Special)
             {
                 case "plan-high": RunCmd("powercfg.exe", "/setactive " + HighPerf); break;
+                case "plan-smoothtwk":
+                    if (Dry) { Log("[simulación] powercfg /import SmoothTwk.pow " + SmoothPlan); break; }
+                    string list;
+                    Run("powercfg.exe", "/list", out list, 30000);
+                    if (list.IndexOf(SmoothPlan, StringComparison.OrdinalIgnoreCase) < 0)
+                    {
+                        var pow = Path.Combine(Path.GetTempPath(), "SmoothTwk-" + System.Guid.NewGuid().ToString("N") + ".pow");
+                        using (var src = Assembly.GetExecutingAssembly().GetManifestResourceStream("SmoothTwk.pow"))
+                        using (var dst = File.Create(pow)) src.CopyTo(dst);
+                        try { RunCmd("powercfg.exe", "/import \"" + pow + "\" " + SmoothPlan); }
+                        finally { try { File.Delete(pow); } catch { } }
+                    }
+                    RunCmd("powercfg.exe", "/setactive " + SmoothPlan);
+                    break;
                 case "hibernate-off": RunCmd("powercfg.exe", "/hibernate off"); break;
                 case "memcomp-off": RunScript("Disable-MMAgent -MemoryCompression", log); break;
                 case "overlay-best":
-                    if (!Dry && ActivePlan() != Balanced) throw new InvalidOperationException("Activa primero el plan Equilibrado; este modo solo existe ahí.");
+                    if (!Dry && ActivePlan() != Balanced) throw new InvalidOperationException(L.T("Activa primero el plan Equilibrado; este modo solo existe ahí.", "Switch to the Balanced plan first; this mode only exists there."));
                     RunCmd("powercfg.exe", "/overlaysetactive " + OverlayBest);
                     break;
                 case "plan-ultimate":
@@ -707,7 +726,7 @@ namespace SmoothTwk
         {
             var backup = Backup.Load();
             object raw;
-            if (!backup.TryGetValue(t.Id, out raw)) return "Ya estaba así antes de SmoothTwk: no hay valor anterior que restaurar.";
+            if (!backup.TryGetValue(t.Id, out raw)) return L.T("Ya estaba así antes de SmoothTwk: no hay valor anterior que restaurar.", "It was already like this before SmoothTwk: nothing to restore.");
             var rec = (Dictionary<string, object>)raw;
             int fails = 0;
             var saved = Json.D(rec, "entries").ToList();
@@ -740,6 +759,10 @@ namespace SmoothTwk
                 switch (t.Special)
                 {
                     case "plan-high": if (custom.Length > 0) RunCmd("powercfg.exe", "/setactive " + custom); break;
+                    case "plan-smoothtwk":
+                        RunCmd("powercfg.exe", "/setactive " + (custom.Length > 0 && custom != SmoothPlan ? custom : Balanced));
+                        RunCmd("powercfg.exe", "/delete " + SmoothPlan);
+                        break;
                     case "hibernate-off": RunCmd("powercfg.exe", "/hibernate on"); break;
                     case "memcomp-off": RunScript("Enable-MMAgent -MemoryCompression", log); break;
                     case "overlay-best": RunCmd("powercfg.exe", "/overlaysetactive " + (custom.Length > 0 ? custom : "00000000-0000-0000-0000-000000000000")); break;
@@ -755,14 +778,14 @@ namespace SmoothTwk
             backup.Remove(t.Id);
             Backup.Save(backup);
             if (t.Reboot) RebootPending = true;
-            return Result("Deshecho", t, fails);
+            return Result(L.T("Deshecho", "Undone"), t, fails);
         }
 
         static string Result(string verb, Tweak t, int fails)
         {
             var text = verb + ": " + t.Name;
-            if (Dry) return "[simulación] " + text;
-            if (fails > 0) return text + ". " + fails + " cambio(s) bloqueado(s) por Windows.";
+            if (Dry) return L.T("[simulación] ", "[simulation] ") + text;
+            if (fails > 0) return text + ". " + fails + L.T(" cambio(s) bloqueado(s) por Windows.", " change(s) blocked by Windows.");
             return text;
         }
 
@@ -771,7 +794,7 @@ namespace SmoothTwk
             var action = Catalog.Actions.FirstOrDefault(a => a.Id == "restore-point");
             if (action == null) return "Falta la acción de punto de restauración en el catálogo.";
             int code = RunScript(action.Script, log);
-            return Dry ? "[simulación] Punto de restauración" : code == 0 ? "Punto de restauración listo." : "No se pudo crear el punto de restauración.";
+            return Dry ? L.T("[simulación] Punto de restauración", "[simulation] Restore point") : code == 0 ? L.T("Punto de restauración listo.", "Restore point created.") : L.T("No se pudo crear el punto de restauración.", "Could not create the restore point.");
         }
     }
 }

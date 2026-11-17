@@ -187,7 +187,7 @@ namespace SmoothTwk
             set
             {
                 state = value;
-                target = value == "on" ? 1f : value == "partial" ? 0.5f : 0f;
+                target = value == "on" ? 1f : 0f;   // "partial" se ve apagado: al pulsarlo se aplica completo
                 if (!IsHandleCreated || !Visible) { pos = target; Invalidate(); }
                 else anim.Start();
             }
@@ -254,19 +254,18 @@ namespace SmoothTwk
         public string Title, Sub;
         bool selected;
         public bool Selected { get { return selected; } set { selected = value; Invalidate(); } }
-        public NavButton(string title, string sub) { Title = title; Sub = sub; Size = new Size(200, 42); Cursor = Cursors.Hand; }
+        public NavButton(string title, string sub) { Title = title; Sub = sub; Size = new Size(200, 36); Cursor = Cursors.Hand; }
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            var r = new Rectangle(0, 2, Width - 1, Height - 5);
+            var r = new Rectangle(0, 2, Width - 1, Height - 4);
             if (selected || hover)
                 using (var path = Theme.Round(r, 8))
                 using (var b = new LinearGradientBrush(r, Color.FromArgb(selected ? 46 : 20, 255, 255, 255), Color.FromArgb(0, 255, 255, 255), 0f))
                     g.FillPath(b, path);
-            if (selected) using (var path = Theme.Round(new Rectangle(0, 10, 3, Height - 21), 1)) g.FillPath(Brushes.White, path);
-            Theme.Draw(g, Title, Theme.F(10f, FontStyle.Bold), selected ? Theme.Text : Color.FromArgb(205, 205, 205), new Rectangle(16, 5, Width - 20, 20), TextFormatFlags.Left);
-            Theme.Draw(g, Sub, Theme.F(8.25f), selected ? Color.FromArgb(185, 185, 185) : Color.FromArgb(125, 125, 125), new Rectangle(16, 23, Width - 20, 16), TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
+            if (selected) using (var path = Theme.Round(new Rectangle(0, 11, 3, Height - 21), 1)) g.FillPath(Brushes.White, path);
+            Theme.Draw(g, Title, Theme.F(10f, selected ? FontStyle.Bold : FontStyle.Regular), selected ? Theme.Text : Color.FromArgb(190, 190, 190), new Rectangle(16, 2, Width - 20, Height - 4), TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
         }
     }
 
@@ -283,7 +282,8 @@ namespace SmoothTwk
     public class GameTile : Ctl
     {
         public Bitmap Icon;
-        public string GameName = "", Short = "", Status = "Buscando…", Sub = "";
+        public static readonly string Searching = L.T("Buscando…", "Searching…");
+        public string GameName = "", Short = "", Status = Searching, Sub = "";
         public bool Installed;
         public GameTile() { Size = new Size(280, 196); Cursor = Cursors.Hand; }
 
@@ -310,7 +310,7 @@ namespace SmoothTwk
             }
             var iconRect = new Rectangle((Width - 84) / 2, 22, 84, 84);
             if (Icon != null) g.DrawImage(Icon, iconRect);
-            else Monogram(g, iconRect, Short, !Installed && Status != "Buscando…");
+            else Monogram(g, iconRect, Short, !Installed && Status != Searching);
             Theme.Draw(g, GameName, Theme.F(11.5f, FontStyle.Bold), Theme.Text, new Rectangle(8, 116, Width - 16, 24), TextFormatFlags.HorizontalCenter | TextFormatFlags.EndEllipsis);
             Theme.Draw(g, Status, Theme.F(8.5f, FontStyle.Bold), Installed ? Color.FromArgb(225, 225, 225) : Theme.Faint, new Rectangle(8, 142, Width - 16, 18), TextFormatFlags.HorizontalCenter | TextFormatFlags.EndEllipsis);
             Theme.Draw(g, Sub, Theme.F(8f), Theme.Dim, new Rectangle(12, 162, Width - 24, 18), TextFormatFlags.HorizontalCenter | TextFormatFlags.EndEllipsis);
@@ -364,47 +364,58 @@ namespace SmoothTwk
         }
     }
 
-    // Fila: texto a la izquierda; a la derecha boton ? y control (interruptor o boton); casilla opcional al inicio.
-    public class Row : Ctl
+    // Fila tipo tarjeta: titulo (y descripcion corta opcional) a la izquierda; a la derecha boton ? y control.
+    public class Row : Ctl, IGradientHost
     {
-        public string Title, Desc;
+        static readonly Color Card = Color.FromArgb(17, 17, 17);
+        public static readonly string[] Strong = { "RIESGO", "SIN DESHACER", "ROMPE FIVEM", "RISK", "NO UNDO", "BREAKS FIVEM" };
+        string desc = "";
+        public string Title;
+        public string Desc { get { return desc; } set { desc = value ?? ""; Height = desc.Length > 0 ? 60 : 50; } }
         public List<string> Tags = new List<string>();
         public new Control Right;
         public Control Lead;
         public HelpButton Help;
         public Row(string title, string desc, Control right, Control lead = null, string help = null)
         {
-            Title = title; Desc = desc ?? ""; Right = right; Lead = lead; Height = 58;
+            Title = title; Desc = desc; Right = right; Lead = lead;
             if (right != null) Controls.Add(right);
             if (lead != null) Controls.Add(lead);
             if (!string.IsNullOrEmpty(help)) { Help = new HelpButton(title, help); Controls.Add(Help); }
         }
+        public void PaintChildBackground(Graphics g, Control child) { using (var b = new SolidBrush(Card)) g.FillRectangle(b, 0, 0, child.Width, child.Height); }
         protected override void OnLayout(LayoutEventArgs e)
         {
-            int edge = Width - 14;
+            int edge = Width - 16;
             if (Right != null) { Right.Location = new Point(edge - Right.Width, (Height - Right.Height) / 2); edge = Right.Left - 12; }
             if (Help != null) Help.Location = new Point(edge - Help.Width, (Height - Help.Height) / 2);
-            if (Lead != null) Lead.Location = new Point(10, (Height - Lead.Height) / 2);
+            if (Lead != null) Lead.Location = new Point(14, (Height - Lead.Height) / 2);
             base.OnLayout(e);
         }
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
-            if (hover) using (var b = new SolidBrush(Theme.Panel)) g.FillRectangle(b, ClientRectangle);
-            int x = Lead != null ? 42 : 12;
-            int right = Help != null ? Help.Left - 12 : Right != null ? Right.Left - 14 : Width - 12;
-            var tf = Theme.F(10f);
-            var size = TextRenderer.MeasureText(g, Title, tf, new Size(right - x, 20), TextFormatFlags.NoPadding | TextFormatFlags.EndEllipsis);
-            Theme.Draw(g, Title, tf, Theme.Text, new Rectangle(x, 10, right - x, 20), TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
-            int tx = x + Math.Min(size.Width, right - x) + 8;
             g.SmoothingMode = SmoothingMode.AntiAlias;
+            var box = new Rectangle(0, 0, Width - 1, Height - 1);
+            using (var path = Theme.Round(box, 8))
+            {
+                using (var b = new SolidBrush(Card)) g.FillPath(b, path);
+                using (var pen = new Pen(hover ? Color.FromArgb(70, 70, 70) : Color.FromArgb(30, 30, 30))) g.DrawPath(pen, path);
+            }
+            int x = Lead != null ? 46 : 16;
+            int right = Help != null ? Help.Left - 12 : Right != null ? Right.Left - 14 : Width - 14;
+            var tf = Theme.F(10f);
+            int ty = desc.Length > 0 ? 11 : (Height - 20) / 2;
+            var size = TextRenderer.MeasureText(g, Title, tf, new Size(right - x, 20), TextFormatFlags.NoPadding | TextFormatFlags.EndEllipsis);
+            Theme.Draw(g, Title, tf, Theme.Text, new Rectangle(x, ty, right - x, 20), TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
+            int tx = x + Math.Min(size.Width, right - x) + 8;
             foreach (var tag in Tags)
             {
                 var font = Theme.F(6.75f, FontStyle.Bold);
                 int w = TextRenderer.MeasureText(tag, font).Width + 6;
                 if (tx + w > right) break;
-                var r = new Rectangle(tx, 12, w, 15);
-                bool strong = tag == "RIESGO" || tag == "SIN DESHACER" || tag == "ROMPE FIVEM";
+                var r = new Rectangle(tx, ty + 2, w, 15);
+                bool strong = Strong.Contains(tag);
                 using (var path = Theme.Round(r, 7))
                 {
                     if (strong) g.FillPath(Brushes.White, path);
@@ -413,8 +424,7 @@ namespace SmoothTwk
                 Theme.Draw(g, tag, font, strong ? Theme.Bg : Theme.Dim, r, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                 tx += w + 5;
             }
-            Theme.Draw(g, Desc, Theme.F(8.5f), Theme.Dim, new Rectangle(x, 33, right - x, 18), TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
-            using (var pen = new Pen(Theme.Line)) g.DrawLine(pen, x, Height - 1, Width, Height - 1);
+            if (desc.Length > 0) Theme.Draw(g, desc, Theme.F(8.5f), Theme.Dim, new Rectangle(x, 34, right - x, 18), TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
         }
     }
 
@@ -461,7 +471,7 @@ namespace SmoothTwk
             FormBorderStyle = FormBorderStyle.None; StartPosition = FormStartPosition.CenterParent; ShowInTaskbar = false;
             BackColor = Theme.Bg; Size = new Size(480, 210); KeyPreview = true;
             var yes = new FlatButton(ok, 130) { Primary = true, Location = new Point(Width - 290, Height - 58) };
-            var no = new FlatButton("Cancelar", 130) { Location = new Point(Width - 150, Height - 58) };
+            var no = new FlatButton(L.T("Cancelar", "Cancel"), 130) { Location = new Point(Width - 150, Height - 58) };
             yes.Click += delegate { DialogResult = DialogResult.OK; };
             no.Click += delegate { DialogResult = DialogResult.Cancel; };
             Controls.Add(yes); Controls.Add(no);
@@ -475,9 +485,9 @@ namespace SmoothTwk
             KeyDown += (s, e) => { if (e.KeyCode == Keys.Escape) DialogResult = DialogResult.Cancel; };
         }
 
-        public static bool Ask(IWin32Window owner, string title, string text, string ok = "Confirmar")
+        public static bool Ask(IWin32Window owner, string title, string text, string ok = null)
         {
-            using (var d = new ConfirmDialog(title, text, ok)) return d.ShowDialog(owner) == DialogResult.OK;
+            using (var d = new ConfirmDialog(title, text, ok ?? L.T("Confirmar", "Confirm"))) return d.ShowDialog(owner) == DialogResult.OK;
         }
     }
 
@@ -499,7 +509,7 @@ namespace SmoothTwk
                 Font = font, Text = text.Replace("\n", Environment.NewLine), ScrollBars = textH > boxH ? ScrollBars.Vertical : ScrollBars.None,
                 Bounds = new Rectangle(26, 64, width - 52, boxH), TabStop = false
             };
-            var ok = new FlatButton("Entendido", 130) { Primary = true, Location = new Point(width - 156, Height - 56) };
+            var ok = new FlatButton(L.T("Entendido", "Got it"), 130) { Primary = true, Location = new Point(width - 156, Height - 56) };
             ok.Click += delegate { Close(); };
             Controls.Add(box); Controls.Add(ok);
             Shown += delegate { box.SelectionLength = 0; ok.Focus(); };
@@ -507,7 +517,7 @@ namespace SmoothTwk
             {
                 using (var b = new LinearGradientBrush(ClientRectangle, Color.FromArgb(30, 30, 30), Color.Black, 90f)) e.Graphics.FillRectangle(b, ClientRectangle);
                 using (var pen = new Pen(Color.FromArgb(90, 90, 90))) e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
-                Theme.Draw(e.Graphics, "¿Qué hace?", Theme.F(8f, FontStyle.Bold), Theme.Dim, new Rectangle(26, 16, width - 52, 16), TextFormatFlags.Left);
+                Theme.Draw(e.Graphics, L.T("¿Qué hace?", "What does it do?"), Theme.F(8f, FontStyle.Bold), Theme.Dim, new Rectangle(26, 16, width - 52, 16), TextFormatFlags.Left);
                 Theme.Draw(e.Graphics, title, Theme.F(13f, FontStyle.Bold), Theme.Text, new Rectangle(26, 32, width - 52, 26), TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
             };
             KeyDown += (s, e) => { if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Enter) Close(); };

@@ -43,7 +43,10 @@ $exe = Join-Path $out 'SmoothTwk.exe'
 $src = Get-ChildItem (Join-Path $root 'src') -Filter *.cs | ForEach-Object { $_.FullName }
 $cscArgs = @('/nologo', '/target:winexe', '/optimize+', '/codepage:65001', '/platform:anycpu', "/out:$exe", "/win32icon:$ico", "/win32manifest:$manifest",
     '/r:System.dll', '/r:System.Core.dll', '/r:System.Drawing.dll', '/r:System.Windows.Forms.dll', '/r:System.ServiceProcess.dll', "/r:$fw\System.Web.Extensions.dll",
-    "/resource:$(Join-Path $data 'catalog.json'),catalog.json", "/resource:$(Join-Path $root 'src\lib.ps1'),lib.ps1") + $src
+    "/resource:$(Join-Path $data 'catalog.json'),catalog.json", "/resource:$(Join-Path $root 'src\lib.ps1'),lib.ps1",
+    "/resource:$(Join-Path $root 'assets\SmoothTwk.pow'),SmoothTwk.pow", "/resource:$(Join-Path $root 'assets\THIRD-PARTY.txt'),THIRD-PARTY.txt") +
+    # Traducciones: es.json y en-*.json (source-es.json es solo el texto de partida para traducir).
+    @(Get-ChildItem (Join-Path $root 'i18n') -Filter *.json | Where-Object Name -ne 'source-es.json' | ForEach-Object { "/resource:$($_.FullName),$($_.Name)" }) + $src
 & (Join-Path $fw 'csc.exe') @cscArgs
 if ($LASTEXITCODE -ne 0) { throw "csc falló con código $LASTEXITCODE" }
 "exe: $exe ($([Math]::Round((Get-Item $exe).Length / 1KB)) KB)"
