@@ -70,3 +70,7 @@ Los ajustes aplicados siguen como están. Usa «Deshacer todo» antes si quieres
 ## Créditos
 
 Los tweaks, apps, funciones y DNS de Ajustes extra, Apps y DNS, Limpiar Windows y Mantenimiento vienen de [WinUtil](https://github.com/ChrisTitusTech/winutil) de Chris Titus Tech (licencia MIT, ver THIRD-PARTY.txt). La lista inicial de ajustes se basa en un análisis de Optimizer de hellzerg.
+
+## Licencia
+
+MIT, ver [LICENSE](LICENSE). Las partes de WinUtil conservan su propia licencia MIT (ver THIRD-PARTY.txt).
