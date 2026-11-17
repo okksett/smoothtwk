@@ -4,17 +4,13 @@ Optimizador de Windows con ventana negra, detalles blancos, HUD en vivo y botone
 
 ## Instalar y abrir
 
-Este repositorio es privado. La otra PC necesita [GitHub CLI](https://cli.github.com/) con sesión iniciada en una cuenta con acceso:
+Desde cmd:
 
 ```bat
-gh auth login
+powershell -NoProfile -Command "irm https://raw.githubusercontent.com/okksett/smoothtwk/main/install.ps1 | iex"
 ```
 
-Después, desde cmd:
-
-```bat
-powershell -NoProfile -Command "gh api repos/okksett/smoothtwk/contents/install.ps1 -H 'Accept: application/vnd.github.raw' | Out-String | iex"
-```
+O descarga `SmoothTwk.exe` de este repositorio y ábrelo con doble clic.
 
 Para abrirlo más tarde, en cualquier cmd nuevo:
 
